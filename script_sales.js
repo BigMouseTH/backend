@@ -244,14 +244,23 @@ async function submitSaleOrder() {
 // ==========================================
 
 async function loadSalesHistory() {
-  // ... (โค้ดเดิม) ...
+  const monthSelect = $('history-month-filter');
+  const selectedMonth = monthSelect ? monthSelect.value : "";
+  const tbody = $('history-body');
+  if (tbody) tbody.innerHTML = '<tr><td colspan="8" style="text-align: center; padding: 20px; color: gray;">กำลังโหลดข้อมูลประวัติ... ⏳</td></tr>';
+
   try {
-    const response = await fetch(SCRIPT_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ action: 'getSalesHistory', month: selectedMonth === 'current' ? '' : selectedMonth }) });
+    const response = await fetch(SCRIPT_URL, { 
+      method: 'POST', 
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' }, 
+      body: JSON.stringify({ action: 'getSalesHistory', month: selectedMonth === 'current' ? '' : selectedMonth }) 
+    });
+    
     const result = await response.json();
+    
     if (result.status === 'success') {
       const data = result.data;
       
-      // -- เก็บประวัติไว้ใช้นับออเดอร์ --
       window.globalSalesRecords = data.records || []; 
       
       if (monthSelect && (monthSelect.options.length <= 1 || selectedMonth === 'current' || selectedMonth === '')) {
@@ -262,11 +271,15 @@ async function loadSalesHistory() {
         });
       }
       renderHistoryTable(data.records);
-      
-      // -- เรียกใช้งานรันเลขออเดอร์อัตโนมัติ --
       generateAutoOrderNo(); 
+    } else {
+      // ดึง Error จากหลังบ้านมาแสดงหน้าเว็บ
+      if (tbody) tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; color:#ef4444; padding:20px; font-weight:bold;">เกิดข้อผิดพลาด: ${result.message}</td></tr>`;
     }
-  } catch (error) { /* ... โค้ด error เดิม ... */ }
+  } catch (error) { 
+    // ดึง Error กรณีเชื่อมต่อไม่ได้
+    if (tbody) tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; color:#ef4444; padding:20px; font-weight:bold;">ปัญหาการเชื่อมต่อ: ${error.message}</td></tr>`; 
+  }
 }
 
 // สร้างฟังก์ชันใหม่ สำหรับคำนวณและรันเลขออเดอร์อัตโนมัติ (ใส่ไว้ล่างสุดของไฟล์หรือต่อจาก renderHistoryTable)
