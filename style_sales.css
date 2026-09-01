@@ -1,0 +1,202 @@
+/* =========================================
+   style_sales.css
+   สไตล์เฉพาะสำหรับหน้าบันทึกยอดขาย (Minimal Premium)
+   ========================================= */
+
+/* --- ปุ่ม Toggle Switch (ปลีก/ส่ง) --- */
+.price-mode {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+  background: #f1f5f9;
+  padding: 6px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+}
+.price-mode label {
+  flex: 1;
+  text-align: center;
+  padding: 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  margin: 0;
+  font-size: 14px;
+  color: var(--muted);
+  transition: all 0.2s;
+  font-weight: 700;
+}
+.price-mode input { display: none; }
+.price-mode input:checked + label {
+  background: #ffffff;
+  color: var(--text);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  border: 1px solid var(--border);
+}
+
+/* --- Checkbox "สินค้าเป็น" --- */
+.live-check-row {
+  display: flex;
+  align-items: center;
+  margin: 14px 0;
+  padding: 12px 16px;
+  background: #fdfdfd;
+  border-radius: 10px;
+  border: 1px dashed #cbd5e1;
+  transition: all 0.2s ease;
+}
+.live-check-row:has(input:checked) {
+  background: #fffdf5; /* พื้นหลังนวลขึ้นเมื่อเลือก */
+  border-color: var(--accent); /* ขอบสีส้ม */
+}
+input[type="checkbox"], input[type="radio"] {
+  appearance: auto !important;
+  width: 20px !important; 
+  height: 20px !important;
+  cursor: pointer;
+  margin-right: 10px;
+  accent-color: var(--accent);
+}
+.live-label {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+.live-hint {
+  font-weight: 500;
+  color: var(--muted);
+  font-size: 13px;
+  margin-left: 6px;
+}
+
+/* --- รายการสินค้าในตะกร้า --- */
+.cart-list { margin-top: 15px; border-top: 1px solid var(--border); padding-top: 15px; }
+.cart-item {
+  background: #ffffff;
+  border: 1px solid var(--border);
+  padding: 12px 14px;
+  border-radius: var(--radius);
+  margin-bottom: 10px;
+  font-size: 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+}
+.cart-item b { color: var(--text); font-size: 15px; }
+.cart-del {
+  color: #ef4444; 
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 22px;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  transition: all 0.2s;
+  background: #fef2f2;
+}
+.cart-del:hover { background: #fee2e2; transform: scale(1.05); }
+
+/* --- กล่องสรุปยอดเงิน --- */
+.summary-box {
+  background: #ffffff;
+  border: 2px solid var(--text); /* ขอบดำให้ดูแพง */
+  border-radius: 12px;
+  padding: 24px;
+  text-align: center;
+  margin-top: 25px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+.sum-title {
+  font-size: 13px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+  font-weight: 700;
+}
+.sum-total {
+  font-size: 44px; 
+  font-weight: 800;
+  color: var(--accent); /* สีส้ม */
+  line-height: 1;
+}
+
+/* --- ประวัติการขาย --- */
+#history-month-filter { padding: 8px 12px; border-radius: 8px; font-weight: 700; font-size: 13px; }
+.history-table-wrapper { overflow-x: auto; margin-top: 15px; border: 1px solid var(--border); border-radius: 8px; }
+#sales-history-table th { background: #fafafa !important; text-transform: uppercase; font-size: 12px; letter-spacing: 0.02em; }
+#sales-history-table td { padding: 12px 10px !important; }
+
+#history-summary {
+  margin-top: 16px;
+  padding: 16px !important;
+  background: #fafafa !important;
+  border-radius: 10px !important;
+  font-size: 14px;
+  font-weight: 700;
+  border: 1px solid var(--border) !important;
+  text-align: center;
+}
+#sum-monthly-price { font-size: 20px; color: var(--accent) !important; }
+#sum-monthly-ship { font-size: 16px; color: var(--text) !important; }
+
+/* --- Utilities Layouts --- */
+.prom-row { background: #fafafa; padding: 16px; border-radius: 8px; border: 1px dashed var(--border); display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 14px; }
+@media (max-width: 480px) { .prom-row { grid-template-columns: 1fr; } }
+.prom-col { min-width: 0; }
+.disc-preview-box { grid-column: 1 / -1; margin-top: 8px; padding-top: 12px; border-top: 1px dashed var(--border); text-align: right; font-size: 13px; }
+.disc-preview-total { color: var(--accent); font-weight: 800; font-size: 16px; }
+
+.add-cart-btn { width: 100%; margin-top: 16px; background: #ffffff; color: var(--text); border: 1px solid var(--text); border-radius: 8px; }
+.add-cart-btn:hover { background: #f8f9fa; transform: none; }
+
+.history-card { margin-top: 24px; }
+.history-header { display: flex; justify-content: space-between; align-items: center; }
+.action-icon { cursor: pointer; font-size: 16px; color: var(--muted); margin-left: 8px; transition: transform 0.2s; }
+.action-icon:hover { transform: scale(1.2); color: var(--text); }
+
+/* --- ปุ่มเลือกประเภทและไซส์ (แทน Dropdown) --- */
+.btn-group-select {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 6px;
+}
+.btn-select {
+  flex: 1;
+  min-width: 60px;
+  padding: 10px 14px;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--muted);
+  transition: all 0.2s ease;
+  text-align: center;
+}
+.btn-select:hover {
+  border-color: var(--text);
+  color: var(--text);
+}
+.btn-select.active {
+  background: var(--text);
+  color: #ffffff;
+  border-color: var(--text);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+.size-group .btn-select {
+  flex: 0 1 calc(25% - 6px); /* ให้แสดง 4 ปุ่มต่อแถว */
+  padding: 8px 10px;
+}
+@media (max-width: 480px) {
+  .size-group .btn-select { flex: 0 1 calc(33.33% - 6px); } /* มือถือแสดง 3 ปุ่มต่อแถว */
+}

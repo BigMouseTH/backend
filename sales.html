@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Big Mouse • บันทึกยอดขาย</title>
+  <link rel="stylesheet" href="style_stock.css" />
+  <link rel="stylesheet" href="style_sales.css" />
+  <link rel="shortcut icon" type="image/x-icon" href="favicon D1.ico">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+  <header class="top-nav">
+    <div class="nav-title">🐭 Big Mouse <span class="nav-divider">|</span> <span class="nav-subtitle">Backoffice</span></div>
+    
+    <div style="display: flex; align-items: center; gap: 12px;">
+      
+      <nav class="nav-tabs" id="navTabs">
+        <a href="index.html" class="nav-tab" style="text-decoration:none;">Pricing</a>
+        <a href="stock.html" class="nav-tab" style="text-decoration:none;">Stock</a>
+        <button class="nav-tab active" data-page="sales">Sales</button>
+        <a href="orders.html" class="nav-tab" style="text-decoration:none;">Purchases</a>
+      </nav>
+
+      <button class="settings-btn" onclick="openSettings()" aria-label="Settings">⚙️</button>
+      
+      <button class="menu-toggle" id="menuToggle" aria-label="Toggle Menu">
+        <svg viewBox="0 0 24 24" width="28" height="28" stroke="#ffffff" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
+      
+    </div>
+  </header>
+
+  <div class="wrap">
+    <div class="title">บันทึกยอดขาย</div>
+
+    <section class="card">
+      <div class="head"><h2>1. ข้อมูลบิลออเดอร์</h2></div>
+      <div class="row-grid">
+        <div class="col">
+          <label>วันที่ขาย</label>
+          <input type="date" id="sale-date">
+        </div>
+        <div class="col">
+          <label>เลขที่ออเดอร์ (No.)</label>
+          <input type="text" id="sale-no" readonly style="background-color: #f8fafc; border-color: #cbd5e1; color: var(--accent); font-weight: 800; cursor: not-allowed;" placeholder="Auto">
+        </div>
+      </div>
+    </section>
+
+    <section class="card update-card">
+      <div class="head"><h2>2. ข้อมูลสินค้า & ราคา</h2></div>
+      
+      <div class="price-mode">
+        <input type="radio" name="priceType" id="type-retail" value="retail" checked onchange="updatePrice()">
+        <label for="type-retail">ขายปลีก (Retail)</label>
+        
+        <input type="radio" name="priceType" id="type-wholesale" value="wholesale" onchange="updatePrice()">
+        <label for="type-wholesale">ขายส่ง (Wholesale)</label>
+      </div>
+
+      <div class="row-grid" style="grid-template-columns: 1fr;">
+        <div class="col">
+          <label>ประเภท</label>
+          <div class="btn-group-select" id="animal-group">
+            <button class="btn-select active" data-val="Mice" onclick="selectAnimal('Mice')">Mice</button>
+            <button class="btn-select" data-val="Rat" onclick="selectAnimal('Rat')">Rat</button>
+          </div>
+        </div>
+        <div class="col" style="margin-top: 10px;">
+          <label>ไซส์</label>
+          <div class="btn-group-select size-group" id="size-group">
+            <!-- ปุ่มไซส์จะถูกสร้างและอัปเดตอัตโนมัติด้วย JS -->
+          </div>
+        </div>
+      </div>
+
+      <div class="live-check-row">
+        <input type="checkbox" id="prod-live">
+        <label for="prod-live" class="live-label">
+          สินค้าเป็น (Live) 
+          <span class="live-hint"> (ปล่อยว่าง = แช่แข็ง)</span>
+        </label>
+      </div>
+
+      <div class="row-grid">
+        <div class="col">
+          <label>ราคา/หน่วย</label>
+          <input type="number" id="prod-price" placeholder="บาท">
+        </div>
+        <div class="col">
+          <label>จำนวน</label>
+          <input type="number" id="prod-qty" placeholder="ตัว">
+        </div>
+      </div>
+
+      <div class="prom-row">
+        <div class="col prom-col">
+          <label id="lbl-prom-val">ส่วนลดพิเศษ (ProM.)</label>
+          <input type="number" id="prom-val" placeholder="ระบุตัวเลข (ถ้ามี)">
+        </div>
+        <div class="col prom-col">
+          <label>รูปแบบส่วนลด</label>
+          <select id="prom-type">
+            <option value="baht">ลดเป็นเงิน (บาท)</option>
+            <option value="percent">ลดเป็นเปอร์เซ็นต์ (%)</option>
+            <option value="perItem">ลดต่อตัว (฿/ตัว)</option>
+          </select>
+        </div>
+        
+        <div id="disc-preview-box" class="disc-preview-box" style="display:none;">
+          ส่วนลดสำหรับรายการนี้: <span id="disc-preview-total" class="disc-preview-total">0</span> บาท
+        </div>
+      </div>
+
+      <button class="btn add-cart-btn" onclick="addToCart()">+ เพิ่มลงรายการบิล</button>
+
+      <div id="cart-container" class="cart-list" style="display:none;">
+        <label style="margin-bottom:10px;">รายการสินค้าที่เพิ่มแล้ว:</label>
+        <div id="cart-items"></div>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="head"><h2>3. การชำระเงิน & การจัดส่ง</h2></div>
+      <div class="row-grid">
+        <div class="col">
+          <label>ช่องทางชำระ</label>
+          <select id="pay-type">
+            <option value="โอน">โอนเข้าบัญชี (Transfer)</option>
+            <option value="เงินสด">เงินสด (Cash)</option>
+          </select>
+        </div>
+        <div class="col">
+          <label>ขนส่ง</label>
+          <select id="ship-method">
+            <option value="Yourself">มารับเอง (Yourself)</option>
+            <option value="Grab">Grab</option>
+            <option value="Nim Express">Nim Express</option>
+            <option value="Lalamove">Lalamove</option>
+          </select>
+        </div>
+      </div>
+      <div class="row-grid" style="margin-top: 14px;">
+        <div class="col">
+          <label>ค่าส่งที่เรียกเก็บ (ลูกค้าจ่าย)</label>
+          <input type="number" id="ship-cost" value="0">
+        </div>
+        <div class="col">
+          <label>ค่าส่งต้นทุน (จ่ายจริง)</label>
+          <input type="number" id="ship-paid" value="0">
+        </div>
+      </div>
+    </section>
+
+    <div class="summary-box">
+      <div class="sum-title">ยอดรวมสุทธิ (Net Total)</div>
+      <div class="sum-total" id="grand-total">0</div>
+      <div style="font-size:14px; color:var(--muted); font-weight: 600; margin-top: 4px;">THB</div>
+    </div>
+
+    <button class="btn btn-primary" id="btn-save" onclick="submitSaleOrder()" style="width:100%; margin-top:20px; font-size:15px; padding:16px;">
+      ยืนยันออเดอร์
+    </button>
+    
+    <section class="card history-card">
+      <div class="head history-header">
+        <h2>4. ประวัติการขาย (Sales History)</h2>
+        <select id="history-month-filter" class="month-filter" onchange="loadSalesHistory()">
+          <option value="current">เดือนปัจจุบัน</option>
+        </select>
+      </div>
+
+      <div class="history-table-wrapper">
+        <table id="sales-history-table">
+          <thead>
+            <tr>
+              <th>วันที่</th>
+              <th>สินค้า/ไซส์</th>
+              <th>รูปแบบ</th>
+              <th>จำนวน</th>
+              <th>ราคาขาย</th>
+              <th>ค่าส่ง(ลค.)</th>
+              <th>ค่าส่ง(จริง)</th>
+              <th style="text-align:center;">จัดการ</th>
+            </tr>
+          </thead>
+          <tbody id="history-body">
+            <tr>
+              <td colspan="8" style="text-align: center; padding: 20px; color: gray;">กำลังโหลดข้อมูลประวัติ...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      <div id="history-summary" class="history-summary-box" style="display: none;">
+        ยอดขายรวม: <span id="sum-monthly-price">0</span> บาท | 
+        กำไรค่าส่ง: <span id="sum-monthly-ship">0</span> บาท
+      </div>
+    </section>
+    
+    <div style="height:30px;"></div>
+  </div>
+
+  <div id="settings-modal" class="modal">
+    <div class="modal-backdrop" onclick="closeSettings()"></div>
+    <div class="modal-content">
+      <div class="modal-head">
+        <h3>⚙️ ตั้งค่าไฟล์ฐานข้อมูล (Sales)</h3>
+        <button class="modal-close" onclick="closeSettings()">×</button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size:13px; color:var(--muted); margin-bottom:16px;">เมื่อขึ้นปีใหม่ หรือเปลี่ยนไฟล์ Google Sheet ให้นำลิงก์มาอัปเดตที่นี่ครับ</p>
+        
+        <label style="font-size:12px; font-weight:bold; display:block; margin-bottom:6px;">1. ลิงก์บันทึกยอดขาย (Sales):</label>
+        <input type="text" id="sheet-url-input" placeholder="https://docs.google.com/spreadsheets/d/..." style="margin-bottom:16px;">
+        
+        <label style="font-size:12px; font-weight:bold; display:block; margin-bottom:6px;">2. ลิงก์อัปเดตกระเป๋าเงิน (Purchases):</label>
+        <input type="text" id="wallet-url-input" placeholder="วางลิงก์ไฟล์เดียวกับหน้า Purchases">
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-secondary" onclick="closeSettings()">ปิด</button>
+        <button class="btn btn-primary" onclick="saveSettings()">บันทึกข้อมูล</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="script_sales.js"></script>
+</body>
+</html>

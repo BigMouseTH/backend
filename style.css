@@ -1,0 +1,561 @@
+:root {
+  /* Minimal Business Premium Palette */
+  --bg: #f8f9fa;            /* Light premium executive workspace background */
+  --card: #ffffff;          /* Crisp pure white for cards */
+  --text: #111111;          /* Elegant absolute high-contrast black text */
+  --muted: #666666;         /* Refined subtle slate neutral grey */
+  --accent: #ff6a00;        /* Dynamic Premium Business Orange for Key Action Buttons/Tab active States */
+  --accent-hover: #e05d00;  /* Slightly deeper rich orange for rich interactions */
+  --border: #e2e8f0;        /* Ultrathin clean border architecture */
+  --border-focus: #111111;  /* High contrast black focus indicator */
+  --radius: 8px;            /* Sleek micro-radius for modern enterprise system look */
+  --input-bg: #ffffff;
+}
+
+/* Base resets & structural definitions */
+* {
+  box-sizing: border-box;
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+}
+html {
+  scroll-behavior: smooth;
+}
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+.wrap {
+  max-width: 1200px;
+  margin: auto;
+  padding: 24px;
+  min-height: calc(100vh - 60px);
+}
+.title {
+  font-weight: 700;
+  font-size: 20px;
+  color: var(--text);
+  margin: 10px 0 24px 0;
+  letter-spacing: -0.02em;
+}
+
+/* Enterprise Top Navigation Layout Header */
+.top-nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 32px;
+  height: 60px;
+  background: #111111; /* Executive Charcoal Black Bar */
+  color: #ffffff;
+  border-bottom: 1px solid #222222;
+}
+.nav-title {
+  font-weight: 800;
+  font-size: 16px;
+  letter-spacing: -0.01em;
+  display: flex;
+  align-items: center;
+}
+.nav-divider {
+  color: #444444;
+  margin: 0 10px;
+  font-weight: 300;
+}
+.nav-subtitle {
+  color: #aaaaaa;
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+.nav-tabs {
+  display: flex;
+  height: 100%;
+}
+.nav-tab {
+  height: 100%;
+  padding: 0 20px;
+  font-size: 13px;
+  font-weight: 600;
+  background: transparent;
+  color: #aaaaaa;
+  border: none;
+  cursor:pointer;
+  display: flex;
+  align-items: center;
+  transition: all 0.2s ease;
+  border-bottom: 3px solid transparent;
+}
+.nav-tab:hover {
+  color: #ffffff;
+}
+.nav-tab.active {
+  color: var(--accent);
+  border-bottom-color: var(--accent); /* Highlight tab with elegant premium orange line */
+  background: rgba(255, 255, 255, 0.03);
+}
+
+/* Responsive Grid Splitter */
+.grid {
+  display: grid;
+  gap: 24px;
+}
+@media(min-width: 960px){
+  .grid { grid-template-columns: 1.15fr 0.85fr; }
+}
+
+/* Container Cards Setup */
+.page { display: none; }
+.page.active { display: block; }
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+  margin-bottom: 24px;
+}
+.head {
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 14px;
+  margin-bottom: 20px;
+}
+.head h2 {
+  font-size: 16px;
+  margin: 0;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+}
+
+/* Elegant Form Controls & Inputs */
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin: 14px 0;
+}
+.row-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+  margin: 14px 0;
+}
+label {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text);
+  display: block;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+select,
+input[type="number"],
+input[type="text"] {
+  background: var(--input-bg);
+  border: 1px solid #cbd5e1;
+  color: var(--text);
+  border-radius: var(--radius);
+  padding: 10px 14px;
+  font-size: 14px;
+  outline: none;
+  width: 100%;
+  transition: all 0.15s ease;
+}
+select:focus,
+input:focus {
+  border-color: var(--border-focus);
+  box-shadow: 0 0 0 2px rgba(17, 17, 17, 0.05);
+}
+
+/* Custom Minimal Segmented Control Pill Toggles */
+.inline-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.pill {
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  padding: 10px 16px;
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 13px;
+  user-select: none;
+  transition: all 0.15s ease;
+}
+.pill:has(input:checked) {
+  border-color: var(--text);
+  background: #f1f5f9;
+  font-weight: 700;
+}
+.pill input {
+  accent-color: var(--text);
+  margin: 0;
+  transform: scale(1.1);
+}
+
+/* Advanced Clean Data & Metrics Layout Table */
+#tableWrap {
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  overflow: hidden;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #ffffff;
+  font-size: 13px;
+}
+th, td {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border);
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+th {
+  color: var(--muted);
+  background: #fafafa;
+  font-weight: 600;
+  text-align: right;
+  font-size: 12px;
+  letter-spacing: 0.02em;
+}
+th:first-child, td:first-child { text-align: left; }
+tbody tr:last-child td { border-bottom: none; }
+tbody tr:nth-child(even) { background: #fafafa; }
+
+/* Financial Summary Display Card Styling */
+.summary-table {
+  margin-bottom: 20px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.summary-table td {
+  padding: 14px 18px;
+  font-size: 14px;
+}
+.summary-table tbody tr:nth-child(even) { background: transparent; }
+.num-bold {
+  font-weight: 700;
+  color: var(--text);
+  font-size: 15px;
+}
+.discount-text {
+  color: #df2121;
+}
+.summary-table tfoot {
+  background: #111111;
+}
+.summary-table tfoot td {
+  color: #ffffff;
+  font-weight: 700;
+  padding: 16px 18px;
+}
+.grand-total-amount {
+  font-size: 22px !important;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  color: var(--accent) !important; /* Premium Highlight Orange */
+}
+.muted { color: var(--muted); }
+
+/* Raw Message Box Preview Container */
+.msg {
+  white-space: pre-wrap;
+  background: #fdfdfd;
+  border: 1px dashed #cbd5e1;
+  border-radius: var(--radius);
+  padding: 16px;
+  min-height: 180px;
+  margin-top: 6px;
+  margin-bottom: 20px;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 13px;
+  color: #222222;
+  line-height: 1.6;
+}
+
+/* Master Typography & Functional Buttons Framework */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: var(--radius);
+  padding: 12px 18px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  letter-spacing: 0.01em;
+}
+.btn:active { transform: translateY(1px); }
+
+/* Premium Color Variants for Utility Buttons */
+.btn-primary {
+  background: var(--text); /* Black Premium Business Theme Base button */
+  color: #ffffff;
+}
+.btn-primary:hover { background: #333333; }
+
+.btn-secondary {
+  background: #ffffff;
+  color: var(--text);
+  border: 1px solid #cbd5e1;
+}
+.btn-secondary:hover { background: #f8f9fa; border-color: #94a3b8; }
+
+.btn-line {
+  background: #ff6a00; /* Re-skinned from native green to match explicit UI Orange menu/button requests */
+  color: #ffffff;
+}
+.btn-line:hover { background: var(--accent-hover); }
+
+.btn-sync {
+  background: var(--text);
+  color: #ffffff;
+  height: 40px;
+  border-radius: 0 var(--radius) var(--radius) 0;
+}
+.btn-sync:hover { background: #333333; }
+
+.btn-dark-action {
+  background: #111111;
+  color: #ffffff;
+  width: 100%;
+}
+.btn-dark-action:hover { background: #222222; }
+
+/* Grid layout for major action control buttons */
+.action-buttons-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.btn-line {
+  grid-column: span 2;
+  font-size: 14px;
+  padding: 14px;
+}
+
+/* Google Sheets Sync integration layout block */
+.sync-container {
+  margin-bottom: 24px;
+  padding: 16px;
+  background: #fafafa;
+  border-radius: var(--radius);
+  border: 1px dashed var(--border);
+}
+.sync-label {
+  font-size: 13px;
+  color: var(--text);
+  margin-bottom: 10px;
+}
+.sync-row {
+  display: flex;
+}
+.sync-row input {
+  border-radius: var(--radius) 0 0 var(--radius);
+  border-right: none;
+}
+
+/* Logistics tracking module styling */
+.tracking-zone {
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+}
+.tracking-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+.tracking-icon { font-size: 20px; }
+.tracking-head h3 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.hint {
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 6px;
+  line-height: 1.4;
+}
+
+/* Modal Overlay & Responsive Frame Configuration */
+.modal {
+  position: fixed;
+  inset: 0;
+  display: none;
+  z-index: 2000;
+}
+.modal.open { display: block; }
+.modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(2px);
+}
+.modal-card {
+  position: relative;
+  z-index: 2001;
+  max-width: 580px;
+  margin: 8vh auto;
+  background: #ffffff;
+  border-radius: var(--radius);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+  overflow: hidden;
+  max-height: 84vh;
+  display: flex;
+  flex-direction: column;
+}
+@media (max-width: 600px) {
+  .modal-card {
+    margin: 0;
+    width: 100vw;
+    height: 100vh;
+    max-height: 100vh;
+    border-radius: 0;
+  }
+}
+.modal-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+  border-bottom: 1px solid var(--border);
+  background: #fafafa;
+}
+.modal-head h3 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 700;
+}
+.modal-close {
+  background: transparent;
+  border: 0;
+  font-size: 24px;
+  cursor: pointer;
+  color: var(--muted);
+  padding: 0 4px;
+}
+.modal-body {
+  padding: 24px;
+  overflow-y: auto;
+  flex: 1;
+}
+.modal-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  padding: 16px 24px;
+  border-top: 1px solid var(--border);
+  background: #fafafa;
+}
+
+/* Clean Professional Invoice Bill UI Template Render */
+.receipt {
+  font-size: 13px;
+  color: var(--text);
+}
+.receipt .meta {
+  color: var(--muted);
+  font-size: 11px;
+  margin-bottom: 14px;
+  text-transform: uppercase;
+}
+.receipt table {
+  border: 1px solid var(--border);
+}
+.receipt th { background: #fafafa; }
+.receipt .grand {
+  color: var(--accent);
+  font-weight: 800;
+  font-size: 16px;
+}
+
+/* System Placeholder State Graphics */
+.placeholder-card {
+  text-align: center;
+  padding: 60px 24px;
+  color: var(--muted);
+}
+.placeholder-card h2 {
+  font-size: 18px;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+/* Global Mobile Adaptability Overrides */
+@media (max-width: 480px) {
+  .wrap { padding: 14px; }
+  .card { padding: 16px; margin-bottom: 16px; }
+  .action-buttons-grid { grid-template-columns: 1fr; }
+  .top-nav { padding: 0 16px; }
+  .nav-title { font-size: 14px; }
+  .nav-subtitle { display: none; }
+  .nav-divider { display: none; }
+}
+
+/* =========================================
+   📱 Mobile Hamburger Menu
+========================================= */
+.menu-toggle {
+  display: none;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+}
+
+@media (max-width: 768px) {
+  .menu-toggle {
+    display: block; 
+  }
+  .nav-tabs {
+    display: none; 
+    flex-direction: column;
+    position: absolute;
+    top: 60px; 
+    left: 0;
+    width: 100%;
+    height: auto; /* 🆕 แก้ปัญหาพื้นหลังไม่ยืดตามเมนู */
+    background: #111111;
+    border-top: 1px solid #222222;
+    padding: 0;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+  }
+  .nav-tabs.open {
+    display: flex; 
+  }
+  .nav-tab {
+    height: auto; /* 🆕 ล้างค่าความสูงเดิมที่จำมาจาก Desktop */
+    padding: 16px 32px;
+    width: 100%;
+    border-bottom: 1px solid #222222;
+    justify-content: flex-start;
+  }
+  .nav-tab.active {
+    border-bottom: 1px solid #222222;
+    border-left: 4px solid var(--accent);
+    background: rgba(255, 255, 255, 0.05);
+  }
+}

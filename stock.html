@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Big Mouse • สต็อกสินค้า</title>
+  <link rel="stylesheet" href="style_stock.css" />
+  <link rel="shortcut icon" type="image/x-icon" href="favicon D1.ico">
+</head>
+<body>
+    <header class="top-nav">
+    <div class="nav-title">🐭 Big Mouse <span class="nav-divider">|</span> <span class="nav-subtitle">Backoffice</span></div>
+    
+    <div style="display: flex; align-items: center; gap: 12px;">
+      
+      <nav class="nav-tabs" id="navTabs">
+        <a href="index.html" class="nav-tab" style="text-decoration:none;">Pricing</a>
+        <button class="nav-tab active" data-page="stock">Stock</button>
+        <a href="sales.html" class="nav-tab" style="text-decoration:none;">Sales</a>
+        <a href="orders.html" class="nav-tab" style="text-decoration:none;">Purchases</a>
+      </nav>
+
+      <button class="settings-btn" onclick="openSettings()" aria-label="Settings">⚙️</button>
+      
+      <button class="menu-toggle" id="menuToggle" aria-label="Toggle Menu">
+        <svg viewBox="0 0 24 24" width="28" height="28" stroke="#ffffff" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
+      
+    </div>
+  </header>
+
+  <div class="wrap">
+    <div class="title">STOCK</div>
+
+    <section class="card update-card">
+      <div class="head"><h2>เติมสต็อกสินค้า</h2></div>
+      <div class="row-grid">
+        <div class="col">
+          <label>วันที่เติมของ</label>
+          <input type="date" id="upd-date">
+        </div>
+        <div class="col">
+          <label>ประเภท</label>
+          <select id="upd-animal">
+            <option value="" disabled selected>-- เลือก --</option>
+            <option value="Mice">Mice (หนูไมซ์)</option>
+            <option value="Rat">Rat (หนูแรท)</option>
+          </select>
+        </div>
+        <div class="col">
+          <label>ไซส์</label>
+          <select id="upd-size">
+            <option value="" disabled selected>-- รอเลือกประเภท --</option>
+          </select>
+        </div>
+      </div>
+      <div class="row-grid" style="margin-top: 14px;">
+        <div class="col">
+          <label>จำนวนที่เติม (ตัว)</label>
+          <input type="number" id="upd-qty" placeholder="ระบุจำนวนที่เติม" inputmode="numeric">
+        </div>
+      </div>
+      <button class="btn btn-primary" id="btn-submit" style="width:100%; margin-top:16px;">
+        บันทึกการเติมสต็อก
+      </button>
+    </section>
+
+    <div class="grid">
+      <section class="card">
+        <div class="head"><h2>Mice Stock</h2></div>
+        <div class="stock-table-wrap">
+          <table id="stock-table-mice">
+            <thead><tr><th>ไซส์</th><th>Stock</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <p class="hint" style="margin-top:10px">* ดึงข้อมูลเรียลไทม์จาก Tab: M Stock</p>
+      </section>
+
+      <section class="card">
+        <div class="head"><h2>Rat Stock</h2></div>
+        <div class="stock-table-wrap">
+          <table id="stock-table-rat">
+            <thead><tr><th>ไซส์</th><th>Stock</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <p class="hint" style="margin-top:10px">* ดึงข้อมูลเรียลไทม์จาก Tab: R Stock</p>
+      </section>
+    </div>
+  </div>
+
+  <div id="settings-modal" class="modal">
+    <div class="modal-backdrop" onclick="closeSettings()"></div>
+    <div class="modal-content">
+      <div class="modal-head">
+        <h3>⚙️ ตั้งค่าไฟล์ฐานข้อมูล (Stock)</h3>
+        <button class="modal-close" onclick="closeSettings()">×</button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size:13px; color:var(--muted); margin-bottom:12px;">กรุณาวางลิงก์ Google Sheet ที่มี Tab "M Stock" และ "R Stock"</p>
+        <label>Google Sheet URL:</label>
+        <input type="text" id="sheet-url-input" placeholder="https://docs.google.com/spreadsheets/d/...">
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-secondary" onclick="closeSettings()">ปิด</button>
+        <button class="btn btn-primary" onclick="saveSettings()">บันทึก</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="script_stock.js"></script>
+</body>
+</html>

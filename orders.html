@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Big Mouse • รายการสั่งซื้อ</title>
+  <link rel="stylesheet" href="style_stock.css" />
+  <link rel="stylesheet" href="style_orders.css" />
+  <link rel="shortcut icon" type="image/x-icon" href="favicon D1.ico">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+  <header class="top-nav">
+    <div class="nav-title">🐭 Big Mouse <span class="nav-divider">|</span> <span class="nav-subtitle">Backoffice</span></div>
+    
+    <div style="display: flex; align-items: center; gap: 12px;">
+      <nav class="nav-tabs" id="navTabs">
+        <a href="index.html" class="nav-tab" style="text-decoration:none;">Pricing</a>
+        <a href="stock.html" class="nav-tab" style="text-decoration:none;">Stock</a>
+        <a href="sales.html" class="nav-tab" style="text-decoration:none;">Sales</a>
+        <button class="nav-tab active" data-page="orders">Purchases</button>
+      </nav>
+
+      <button class="settings-btn" onclick="openSettings()" aria-label="Settings">⚙️</button>
+      
+      <button class="menu-toggle" id="menuToggle" aria-label="Toggle Menu">
+        <svg viewBox="0 0 24 24" width="28" height="28" stroke="#ffffff" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <div class="wrap">
+    <div class="title">บันทึกรายการรายจ่าย</div>
+
+    <div class="dashboard-grid">
+      <div class="stat-card sales">
+        <div class="lbl">SALES (รายรับ)</div>
+        <div class="val" id="dash-sales">0.00</div>
+      </div>
+      
+      <div class="stat-card expense">
+        <div class="lbl">EXPENSES (รายจ่าย)</div>
+        <div class="val" id="dash-expenses">0.00</div>
+      </div>
+      
+      <div class="stat-card profit">
+        <div class="lbl">NET PROFIT (กำไรสุทธิ)</div>
+        <div class="val" id="dash-profit">0.00</div>
+      </div>
+      
+      <div class="stat-card balance">
+        <div class="lbl">WALLET BALANCE (กระเป๋าเงินรวม)</div>
+        <div class="val" id="dash-balance">0.00</div>
+        
+        <div class="balance-breakdown">
+          <div class="breakdown-item">
+            <span class="breakdown-lbl">CASH</span>
+            <span class="breakdown-val" id="dash-cash">0.00</span>
+          </div>
+          <div class="breakdown-item">
+            <span class="breakdown-lbl">BANK</span>
+            <span class="breakdown-val" id="dash-digital">0.00</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <div style="text-align: right; margin-bottom: 20px;">
+      <button class="btn btn-transfer" onclick="openTransferModal()">🔄 โอนย้ายเงิน</button>
+    </div>
+
+    <section class="card update-card">
+      <div class="head"><h2>รายการสั่งซื้อ/รายจ่าย</h2></div>
+      <div class="row-grid">
+        <div class="col">
+          <label>วันที่สั่งซื้อ</label>
+          <input type="date" id="order-date" onchange="loadDashboard()">
+        </div>
+      </div>
+      <div class="row-grid">
+        <div class="col"><label>รายการสินค้า / ค่าใช้จ่าย</label><input type="text" id="order-item" placeholder="ระบุรายการ..."></div>
+        <div class="col"><label>ร้านค้า / ผู้รับเงิน</label><input type="text" id="order-supplier" placeholder="ระบุร้านค้า..."></div>
+      </div>
+      <div class="row-grid">
+        <div class="col"><label>ราคาต่อหน่วย</label><input type="number" id="order-price" placeholder="0.00"></div>
+        <div class="col"><label>จำนวน</label><input type="number" id="order-qty" placeholder="1" value="1"></div>
+      </div>
+      <div class="row-grid">
+        <div class="col"><label>ค่าขนส่ง</label><input type="number" id="order-shipping" placeholder="0.00"></div>
+        <div class="col"><label>ส่วนลด</label><input type="number" id="order-discount" placeholder="0.00"></div>
+      </div>
+      
+      <div class="row-grid">
+        <div class="col">
+          <label>กระเป๋าเงินที่ใช้ชำระ</label>
+          <select id="order-pay-type">
+            <option value="โอน">📱 บัญชีธนาคาร (Digital)</option>
+            <option value="เงินสด">💵 เงินสด (Cash)</option>
+          </select>
+        </div>
+        <div class="col"><label>หมายเหตุ</label><input type="text" id="order-note" placeholder="เพิ่มเติม..."></div>
+      </div>
+      
+      <div class="total-preview">ยอดชำระสุทธิ: <span id="total-display">0</span> บาท</div>
+      <button class="btn btn-primary" id="btn-save" onclick="submitOrder()" style="width:100%; margin-top:16px; padding:16px; font-size:15px;">✅ บันทึกรายจ่าย</button>
+    </section>
+
+    <section class="card">
+      <div class="head"><h2>ประวัติรายการเดือนนี้</h2></div>
+      <div class="stock-table-wrap">
+        <table id="order-table">
+          <thead>
+            <tr>
+              <th>วันที่</th>
+              <th>รายการ</th>
+              <th>ยอดเงิน</th>
+              <th style="text-align: center;">ลบ</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td colspan="4" style="text-align: center; padding: 20px; color: gray;">กำลังโหลดข้อมูล...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+    
+    <div style="height:30px;"></div>
+  </div>
+
+  <div id="settings-modal" class="modal">
+    <div class="modal-backdrop" onclick="closeSettings()"></div>
+    <div class="modal-content">
+      <div class="modal-head">
+        <h3>⚙️ ตั้งค่าไฟล์ฐานข้อมูล (Purchases)</h3>
+        <button class="modal-close" onclick="closeSettings()">×</button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size:13px; color:var(--muted); margin-bottom:12px;">วางลิงก์ Google Sheet สำหรับระบบบันทึกรายจ่าย</p>
+        <label>Google Sheet URL:</label>
+        <input type="text" id="sheet-url-input" placeholder="https://docs.google.com/spreadsheets/d/...">
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-secondary" onclick="closeSettings()">ปิด</button>
+        <button class="btn btn-primary" onclick="saveSettings()">บันทึกข้อมูล</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="transfer-modal" class="modal">
+    <div class="modal-backdrop" onclick="closeTransferModal()"></div>
+    <div class="modal-content">
+      <div class="modal-head">
+        <h3>🔄 บันทึกการโยกเงิน</h3>
+        <button class="modal-close" onclick="closeTransferModal()">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="row-grid" style="margin-bottom: 12px;">
+          <div class="col">
+            <label>วันที่</label>
+            <input type="date" id="transfer-date">
+          </div>
+        </div>
+        
+        <div class="row-grid" style="margin-bottom: 12px;">
+          <div class="col">
+            <label>รูปแบบการโยกเงิน</label>
+            <select id="transfer-type">
+              <option value="DigitalToCash">🏧 ถอนออกมาใช้ (บัญชี ➡️ เงินสด)</option>
+              <option value="CashToDigital">🏦 ฝากเข้าธนาคาร (เงินสด ➡️ บัญชี)</option>
+            </select>
+          </div>
+        </div>
+        
+        <div class="row-grid" style="margin-bottom: 12px;">
+          <div class="col">
+            <label>จำนวนเงินที่ทำรายการ</label>
+            <input type="number" id="transfer-amount" placeholder="0.00">
+          </div>
+        </div>
+        
+        <div class="row-grid">
+          <div class="col">
+            <label>หมายเหตุ</label>
+            <input type="text" id="transfer-note" placeholder="เช่น กดเงินสำรองจ่ายหน้าร้าน">
+          </div>
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-secondary" onclick="closeTransferModal()">ยกเลิก</button>
+        <button class="btn btn-line" onclick="submitTransfer()">บันทึกการโยกเงิน</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="script_orders.js"></script>
+</body>
+</html>

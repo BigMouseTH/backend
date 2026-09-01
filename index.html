@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Big Mouse • ตัวช่วยคำนวณ/สรุปข้อความ</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="shortcut icon" type="image/x-icon" href="favicon D1.ico">  
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+</head>
+
+<body>
+  <header class="top-nav">
+    <div class="nav-title">🐭 Big Mouse <span class="nav-divider">|</span> <span class="nav-subtitle">Backoffice</span></div>
+    
+    <button class="menu-toggle" id="menuToggle" aria-label="Toggle Menu">
+      <svg viewBox="0 0 24 24" width="28" height="28" stroke="#ffffff" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="3" y1="12" x2="21" y2="12"></line>
+        <line x1="3" y1="6" x2="21" y2="6"></line>
+        <line x1="3" y1="18" x2="21" y2="18"></line>
+      </svg>
+    </button>
+
+    <nav class="nav-tabs" id="navTabs">
+      <button class="nav-tab active" data-page="calc">Pricing</button>
+      <a href="stock.html" class="nav-tab" style="text-decoration:none;">Stock</a>
+      <a href="sales.html" class="nav-tab" style="text-decoration:none;">Sales</a>
+      <a href="orders.html" class="nav-tab" style="text-decoration:none;">Purchases</a>
+    </nav>
+  </header>
+
+  <div class="wrap">
+    <section id="page-calc" class="page active">
+      <div class="title">ระบบจัดการแจ้งราคาและคำนวณบิล</div>
+      
+      <div class="grid">
+        <section class="card">
+          <div class="head">
+            <h2>คำสั่งซื้อสินค้า</h2>
+          </div>
+
+          <div class="row">
+            <div style="flex:1 1 320px">
+              <label>ประเภทสินค้า (เลือกได้มากกว่า 1)</label>
+              <div id="animalGroup" class="inline-pills">
+                <label class="pill"><input type="checkbox" name="animal" value="mice" checked> <span>Mice</span></label>
+                <label class="pill"><input type="checkbox" name="animal" value="rat"> <span>Rat</span></label>
+              </div>
+            </div>
+            <div class="inline-pills" style="flex:2 1 320px; align-self: flex-end; margin-bottom: 6px;">
+              <label class="pill"><input type="radio" id="retail" name="ptype" value="retail" checked> <span>ราคาปลีก</span></label>
+              <label class="pill"><input type="radio" id="wholesale" name="ptype" value="wholesale"> <span>ราคาส่ง</span></label>
+            </div>
+          </div>
+
+          <div class="row-grid">
+            <div>
+              <label>วิธีขนส่ง</label>
+              <select id="shipMethod">
+                <option value="Grab">Grab</option>
+                <option value="Line Man">Line Man</option>
+                <option value="Lalamove">Lalamove</option>
+                <option value="ขนส่งควบคุมอุณหภูมิ">ขนส่งควบคุมอุณหภูมิ</option>
+                <option value="รับเอง">รับเอง</option>
+              </select>
+            </div>
+            <div>
+              <label>ค่าส่ง (บาท)</label>
+              <input id="shipCost" type="number" step="1" min="0" value="0">
+              <div class="hint">เลือก "รับเอง" ระบบจะตั้งเป็น 0 อัตโนมัติ</div>
+            </div>
+            <div>
+              <label for="promoType">โปรโมชั่น / ส่วนลด</label>
+              <select id="promoType">
+                <option value="none">ไม่มีส่วนลด</option>
+                <option value="baht">ลดเป็นบาท (฿)</option>
+                <option value="percent">ลดเป็นเปอร์เซ็นต์ (%)</option>
+                <option value="perItem">ลดต่อตัว (฿/ตัว)</option>
+              </select>
+            </div>
+            <div>
+              <label for="promoValue">มูลค่าส่วนลด</label>
+              <input id="promoValue" type="number" step="0.01" min="0" value="0">
+              <div class="hint">ตัวอย่าง: 50 = ลด 50 บ. หรือ 10 = ลด 10%</div>
+            </div>
+          </div>
+
+          <div class="row-grid" style="margin-top: 15px;">
+            <div style="grid-column: span 2;">
+              <label>ข้อความขึ้นต้นบิล</label>
+              <input id="msgPrefix" type="text" value="ขออนุญาตแจ้งราคานะครับ 🐭">
+            </div>
+            <div style="grid-column: span 2;">
+              <label>ข้อความปิดท้ายบิล</label>
+              <input id="msgSuffix" type="text" value="รวม {TOTAL} บาท ครับผม">
+            </div>
+          </div>
+
+          <div id="tableWrap" style="margin-top: 24px;"></div>
+        </section>
+
+        <section class="card">
+          <div class="head">
+            <h2>สรุปยอดเงิน & จัดส่งข้อมูล</h2>
+          </div>
+
+          <table class="summary-table">
+            <tbody>
+              <tr><td class="muted">รวมค่าสินค้า</td><td id="subTotal" class="num-bold">0</td></tr>
+              <tr><td class="muted">ส่วนลดรวม</td><td id="promoTotal" class="num-bold discount-text">0</td></tr>
+              <tr><td class="muted">ค่าจัดส่ง</td><td id="shipTotal" class="num-bold">0</td></tr>
+            </tbody>
+            <tfoot>
+              <tr><td>ยอดสุทธิรวมทั้งสิ้น</td><td id="grandTotal" class="accent grand-total-amount">0</td></tr>
+            </tfoot>
+          </table>
+
+          <div style="margin-top:20px">
+            <div class="sync-container">
+              <label class="sync-label">
+                🔗 ลิงก์ฐานข้อมูลลูกค้า Google Sheet (Customers)
+              </label>
+              <div class="sync-row">
+                <input id="sheetUrlInput" type="text" placeholder="วางลิงก์แชร์ Google Sheet ที่นี่...">
+                <button id="loadSheetBtn" class="btn btn-sync">โหลดข้อมูล</button>
+              </div>
+              <div class="hint">
+                💡 <b>วิธีใช้:</b> ตั้งค่าแชร์ในคอลัมน์ชีตให้เป็น "ทุกคนที่มีลิงก์สามารถดูได้" (Anyone with the link can view) แล้วกดคัดลอกลิงก์มาวาง
+              </div>
+            </div>
+
+            <div style="margin-bottom: 16px;">
+              <label style="font-weight: 600; margin-bottom: 8px;">เลือกลูกค้าปลายทาง:</label>
+              <select id="customerSelect" class="form-select">
+                <option value="" selected>📋 กรุณากดปุ่มโหลดข้อมูลลูกค้าด้านบนก่อนใช้งาน</option>
+              </select>
+            </div>
+
+            <label style="font-weight: 600; margin-bottom: 6px;">กล่องแสดงข้อความดิบ (พร้อมคัดลอก):</label>
+            <div class="msg" id="messageBox"></div>
+            
+            <div class="action-buttons-grid">
+              <button class="btn btn-secondary" id="showReceiptBtn">e-Bill</button>
+              <button class="btn btn-primary" id="copyBtn">คัดลอกข้อความ</button>
+              <button class="btn btn-line" id="sendLineFlexBtn">ส่งบิลเข้า LINE OA</button>
+            </div>
+            <p class="hint" style="text-align: center; margin-top: 10px;">* แถวค่าขนส่งในไลน์จะถูกซ่อนโดยอัตโนมัติหากยอดค่าส่งเป็น 0</p>
+          </div>
+
+          <div class="tracking-zone">
+            <div class="tracking-head">
+              <span class="tracking-icon">🚚</span>
+              <h3>ระบบอัปเดตสถานะขนส่ง / เลขพัสดุ</h3>
+            </div>
+            
+            <div class="row-grid">
+              <div>
+                <label>ขนส่งที่ใช้</label>
+                <select id="trackTransport">
+                  <option value="Nim Express">Nim Express</option>
+                  <option value="Lalamove">Lalamove</option>
+                  <option value="Grab">Grab</option>
+                  <option value="Line Man">Line Man</option>
+                  <option value="other">อื่น ๆ</option>
+                </select>
+              </div>
+              <div id="otherTransportWrap" style="display:none;">
+                <label>ระบุชื่อบริษัทขนส่ง</label>
+                <input type="text" id="otherTransportName" placeholder="เช่น Flash, Kerry...">
+              </div>
+              <div style="grid-column: span 2;">
+                <label>เลขพัสดุ / หมายเลขทะเบียนรถ</label>
+                <input type="text" id="trackNo" placeholder="ระบุหมายเลขพัสดุหรือเลขนำทาง...">
+              </div>
+            </div>
+
+            <div style="margin-top: 12px; margin-bottom: 16px;">
+              <label>ลิงก์สำหรับตรวจสอบสถานะพัสดุ (ถ้ามี)</label>
+              <input type="text" id="trackUrl" placeholder="https://tracking.example.com/...">
+            </div>
+            <button class="btn btn-dark-action" id="sendTrackingBtn">📦 ส่งแจ้งเลขพัสดุลูกค้า LINE OA</button>
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <section id="page-stock" class="page">
+      <section class="card placeholder-card">
+        <h2>📦 คลังสินค้าและสต็อก (Stock)</h2>
+        <p class="hint">ส่วนงานนี้เชื่อมต่อไปยังชีต Stock ดึงข้อมูลเรียลไทม์เพื่อตรวจสอบยอดสินค้าคงเหลือ</p>
+      </section>
+    </section>
+
+    <section id="page-sales" class="page">
+      <section class="card placeholder-card">
+        <h2>📊 รายงานยอดขายประจำวัน (Sales Report)</h2>
+        <p class="hint">ส่วนคำนวณและบันทึกประวัติกำไรขาดทุนรายเดือนให้สอดคล้องกับงบการเงินหลัก</p>
+      </section>
+    </section>
+
+    <section id="page-orders" class="page">
+      <section class="card placeholder-card">
+        <h2>🧾 บันทึกรายการสั่งซื้อวัตถุดิบ (Purchases)</h2>
+        <p class="hint">ตารางบันทึกรายจ่ายและออเดอร์คำสั่งจัดซื้อสิ่งของและอุปกรณ์ฟาร์มรายเดือน</p>
+      </section>
+    </section>
+  </div>
+
+  <div id="billModal" class="modal" aria-hidden="true" role="dialog" aria-modal="true">
+    <div class="modal-backdrop" data-close="1"></div>
+    <div class="modal-card" role="document">
+      <div class="modal-head">
+        <h3>📄 ใบเสร็จสรุปค่าใช้จ่าย / e-Bill</h3>
+        <button class="modal-close" id="billClose" aria-label="ปิด">×</button>
+      </div>
+      <div class="modal-body">
+        <div id="billContent" class="receipt"></div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-secondary" id="billCopy">คัดลอกข้อความใบเสร็จ</button>
+        <button class="btn btn-primary" id="billDone">ปิดหน้าต่าง</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
