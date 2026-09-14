@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Big Mouse Farm - Stock Preparation & Dispatch</title>
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "text-muted": "#64748B", "error-container": "#ffdad6", "on-surface": "#0b1c30",
+            "state-danger": "#EF4444", "surface-container": "#e5eeff", "on-background": "#0b1c30",
+            "card-dark": "#0F172A", "kpi-blue": "#3B82F6", "surface-container-low": "#eff4ff",
+            "on-primary": "#ffffff", "bg-main": "#F8FAFC", "secondary": "#0058be",
+            "surface": "#f8f9ff", "kpi-orange": "#FF6A00", "tertiary": "#000000",
+            "text-inverse": "#FFFFFF", "background": "#f8f9ff", "on-tertiary": "#ffffff",
+            "card-light": "#FFFFFF", "primary": "#000000", "border-light": "#E2E8F0",
+            "error": "#ba1a1a", "surface-bright": "#f8f9ff", "text-primary": "#0F172A"
+          },
+          borderRadius: { "DEFAULT": "15px", "card": "15px", "full": "9999px" }
+        }
+      }
+    }
+</script>
+</head>
+<body class="bg-[#F8FAFC] text-text-primary min-h-screen font-sans antialiased">
+
+<!-- MOBILE TOP BAR -->
+<header class="md:hidden flex items-center justify-between p-4 bg-card-light border-b border-border-light sticky top-0 z-20">
+  <div class="flex items-center gap-3">
+    <div class="w-8 h-8 rounded-full overflow-hidden border border-border-light bg-[#FFFFFF] flex items-center justify-center p-1">
+      <img alt="Big Mouse Farm" class="w-full h-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAaR0YK3kqpBfr2luQLOYfkBcDMTkvHkpqPHiEfdH0nDzSGI9hrhmoJnU2t4snznlidCbpiXVvCi-JhzMxfx_57ug-6RgQZdrSgnrUTGnpttWProL1ikaqVNUIEZ-JMzUp259pG_BGj_hwyniK_F-gJT-cYzOhiObkFZP55vmZZKWnfYV7DVIBZRu59HP0CVLmiprCUf0GKTfhIuT0wVDSiQyqU8n_eY-HsmJY-bvOG9iJFA6zokyTMSBNuX75xytqMZw">
+    </div>
+    <span class="text-sm font-bold text-text-primary">Big Mouse Farm</span>
+  </div>
+  <button id="mobile-menu-btn" class="p-2 text-text-primary">
+    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+  </button>
+</header>
+
+<!-- SIDEBAR -->
+<aside id="sidebar" class="fixed top-0 left-0 h-screen w-[260px] flex flex-col justify-between bg-card-light border-r border-border-light z-40 p-6 transition-transform transform -translate-x-full md:translate-x-0">
+<div>
+<div class="flex items-center justify-between pb-6 border-b border-border-light">
+  <div class="flex items-center space-x-3">
+    <div class="w-10 h-10 rounded-full border border-border-light bg-[#FFFFFF] flex items-center justify-center p-1 shadow-sm">
+      <img alt="Big Mouse Farm" class="w-full h-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAaR0YK3kqpBfr2luQLOYfkBcDMTkvHkpqPHiEfdH0nDzSGI9hrhmoJnU2t4snznlidCbpiXVvCi-JhzMxfx_57ug-6RgQZdrSgnrUTGnpttWProL1ikaqVNUIEZ-JMzUp259pG_BGj_hwyniK_F-gJT-cYzOhiObkFZP55vmZZKWnfYV7DVIBZRu59HP0CVLmiprCUf0GKTfhIuT0wVDSiQyqU8n_eY-HsmJY-bvOG9iJFA6zokyTMSBNuX75xytqMZw">
+    </div>
+    <div class="overflow-hidden">
+    <h1 class="text-base font-bold text-text-primary truncate">Big Mouse</h1>
+    <p class="text-xs text-text-muted truncate">Operations</p>
+    </div>
+  </div>
+  <button id="close-menu-btn" class="md:hidden text-text-muted hover:text-text-primary">
+    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+  </button>
+</div>
+<nav class="mt-6 flex flex-col space-y-1.5">
+<a class="flex items-center w-full px-4 py-2.5 rounded-full bg-primary text-text-inverse text-sm font-semibold" href="preparation.html">Preparation</a>
+<a class="flex items-center w-full px-4 py-2.5 rounded-full text-text-muted text-sm font-medium hover:bg-[#F1F5F9]" href="pricing.html">Pricing</a>
+<a class="flex items-center w-full px-4 py-2.5 rounded-full text-text-muted text-sm font-medium hover:bg-[#F1F5F9]" href="stock.html">Stock</a>
+<a class="flex items-center w-full px-4 py-2.5 rounded-full text-text-muted text-sm font-medium hover:bg-[#F1F5F9]" href="sales.html">Sales</a>
+<a class="flex items-center w-full px-4 py-2.5 rounded-full text-text-muted text-sm font-medium hover:bg-[#F1F5F9]" href="purchases.html">Purchases</a>
+<a class="flex items-center w-full px-4 py-2.5 rounded-full text-text-muted text-sm font-medium hover:bg-[#F1F5F9]" href="settings.html">Settings</a>
+</nav>
+</div>
+<div class="p-4 rounded-[15px] bg-[#0F172A] text-text-inverse">
+<div class="text-[10px] font-bold uppercase text-text-muted tracking-wider">Facility Ops</div>
+<div class="text-sm font-bold mt-1 text-text-inverse">BKK Hub Unit 02</div>
+<div class="mt-3 pt-2.5 border-t border-slate-700 flex items-center justify-between text-xs">
+<span class="text-[#94A3B8]">Local Cache</span>
+<span class="text-emerald-400 font-bold">Online</span>
+</div>
+</div>
+</aside>
+
+<main class="md:ml-[260px] p-4 md:p-8 max-w-[1600px]">
+<header class="flex flex-col lg:flex-row lg:items-center lg:justify-between pb-6 md:pb-8 border-b border-border-light gap-4">
+<div>
+<div class="flex items-center gap-3">
+<h1 class="text-2xl md:text-3xl font-bold text-text-primary">Stock Preparation</h1>
+<span class="px-3 py-1 bg-[#0F172A] text-text-inverse text-xs font-semibold rounded-full hidden sm:inline-block">Local Mode</span>
+</div>
+<p class="text-sm text-text-muted mt-1">แจ้งเตือนภารกิจเตรียมสินค้า (บันทึกในอุปกรณ์)</p>
+</div>
+<div class="flex flex-wrap items-center gap-2">
+<button class="px-4 py-2 bg-primary text-text-inverse rounded-full text-sm font-semibold hover:bg-[#1E293B] transition-colors" onclick="requestNotificationPermission()">
+  🔔 เปิดแจ้งเตือน
+</button>
+<button class="px-4 py-2 bg-card-light border border-border-light text-text-muted rounded-full text-sm font-medium hover:text-text-primary" onclick="clearAllTasks()">
+  ล้างงานทั้งหมด
+</button>
+</div>
+</header>
+
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start mt-6 md:mt-8 pb-12">
+<!-- Add Task Module -->
+<div class="lg:col-span-5 space-y-6">
+<div class="bg-card-light border border-border-light rounded-[15px] p-5 md:p-6 shadow-sm">
+<div class="pb-3 border-b border-border-light">
+  <h3 class="text-lg font-bold text-text-primary">Quick Prep Task Entry</h3>
+  <p class="text-sm text-text-muted">เพิ่มรายการคัดแยกหรือเตรียมสินค้าด่วน</p>
+</div>
+<form id="task-form" class="space-y-4 mt-4">
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+    <div>
+      <label class="block text-sm font-bold text-text-primary mb-1">Item Category</label>
+      <select id="task-cat" class="w-full bg-[#FFFFFF] border border-border-light rounded-xl px-3 py-2 text-sm focus:ring-0">
+        <option value="Mice (Frozen)">Mice (Frozen)</option><option value="Mice (Live)">Mice (Live)</option>
+        <option value="Rat (Frozen)">Rat (Frozen)</option><option value="Rat (Live)">Rat (Live)</option>
+      </select>
+    </div>
+    <div>
+      <label class="block text-sm font-bold text-text-primary mb-1">Spec / Size</label>
+      <input id="task-size" type="text" class="w-full bg-[#FFFFFF] border border-border-light rounded-xl px-3 py-2 text-sm focus:ring-0" placeholder="e.g. Hopper, Jumbo">
+    </div>
+  </div>
+  
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+    <div>
+      <label class="block text-sm font-bold text-text-primary mb-1">Quantity (Units)</label>
+      <input id="task-qty" type="number" class="w-full bg-[#FFFFFF] border border-border-light rounded-xl px-3 py-2 text-sm focus:ring-0" placeholder="e.g. 50">
+    </div>
+    <div>
+      <label class="block text-sm font-bold text-text-primary mb-1">Priority</label>
+      <div class="flex items-center gap-2" id="priority-group">
+        <button type="button" class="priority-btn active flex-1 py-2 rounded-xl text-sm font-bold bg-[#0F172A] text-text-inverse" data-val="Urgent">Urgent</button>
+        <button type="button" class="priority-btn flex-1 py-2 rounded-xl text-sm font-medium bg-card-light border border-border-light text-text-muted" data-val="Standard">Standard</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+    <div>
+      <label class="block text-sm font-bold text-text-primary mb-1">Due Date (วันที่ส่ง)</label>
+      <input id="task-date" type="date" class="w-full bg-[#FFFFFF] border border-border-light rounded-xl px-3 py-2 text-sm focus:ring-0">
+    </div>
+    <div>
+      <label class="block text-sm font-bold text-text-primary mb-1">Due Time (เวลาส่ง)</label>
+      <input id="task-time" type="time" class="w-full bg-[#FFFFFF] border border-border-light rounded-xl px-3 py-2 text-sm focus:ring-0">
+    </div>
+  </div>
+
+  <div>
+    <label class="block text-sm font-bold text-text-primary mb-1">Prep Notes / Courier</label>
+    <input id="task-note" type="text" class="w-full bg-[#FFFFFF] border border-border-light rounded-xl px-3 py-2 text-sm focus:ring-0" placeholder="เลขล็อต, วิธีแพ็ค, ขนส่ง...">
+  </div>
+  
+  <button type="submit" class="w-full mt-2 py-3 rounded-xl bg-primary text-text-inverse text-sm font-bold hover:bg-[#1E293B]">Add Daily Task</button>
+</form>
+</div>
+</div>
+
+<!-- Task List -->
+<div class="lg:col-span-7">
+<div class="bg-card-light border border-border-light rounded-[15px] p-5 md:p-6 shadow-sm">
+<div class="flex items-center justify-between pb-4 border-b border-border-light">
+  <div>
+    <h2 class="text-xl font-bold text-text-primary">Daily Prep Action Checklist</h2>
+    <p class="text-sm text-text-muted mt-0.5">รายการเตรียมสต็อกที่ต้องทำ</p>
+  </div>
+  <span id="task-count" class="px-2.5 py-1 bg-[#F1F5F9] text-text-primary font-bold text-xs rounded-full">0 Active</span>
+</div>
+<div id="task-list" class="divide-y divide-[#F1F5F9] mt-3">
+  <!-- Dynamic Task Content -->
+</div>
+</div>
+</div>
+</div>
+</main>
+
+<script>
+  // Mobile Menu Logic
+  const mobileBtn = document.getElementById('mobile-menu-btn');
+  const closeMenuBtn = document.getElementById('close-menu-btn');
+  const sidebar = document.getElementById('sidebar');
+
+  mobileBtn.addEventListener('click', () => sidebar.classList.remove('-translate-x-full'));
+  closeMenuBtn.addEventListener('click', () => sidebar.classList.add('-translate-x-full'));
+
+  // Task Logic
+  let tasks = JSON.parse(localStorage.getItem('bmf_prep_tasks')) || [];
+  let currentPriority = "Urgent";
+
+  document.addEventListener('DOMContentLoaded', () => {
+    // Set default date to today
+    document.getElementById('task-date').value = new Date().toISOString().split('T')[0];
+    
+    renderTasks();
+    setupPriorityToggle();
+    checkDueTimes();
+    setInterval(checkDueTimes, 60000); 
+  });
+
+  function setupPriorityToggle() {
+    const btns = document.querySelectorAll('.priority-btn');
+    btns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        btns.forEach(b => {
+          b.className = 'priority-btn flex-1 py-2 rounded-xl text-sm font-medium bg-card-light border border-border-light text-text-muted';
+        });
+        btn.className = 'priority-btn active flex-1 py-2 rounded-xl text-sm font-bold bg-[#0F172A] text-text-inverse';
+        currentPriority = btn.getAttribute('data-val');
+      });
+    });
+  }
+
+  document.getElementById('task-form').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const cat = document.getElementById('task-cat').value;
+    const size = document.getElementById('task-size').value;
+    const qty = document.getElementById('task-qty').value;
+    const date = document.getElementById('task-date').value;
+    const time = document.getElementById('task-time').value;
+    const note = document.getElementById('task-note').value;
+
+    if (!size || !qty || !date || !time) return Swal.fire('เตือน', 'ระบุไซส์ จำนวน วันที่ และเวลาให้ครบ', 'warning');
+
+    const newTask = { id: Date.now(), cat, size, qty, date, time, note, priority: currentPriority, status: 'pending', alerted: false };
+    tasks.push(newTask);
+    saveTasks();
+    renderTasks();
+    
+    // Reset inputs except date
+    document.getElementById('task-size').value = '';
+    document.getElementById('task-qty').value = '';
+    document.getElementById('task-time').value = '';
+    document.getElementById('task-note').value = '';
+
+    Swal.fire({toast:true, position:'top-end', icon:'success', title:'เพิ่มงานเรียบร้อย', showConfirmButton:false, timer:1500});
+  });
+
+  function renderTasks() {
+    const list = document.getElementById('task-list');
+    list.innerHTML = '';
+    let activeCount = 0;
+    
+    if (tasks.length === 0) {
+      list.innerHTML = '<div class="py-6 text-center text-text-muted text-sm">ไม่มีคิวงานค้าง</div>';
+    } else {
+      tasks.sort((a, b) => {
+        if (a.status !== b.status) return a.status === 'pending' ? -1 : 1;
+        const dateA = new Date(`${a.date}T${a.time}:00`);
+        const dateB = new Date(`${b.date}T${b.time}:00`);
+        return dateA - dateB;
+      });
+
+      tasks.forEach((t, i) => {
+        if (t.status === 'pending') activeCount++;
+        
+        const isDone = t.status === 'done';
+        const colorTitle = isDone ? 'text-text-muted line-through' : 'text-text-primary';
+        const pillClass = t.priority === 'Urgent' ? 'bg-[#FEE2E2] text-[#EF4444]' : 'bg-[#EFF4FF] text-[#2170E4]';
+        
+        // Format date display
+        const dateObj = new Date(t.date);
+        const dateStr = `${dateObj.getDate()}/${dateObj.getMonth()+1}`;
+
+        list.innerHTML += `
+          <div class="py-4 flex flex-col gap-3 ${isDone ? 'opacity-50' : ''}">
+            <div class="flex items-start gap-3">
+              <span class="mt-1 w-5 h-5 rounded-full border border-text-primary shrink-0 flex items-center justify-center font-bold text-xs">${i+1}</span>
+              <div class="w-full">
+                <h3 class="font-bold text-sm ${colorTitle}">${t.cat} ${t.size} <span class="text-kpi-orange">x${t.qty}</span></h3>
+                <p class="text-xs font-semibold text-text-muted mt-1">กำหนดส่ง: ${dateStr} เวลา ${t.time}</p>
+                <p class="text-xs text-text-muted mt-0.5">${t.note || '-'}</p>
+                
+                <div class="flex items-center justify-between mt-3">
+                  <span class="px-2.5 py-0.5 text-[10px] font-bold rounded-full ${isDone ? 'bg-slate-200 text-slate-500' : pillClass}">
+                    ${isDone ? 'Completed' : t.priority}
+                  </span>
+                  <div class="flex gap-2">
+                    ${!isDone ? `<button onclick="markDone(${t.id})" class="px-4 py-1.5 text-xs font-bold rounded-xl bg-[#0F172A] text-text-inverse hover:bg-[#1E293B]">Done</button>` : ''}
+                    <button onclick="deleteTask(${t.id})" class="px-3 py-1.5 text-xs font-bold text-state-danger hover:underline">Del</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+      });
+    }
+    document.getElementById('task-count').innerText = `${activeCount} Active`;
+  }
+
+  function markDone(id) {
+    const task = tasks.find(t => t.id === id);
+    if (task) task.status = 'done';
+    saveTasks(); renderTasks();
+  }
+
+  function deleteTask(id) {
+    tasks = tasks.filter(t => t.id !== id);
+    saveTasks(); renderTasks();
+  }
+
+  function clearAllTasks() {
+    Swal.fire({ title: 'ล้างงานทั้งหมด?', icon: 'warning', showCancelButton: true }).then((r) => {
+      if (r.isConfirmed) { tasks = []; saveTasks(); renderTasks(); }
+    });
+  }
+
+  function saveTasks() {
+    localStorage.setItem('bmf_prep_tasks', JSON.stringify(tasks));
+  }
+
+  // --- Notification System ---
+  function requestNotificationPermission() {
+    if ("Notification" in window) {
+      Notification.requestPermission().then(permission => {
+        if (permission === "granted") Swal.fire({toast:true, position:'top-end', icon:'success', title:'เปิดแจ้งเตือนสำเร็จ', showConfirmButton:false, timer:1500});
+        else Swal.fire('เตือน', 'คุณปฏิเสธการแจ้งเตือน', 'info');
+      });
+    }
+  }
+
+  function checkDueTimes() {
+    if (!("Notification" in window) || Notification.permission !== "granted") return;
+    
+    const now = new Date();
+    
+    tasks.forEach(t => {
+      if (t.status === 'pending' && !t.alerted) {
+        const taskDateTime = new Date(`${t.date}T${t.time}:00`);
+        const diffMinutes = (taskDateTime - now) / (1000 * 60);
+
+        // แจ้งเตือนล่วงหน้า 30 นาที จนถึงเลยเวลาไปแล้ว 60 นาที
+        if (diffMinutes <= 30 && diffMinutes >= -60) {
+          new Notification("BMF Task Alert 🐭", {
+            body: `ถึงเวลาเตรียม: ${t.cat} ${t.size} x${t.qty} (กำหนดส่ง ${t.time})`,
+            icon: "https://cdn-icons-png.flaticon.com/512/3209/3209841.png"
+          });
+          t.alerted = true;
+          saveTasks();
+        }
+      }
+    });
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Big Mouse Farm - Purchases & Financial Dashboard</title>
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "text-muted": "#64748B", "error-container": "#ffdad6", "on-surface": "#0b1c30",
+            "state-danger": "#EF4444", "surface-container": "#e5eeff", "on-background": "#0b1c30",
+            "card-dark": "#0F172A", "kpi-blue": "#3B82F6", "surface-container-low": "#eff4ff",
+            "on-primary": "#ffffff", "bg-main": "#F8FAFC", "secondary": "#0058be",
+            "surface": "#f8f9ff", "kpi-orange": "#FF6A00", "tertiary": "#000000",
+            "text-inverse": "#FFFFFF", "background": "#f8f9ff", "on-tertiary": "#ffffff",
+            "card-light": "#FFFFFF", "primary": "#000000", "border-light": "#E2E8F0",
+            "error": "#ba1a1a", "surface-bright": "#f8f9ff", "text-primary": "#0F172A"
+          },
+          "borderRadius": { "DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px" },
+          "fontFamily": {
+            "body-sm": ["Inter"], "body-lg": ["Inter"], "headline-lg": ["Inter"],
+            "headline-sm": ["Inter"], "headline-md": ["Inter"], "body-md": ["Inter"]
+          }
+        },
+      }
+    }
+  </script>
+</head>
+<body class="bg-bg-main text-text-primary antialiased min-h-screen flex flex-col md:flex-row selection:bg-text-primary selection:text-text-inverse">
+
+<!-- MOBILE TOP BAR -->
+<header class="md:hidden flex items-center justify-between p-4 bg-card-light border-b border-border-light sticky top-0 z-20">
+  <div class="flex items-center gap-3">
+    <div class="w-8 h-8 rounded-full overflow-hidden border border-border-light bg-[#FFFFFF] flex items-center justify-center p-1">
+      <img alt="Big Mouse Farm" class="w-full h-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDfcbMRTaRGtYB9Ribr6faTlwR6rHhZEJ8oH3OZg1lbd_wbhijk89hNMrgz8NKKlNc8eKqF4pLXOoShcRa5McJaD7JPe3_pyum59CmkAf4Vb9KXYb7PeWkcBIcFLDM6D04sg3HydeB6HmSjoi1_8ncxLUhz9rWBUNVUIuns67W8jGbLLyWlpXuY-jfA42hOav2TDBO_fV25t-ExFx5mz3vvvwZSXCRFOUe1WVbNbIsKl82jIHyrG4x6d-rlAwV5yJyfrQ">
+    </div>
+    <span class="text-sm font-bold text-text-primary">Big Mouse Farm</span>
+  </div>
+  <button id="mobile-menu-btn" class="p-2 text-text-primary">
+    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+  </button>
+</header>
+
+<!-- SIDEBAR -->
+<aside id="sidebar" class="w-[260px] h-screen p-6 flex flex-col justify-between shrink-0 fixed top-0 left-0 bg-card-light border-r border-border-light z-40 transition-transform transform -translate-x-full md:translate-x-0">
+<div class="flex flex-col gap-6">
+<div class="flex items-center justify-between pb-4 border-b border-border-light md:border-none md:pb-0">
+  <div class="flex items-center gap-3">
+    <div class="w-11 h-11 rounded-full overflow-hidden shrink-0 flex items-center justify-center bg-card-light border border-slate-200 shadow-sm">
+      <img alt="Big Mouse Farm" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDfcbMRTaRGtYB9Ribr6faTlwR6rHhZEJ8oH3OZg1lbd_wbhijk89hNMrgz8NKKlNc8eKqF4pLXOoShcRa5McJaD7JPe3_pyum59CmkAf4Vb9KXYb7PeWkcBIcFLDM6D04sg3HydeB6HmSjoi1_8ncxLUhz9rWBUNVUIuns67W8jGbLLyWlpXuY-jfA42hOav2TDBO_fV25t-ExFx5mz3vvvwZSXCRFOUe1WVbNbIsKl82jIHyrG4x6d-rlAwV5yJyfrQ">
+    </div>
+    <div class="flex flex-col">
+      <span class="text-base font-bold text-text-primary tracking-tight">Big Mouse</span>
+      <span class="text-xs text-text-muted">Operations</span>
+    </div>
+  </div>
+  <button id="close-menu-btn" class="md:hidden text-text-muted hover:text-text-primary">
+    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+  </button>
+</div>
+<nav class="flex flex-col gap-1.5 mt-2">
+<a class="flex items-center w-full px-4 py-2.5 rounded-full text-text-muted text-sm font-medium hover:bg-surface-container-low" href="preparation.html">Preparation</a>
+<a class="flex items-center w-full px-4 py-2.5 rounded-full text-text-muted text-sm font-medium hover:bg-surface-container-low" href="pricing.html">Pricing</a>
+<a class="flex items-center w-full px-4 py-2.5 rounded-full text-text-muted text-sm font-medium hover:bg-surface-container-low" href="stock.html">Stock</a>
+<a class="flex items-center w-full px-4 py-2.5 rounded-full text-text-muted text-sm font-medium hover:bg-surface-container-low" href="sales.html">Sales</a>
+<a class="flex items-center w-full px-4 py-2.5 rounded-full bg-card-dark text-text-inverse text-sm font-semibold transition-all" href="purchases.html">Purchases</a>
+<a class="flex items-center w-full px-4 py-2.5 rounded-full text-text-muted text-sm font-medium hover:bg-surface-container-low" href="settings.html">Settings</a>
+</nav>
+</div>
+<div class="pt-4 border-t border-border-light flex flex-col gap-2">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-kpi-blue shrink-0"></span>
+<span class="text-xs font-semibold text-text-primary">System Live Node</span>
+</div>
+<p class="text-xs text-text-muted">Operational v3.0.0</p>
+</div>
+</aside>
+
+<main class="flex-1 md:ml-[260px] p-4 md:p-8 flex flex-col gap-6 md:gap-8 max-w-[1440px]">
+<section class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+<div>
+<h1 class="text-2xl md:text-3xl font-bold text-text-primary">Purchases & Financial Dashboard</h1>
+<p class="text-sm text-text-muted mt-1">บันทึกค่าใช้จ่าย บริหารจัดการต้นทุนฟาร์ม และสรุปบัญชีการเงิน</p>
+</div>
+<div class="flex flex-wrap items-center gap-2.5">
+<button class="px-5 py-2.5 rounded-full bg-card-light border border-border-light text-sm font-semibold hover:bg-surface-container-low" onclick="loadDashboard()">
+  Sync Ledger
+</button>
+<button class="px-5 py-2.5 rounded-full bg-card-dark text-text-inverse text-sm font-semibold hover:bg-black shadow-sm" onclick="toggleModal(true)">
+  Transfer Money
+</button>
+</div>
+</section>
+
+<!-- KPI METRICS -->
+<section class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+<div class="bg-card-light border border-border-light p-5 md:p-6 flex flex-col justify-between rounded-2xl shadow-sm">
+<div>
+<span class="text-xs font-bold text-text-muted uppercase tracking-wider">Sales Revenue (รายรับ)</span>
+<div class="mt-2 text-2xl md:text-3xl font-extrabold text-text-primary" id="dash-sales">฿0.00</div>
+</div>
+</div>
+<div class="bg-card-light border border-border-light p-5 md:p-6 flex flex-col justify-between rounded-2xl shadow-sm">
+<div>
+<span class="text-xs font-bold text-text-muted uppercase tracking-wider">Total Expenses (รายจ่าย)</span>
+<div class="mt-2 text-2xl md:text-3xl font-extrabold text-text-primary" id="dash-expenses">฿0.00</div>
+</div>
+</div>
+<div class="bg-card-light border border-border-light p-5 md:p-6 flex flex-col justify-between rounded-2xl shadow-sm">
+<div>
+<span class="text-xs font-bold text-text-muted uppercase tracking-wider">Net Profit (กำไรสุทธิ)</span>
+<div class="mt-2 text-2xl md:text-3xl font-extrabold text-kpi-blue" id="dash-profit">฿0.00</div>
+</div>
+</div>
+<div class="bg-card-light border border-border-light p-5 md:p-6 flex flex-col justify-between rounded-2xl shadow-sm">
+<div>
+<div class="flex items-center justify-between">
+<span class="text-xs font-bold text-text-muted uppercase tracking-wider">Wallet Balance</span>
+<button class="text-xs font-bold underline hover:text-kpi-blue" onclick="toggleModal(true)">Transfer</button>
+</div>
+<div class="mt-2 text-2xl md:text-3xl font-extrabold text-text-primary" id="dash-balance">฿0.00</div>
+</div>
+<div class="mt-4 pt-3 border-t border-border-light flex flex-col gap-1.5">
+<div class="flex items-center justify-between text-sm">
+<span class="text-text-muted">Cash (เงินสด)</span>
+<span class="font-semibold" id="dash-cash">฿0.00</span>
+</div>
+<div class="flex items-center justify-between text-sm">
+<span class="text-text-muted">Bank (บัญชีธนาคาร)</span>
+<span class="font-semibold" id="dash-digital">฿0.00</span>
+</div>
+</div>
+</div>
+</section>
+
+<!-- MAIN TWO-COLUMN SECTION -->
+<section class="grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-8 items-start">
+<div class="lg:col-span-12 bg-card-dark text-text-inverse p-5 md:p-8 border border-card-dark-border shadow-md rounded-2xl">
+<div class="border-b border-card-dark-border pb-4 mb-5">
+<h2 class="text-xl md:text-2xl font-bold text-text-inverse">Expense Entry Form (บันทึกรายจ่าย)</h2>
+<p class="text-xs md:text-sm text-text-muted mt-1">บันทึกต้นทุนอาหารสัตว์, อุปกรณ์, ค่าขนส่ง และเวชภัณฑ์</p>
+</div>
+<form id="order-form" class="flex flex-col gap-4 md:gap-5">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div class="flex flex-col gap-1.5">
+<label class="text-xs font-semibold text-text-muted uppercase">Date (วันที่)</label>
+<input id="order-date" class="w-full bg-[#1E293B] border border-[#334155] text-text-inverse rounded-xl px-4 py-2.5 text-sm focus:ring-0" type="date">
+</div>
+<div class="flex flex-col gap-1.5">
+<label class="text-xs font-semibold text-text-muted uppercase">Payment Wallet (กระเป๋าเงิน)</label>
+<select id="order-pay-type" class="w-full bg-[#1E293B] border border-[#334155] text-text-inverse rounded-xl px-4 py-2.5 text-sm focus:ring-0">
+  <option value="โอน">Bank Transfer (โอนบัญชีธนาคาร)</option>
+  <option value="เงินสด">Cash (เงินสด)</option>
+</select>
+</div>
+</div>
+
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div class="flex flex-col gap-1.5">
+<label class="text-xs font-semibold text-text-muted uppercase">Item Name (รายการค่าใช้จ่าย)</label>
+<input id="order-item" class="w-full bg-[#1E293B] border border-[#334155] text-text-inverse rounded-xl px-4 py-2.5 text-sm focus:ring-0" type="text" placeholder="ระบุรายการ...">
+</div>
+<div class="flex flex-col gap-1.5">
+<label class="text-xs font-semibold text-text-muted uppercase">Supplier (ผู้จำหน่าย)</label>
+<input id="order-supplier" class="w-full bg-[#1E293B] border border-[#334155] text-text-inverse rounded-xl px-4 py-2.5 text-sm focus:ring-0" type="text" placeholder="ร้านค้า...">
+</div>
+</div>
+
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+<div class="flex flex-col gap-1.5">
+<label class="text-xs font-semibold text-text-muted uppercase">Unit Price (฿)</label>
+<input id="order-price" class="w-full bg-[#1E293B] border border-[#334155] text-text-inverse rounded-xl px-3 py-2 text-sm focus:ring-0" type="number" placeholder="0">
+</div>
+<div class="flex flex-col gap-1.5">
+<label class="text-xs font-semibold text-text-muted uppercase">Quantity</label>
+<input id="order-qty" class="w-full bg-[#1E293B] border border-[#334155] text-text-inverse rounded-xl px-3 py-2 text-sm focus:ring-0" type="number" value="1">
+</div>
+<div class="flex flex-col gap-1.5">
+<label class="text-xs font-semibold text-text-muted uppercase">Shipping (฿)</label>
+<input id="order-shipping" class="w-full bg-[#1E293B] border border-[#334155] text-text-inverse rounded-xl px-3 py-2 text-sm focus:ring-0" type="number" placeholder="0">
+</div>
+<div class="flex flex-col gap-1.5">
+<label class="text-xs font-semibold text-text-muted uppercase">Discount (฿)</label>
+<input id="order-discount" class="w-full bg-[#1E293B] border border-[#334155] text-text-inverse rounded-xl px-3 py-2 text-sm focus:ring-0" type="number" placeholder="0">
+</div>
+</div>
+
+<div class="flex flex-col gap-1.5">
+<label class="text-xs font-semibold text-text-muted uppercase">Note (หมายเหตุ)</label>
+<input id="order-note" class="w-full bg-[#1E293B] border border-[#334155] text-text-inverse rounded-xl px-4 py-2.5 text-sm focus:ring-0" type="text" placeholder="เพิ่มเติม...">
+</div>
+
+<div class="flex flex-col sm:flex-row items-center gap-4 pt-4 border-t border-card-dark-border justify-between">
+<div class="text-lg font-bold">ยอดสุทธิ: ฿<span id="total-display">0.00</span></div>
+<button id="btn-save" class="w-full sm:w-auto py-3 px-8 rounded-full bg-text-inverse text-text-primary text-base font-bold hover:bg-slate-200 transition-colors" type="button" onclick="submitOrder()">
+  Save Expense (บันทึก)
+</button>
+</div>
+</form>
+</div>
+</section>
+
+<!-- BOTTOM SECTION: EXPENSE HISTORY -->
+<section class="bg-card-light border border-border-light p-5 md:p-8 shadow-sm rounded-2xl">
+<div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-4 border-b border-border-light">
+<div>
+<h2 class="text-xl md:text-2xl font-bold text-text-primary">Expense History (ประวัติรายจ่าย)</h2>
+</div>
+</div>
+<div class="overflow-x-auto mt-4">
+<table class="w-full text-left border-collapse min-w-[500px]">
+<thead>
+<tr class="border-b border-border-light text-text-muted text-xs font-bold uppercase bg-[#F8FAFC]">
+<th class="py-3 px-3">Date</th>
+<th class="py-3 px-3">Item & Supplier</th>
+<th class="py-3 px-3 text-right">Amount (฿)</th>
+<th class="py-3 px-3 text-center">Action</th>
+</tr>
+</thead>
+<tbody id="history-body" class="divide-y divide-slate-100 text-sm">
+<tr><td colspan="4" class="py-6 text-center text-text-muted">กำลังโหลดข้อมูล...</td></tr>
+</tbody>
+</table>
+</div>
+</section>
+</main>
+</div>
+
+<!-- TRANSFER MODAL -->
+<div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-card-dark/60 backdrop-blur-sm hidden opacity-0 transition-opacity duration-200" id="transferModal">
+<div class="bg-card-light border border-border-light w-full max-w-lg p-6 md:p-8 shadow-2xl flex flex-col gap-5 rounded-[20px]">
+<div class="flex items-center justify-between pb-3 border-b border-border-light">
+<h3 class="text-lg md:text-xl font-bold text-text-primary">Transfer Money (โยกเงิน)</h3>
+<button class="px-3 py-1.5 rounded-full border border-border-light text-xs font-semibold text-text-primary hover:bg-surface-container-low" onclick="toggleModal(false)">Close</button>
+</div>
+<form class="flex flex-col gap-4" onsubmit="event.preventDefault();">
+<div class="flex flex-col gap-1.5">
+<label class="text-xs font-semibold text-text-primary uppercase">วันที่ทำรายการ</label>
+<input id="transfer-date" class="w-full bg-card-light border border-border-light rounded-xl px-4 py-2.5 text-sm focus:ring-0" type="date">
+</div>
+<div class="flex flex-col gap-1.5">
+<label class="text-xs font-semibold text-text-primary uppercase">รูปแบบการโยกเงิน</label>
+<select id="transfer-type" class="w-full bg-card-light border border-border-light rounded-xl px-4 py-2.5 text-sm focus:ring-0">
+<option value="DigitalToCash">ถอนเงินออกมาใช้ (Bank -> Cash)</option>
+<option value="CashToDigital">ฝากเข้าธนาคาร (Cash -> Bank)</option>
+</select>
+</div>
+<div class="flex flex-col gap-1.5">
+<label class="text-xs font-semibold text-text-primary uppercase">Transfer Amount (ยอดเงิน)</label>
+<input id="transfer-amount" class="w-full bg-card-light border border-border-light rounded-xl px-4 py-2.5 text-lg font-bold focus:ring-0" placeholder="0" type="number">
+</div>
+<div class="flex flex-col gap-1.5">
+<label class="text-xs font-semibold text-text-primary uppercase">Transfer Note (บันทึกช่วยจำ)</label>
+<input id="transfer-note" class="w-full bg-card-light border border-border-light rounded-xl px-4 py-2.5 text-sm focus:ring-0" placeholder="เช่น กดเงินสดใช้จ่าย" type="text">
+</div>
+<div class="pt-4 border-t border-border-light flex items-center justify-end gap-3">
+<button id="btn-transfer" class="w-full py-3 rounded-xl bg-card-dark text-text-inverse text-sm font-bold hover:bg-slate-800" onclick="submitTransfer()">Confirm Transfer</button>
+</div>
+</form>
+</div>
+</div>
+
+<script>
+  // Mobile Menu Logic
+  const mobileBtn = document.getElementById('mobile-menu-btn');
+  const closeMenuBtn = document.getElementById('close-menu-btn');
+  const sidebar = document.getElementById('sidebar');
+
+  mobileBtn.addEventListener('click', () => sidebar.classList.remove('-translate-x-full'));
+  closeMenuBtn.addEventListener('click', () => sidebar.classList.add('-translate-x-full'));
+
+  const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzevDDOgRBy5i4WjKzX72JBeSJc8e44N9kwC3aeVU5PebS3lHIyfi-nmDcHYR4esv5K7Q/exec';
+
+  document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('order-date').value = new Date().toISOString().split('T')[0];
+    
+    ['order-price', 'order-qty', 'order-shipping', 'order-discount'].forEach(id => {
+      document.getElementById(id).addEventListener('input', calculateTotal);
+    });
+
+    loadDashboard();
+  });
+
+  function calculateTotal() {
+    const price = parseFloat(document.getElementById('order-price').value) || 0;
+    const qty = parseFloat(document.getElementById('order-qty').value) || 0;
+    const shipping = parseFloat(document.getElementById('order-shipping').value) || 0;
+    const discount = parseFloat(document.getElementById('order-discount').value) || 0;
+    
+    const total = (price * qty) + shipping - discount;
+    document.getElementById('total-display').textContent = total.toLocaleString(undefined, {minimumFractionDigits: 2});
+  }
+
+  async function loadDashboard() {
+    const date = document.getElementById('order-date').value;
+    if (!date) return;
+    
+    const tbody = document.getElementById('history-body');
+    tbody.innerHTML = '<tr><td colspan="4" class="py-6 text-center text-text-muted">กำลังโหลดข้อมูล...</td></tr>';
+
+    try {
+      const res = await fetch(SCRIPT_URL, {
+        method: 'POST', headers: { "Content-Type": "text/plain" },
+        body: JSON.stringify({ action: 'getDashboard', date: date })
+      });
+      const result = await res.json();
+      
+      if (result.status === 'success') {
+        const sum = result.summary;
+        document.getElementById('dash-sales').innerText = '฿' + parseFloat(sum.sales).toLocaleString(undefined, {minimumFractionDigits: 2});
+        document.getElementById('dash-expenses').innerText = '฿' + parseFloat(sum.expenses).toLocaleString(undefined, {minimumFractionDigits: 2});
+        document.getElementById('dash-profit').innerText = '฿' + parseFloat(sum.profit).toLocaleString(undefined, {minimumFractionDigits: 2});
+        document.getElementById('dash-balance').innerText = '฿' + parseFloat(sum.balance).toLocaleString(undefined, {minimumFractionDigits: 2});
+        document.getElementById('dash-cash').innerText = '฿' + parseFloat(sum.cash || 0).toLocaleString(undefined, {minimumFractionDigits: 2});
+        document.getElementById('dash-digital').innerText = '฿' + parseFloat(sum.digital || 0).toLocaleString(undefined, {minimumFractionDigits: 2});
+
+        tbody.innerHTML = '';
+        if (result.orders.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="4" class="py-6 text-center text-text-muted">ไม่มีรายการรายจ่ายในเดือนนี้</td></tr>';
+        } else {
+          result.orders.forEach(o => {
+            const tr = document.createElement('tr');
+            tr.className = "hover:bg-surface-container-low border-b border-slate-100 transition-colors";
+            tr.innerHTML = `
+              <td class="py-3 px-3 font-semibold text-xs md:text-sm">${o.date}</td>
+              <td class="py-3 px-3">
+                <div class="font-bold text-xs md:text-sm">${o.item}</div>
+                <div class="text-[11px] text-text-muted">${o.supplier || '-'}</div>
+              </td>
+              <td class="py-3 px-3 text-right font-extrabold text-state-danger text-xs md:text-sm">฿${parseFloat(o.total).toLocaleString()}</td>
+              <td class="py-3 px-3 text-center">
+                <button class="text-state-danger font-bold text-xs hover:underline" onclick="deleteOrder(${o.row}, '${date.split('-')[0] + '-' + date.split('-')[1]}')">Del</button>
+              </td>
+            `;
+            tbody.appendChild(tr);
+          });
+        }
+      }
+    } catch (err) { console.error(err); }
+  }
+
+  async function submitOrder() {
+    const date = document.getElementById('order-date').value;
+    const item = document.getElementById('order-item').value;
+    const supplier = document.getElementById('order-supplier').value;
+    const price = parseFloat(document.getElementById('order-price').value);
+    const qty = parseInt(document.getElementById('order-qty').value);
+    const shipping = parseFloat(document.getElementById('order-shipping').value) || 0;
+    const discount = parseFloat(document.getElementById('order-discount').value) || 0;
+    const note = document.getElementById('order-note').value;
+    const payType = document.getElementById('order-pay-type').value;
+
+    if (!date || !item || !price || !qty) return Swal.fire('เตือน', 'กรุณากรอกข้อมูลสำคัญให้ครบถ้วน', 'warning');
+
+    const btn = document.getElementById('btn-save');
+    const oldTxt = btn.innerText;
+    btn.disabled = true; btn.innerText = 'กำลังบันทึก...';
+
+    try {
+      const res = await fetch(SCRIPT_URL, {
+        method: 'POST', headers: { "Content-Type": "text/plain" },
+        body: JSON.stringify({ action: 'saveOrder', date, item, supplier, price, qty, shipping, discount, note, payType })
+      });
+      const result = await res.json();
+      if (result.status === 'success') {
+        Swal.fire({ toast: true, position: 'top-end', icon: 'success', title: 'บันทึกรายจ่ายสำเร็จ!', showConfirmButton: false, timer: 1500 });
+        document.getElementById('order-form').reset();
+        document.getElementById('order-date').value = date;
+        document.getElementById('order-qty').value = '1';
+        calculateTotal(); loadDashboard(); 
+      } else throw new Error(result.message);
+    } catch (err) { Swal.fire('Error', err.message, 'error'); } 
+    finally { btn.disabled = false; btn.innerText = oldTxt; }
+  }
+
+  async function deleteOrder(row, monthParam) {
+    const confirm = await Swal.fire({ title: 'ยืนยันลบ?', text: "ลบแล้วยอดเงินจะถูกดึงกลับเข้ากระเป๋า", icon: 'warning', showCancelButton: true, confirmButtonColor: '#d33' });
+    if (confirm.isConfirmed) {
+      Swal.fire({ title: 'Deleting...', didOpen: () => Swal.showLoading() });
+      try {
+        const res = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'deleteOrder', row: row, month: monthParam }) });
+        const result = await res.json();
+        if (result.status === 'success') { Swal.fire({toast:true, position:'top-end', icon:'success', title:'Deleted', showConfirmButton:false, timer:1500}); loadDashboard(); } 
+        else throw new Error(result.message);
+      } catch(err) { Swal.fire('Error', err.message, 'error'); }
+    }
+  }
+
+  function toggleModal(show) {
+    const modal = document.getElementById('transferModal');
+    if (show) {
+      document.getElementById('transfer-date').value = new Date().toISOString().split('T')[0];
+      modal.classList.remove('hidden');
+      setTimeout(() => modal.classList.remove('opacity-0'), 10);
+    } else {
+      modal.classList.add('opacity-0');
+      setTimeout(() => modal.classList.add('hidden'), 200);
+    }
+  }
+
+  async function submitTransfer() {
+    const date = document.getElementById('transfer-date').value;
+    const type = document.getElementById('transfer-type').value;
+    const amount = parseFloat(document.getElementById('transfer-amount').value);
+    const note = document.getElementById('transfer-note').value;
+
+    if (!date || !amount) return Swal.fire('เตือน', 'กรุณาระบุจำนวนเงิน', 'warning');
+
+    const btn = document.getElementById('btn-transfer');
+    const oldTxt = btn.innerText;
+    btn.disabled = true; btn.innerText = 'กำลังโอน...';
+
+    try {
+      const res = await fetch(SCRIPT_URL, {
+        method: 'POST', headers: { "Content-Type": "text/plain" },
+        body: JSON.stringify({ action: 'saveTransfer', date, type, amount, note })
+      });
+      const result = await res.json();
+      if (result.status === 'success') {
+        Swal.fire({ toast: true, position: 'top-end', icon: 'success', title: 'โยกเงินสำเร็จ', showConfirmButton: false, timer: 1500 });
+        document.getElementById('transfer-amount').value = ''; document.getElementById('transfer-note').value = '';
+        toggleModal(false); loadDashboard(); 
+      } else throw new Error(result.message);
+    } catch(e) { Swal.fire('Error', e.message, 'error'); }
+    finally { btn.disabled = false; btn.innerText = oldTxt; }
+  }
+</script>
+</body>
+</html>

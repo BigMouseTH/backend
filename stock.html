@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Stock Management - Big Mouse Farm</title>
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "bg-main": "#F8FAFC", "card-dark-border": "#1E293B",
+            "text-muted": "#64748B", "surface": "#f8f9ff",
+            "text-inverse": "#FFFFFF", "error-container": "#ffdad6",
+            "text-primary": "#0F172A", "secondary": "#0058be", "primary": "#000000",
+            "kpi-blue": "#3B82F6", "card-light": "#FFFFFF", "card-dark": "#0F172A",
+            "border-light": "#E2E8F0", "state-danger": "#EF4444"
+          },
+          "fontFamily": {
+            "body-md": ["Inter", "sans-serif"], "headline-sm": ["Inter", "sans-serif"],
+            "body-sm": ["Inter", "sans-serif"], "headline-md": ["Inter", "sans-serif"]
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-bg-main text-text-primary min-h-screen antialiased flex flex-col md:flex-row selection:bg-text-primary selection:text-text-inverse">
+
+<!-- MOBILE TOP BAR -->
+<header class="md:hidden flex items-center justify-between p-4 bg-card-light border-b border-border-light sticky top-0 z-20">
+  <div class="flex items-center gap-3">
+    <div class="w-8 h-8 rounded-full overflow-hidden border border-border-light bg-[#FFFFFF] flex items-center justify-center p-1">
+      <img alt="Big Mouse Farm" class="w-full h-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAFxzdCKJCJqOuIRWLYFHsp1hfGt6w4UmZm5KaG6fV8g3b2xFo-rD-F19iDjkYJ-IE1JP_mx3iiaY4N2ouqr3yVX4PZx2nbXcynay6FN8VmoCFSG-I-NXBJzdUiTukVoH_FxOdCINNKYEvLAWE1JTtW9qOhnnVchNP2TUw9PtC7QqBilI2vFEHleckYq0u-Bij-OIHtZxUMJlqIRhPB6tGEdAHk-wIGryOPhpaOooXU1bxIfZS9JO387NT8SGJeauGRBg">
+    </div>
+    <span class="text-sm font-bold text-text-primary">Big Mouse Farm</span>
+  </div>
+  <button id="mobile-menu-btn" class="p-2 text-text-primary">
+    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+  </button>
+</header>
+
+<!-- SIDEBAR -->
+<aside id="sidebar" class="fixed top-0 left-0 h-screen w-[260px] flex flex-col justify-between border-r border-border-light bg-card-light p-6 shrink-0 z-40 transition-transform transform -translate-x-full md:translate-x-0">
+<div class="flex flex-col gap-8">
+<div class="flex items-center justify-between pb-2 border-b border-border-light md:border-none md:pb-0">
+  <div class="flex items-center gap-3.5">
+    <img alt="Big Mouse Farm" class="w-10 h-10 rounded-full border border-border-light object-cover shrink-0 bg-card-light shadow-sm" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAFxzdCKJCJqOuIRWLYFHsp1hfGt6w4UmZm5KaG6fV8g3b2xFo-rD-F19iDjkYJ-IE1JP_mx3iiaY4N2ouqr3yVX4PZx2nbXcynay6FN8VmoCFSG-I-NXBJzdUiTukVoH_FxOdCINNKYEvLAWE1JTtW9qOhnnVchNP2TUw9PtC7QqBilI2vFEHleckYq0u-Bij-OIHtZxUMJlqIRhPB6tGEdAHk-wIGryOPhpaOooXU1bxIfZS9JO387NT8SGJeauGRBg">
+    <div class="flex flex-col">
+      <span class="text-base font-bold text-text-primary tracking-tight">Big Mouse Farm</span>
+      <span class="text-xs text-text-muted mt-0.5">Livestock Operations</span>
+    </div>
+  </div>
+  <button id="close-menu-btn" class="md:hidden text-text-muted hover:text-text-primary">
+    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+  </button>
+</div>
+<nav aria-label="Primary Navigation" class="flex flex-col gap-1.5">
+<a class="flex items-center w-full px-4 py-2.5 rounded-full text-text-muted text-sm font-medium hover:bg-surface-container-low" href="preparation.html">Preparation</a>
+<a class="flex items-center w-full px-4 py-2.5 rounded-full text-text-muted text-sm font-medium hover:bg-surface-container-low" href="pricing.html">Pricing</a>
+<a class="flex items-center w-full px-4 py-2.5 rounded-full bg-card-dark text-text-inverse text-sm font-semibold" href="stock.html">Stock</a>
+<a class="flex items-center w-full px-4 py-2.5 rounded-full text-text-muted text-sm font-medium hover:bg-surface-container-low" href="sales.html">Sales</a>
+<a class="flex items-center w-full px-4 py-2.5 rounded-full text-text-muted text-sm font-medium hover:bg-surface-container-low" href="purchases.html">Purchases</a>
+<a class="flex items-center w-full px-4 py-2.5 rounded-full text-text-muted text-sm font-medium hover:bg-surface-container-low" href="settings.html">Settings</a>
+</nav>
+</div>
+<div class="pt-6 border-t border-border-light flex flex-col gap-2">
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-kpi-blue animate-pulse"></div>
+<span class="text-xs font-bold text-text-primary">System State</span>
+</div>
+<p class="text-xs text-text-muted">Operational v3.0.0</p>
+</div>
+</aside>
+
+<main class="md:ml-[260px] flex-1 p-4 md:p-8 min-w-0 max-w-full">
+<header class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 pb-6 md:pb-8 border-b border-border-light">
+<div>
+<h1 class="text-2xl md:text-3xl font-bold text-text-primary">Stock Management</h1>
+<p class="text-sm text-text-muted mt-0.5">จัดการและตรวจสอบคลังสินค้าหนูเหยื่อ (Mice & Rats Stock)</p>
+</div>
+<div class="flex items-center gap-2.5">
+<button class="px-5 py-2.5 rounded-full bg-card-dark text-text-inverse text-sm font-semibold hover:bg-card-dark-border" type="button" onclick="loadStockTable()">
+  Sync Data
+</button>
+</div>
+</header>
+
+<section class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 my-6 md:my-8">
+<div class="bg-card-light border border-border-light rounded-2xl p-5 shadow-sm flex flex-col justify-between">
+<div class="text-xs font-bold text-text-muted uppercase tracking-wider">Total Mice In Stock</div>
+<div class="flex items-baseline justify-between mt-2 gap-2">
+<div class="text-2xl md:text-3xl font-extrabold text-text-primary tracking-tight" id="metric-total-mice">0</div>
+<span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 text-text-primary">UNITS</span>
+</div>
+</div>
+<div class="bg-card-light border border-border-light rounded-2xl p-5 shadow-sm flex flex-col justify-between">
+<div class="text-xs font-bold text-text-muted uppercase tracking-wider">Total Rats In Stock</div>
+<div class="flex items-baseline justify-between mt-2 gap-2">
+<div class="text-2xl md:text-3xl font-extrabold text-text-primary tracking-tight" id="metric-total-rats">0</div>
+<span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 text-text-primary">UNITS</span>
+</div>
+</div>
+<div class="bg-card-light border border-border-light rounded-2xl p-5 shadow-sm flex flex-col justify-between">
+<div class="text-xs font-bold text-state-danger uppercase tracking-wider">Low Stock Alerts</div>
+<div class="flex items-baseline justify-between mt-2 gap-2">
+<div class="text-2xl md:text-3xl font-extrabold text-state-danger tracking-tight" id="metric-low-stock">0</div>
+<span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-error-container text-state-danger">ITEMS</span>
+</div>
+</div>
+<div class="bg-card-light border border-border-light rounded-2xl p-5 shadow-sm flex flex-col justify-between">
+<div class="text-xs font-bold text-kpi-blue uppercase tracking-wider">Status</div>
+<div class="flex items-baseline justify-between mt-2 gap-2">
+<div class="text-xl md:text-2xl font-extrabold text-kpi-blue tracking-tight" id="sync-status">Connected</div>
+</div>
+</div>
+</section>
+
+<!-- Add Stock Form -->
+<section class="bg-card-dark border border-card-dark-border rounded-2xl p-5 sm:p-8 text-text-inverse mb-8 shadow-xl">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-card-dark-border gap-2">
+<div>
+<h2 class="text-lg md:text-xl font-bold text-text-inverse tracking-tight">Add Stock / บันทึกสต็อกเข้า</h2>
+<p class="text-xs md:text-sm text-text-muted mt-0.5">Commercial intake logging</p>
+</div>
+</div>
+<form class="mt-6 flex flex-col gap-5" id="add-stock-form">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div class="flex flex-col gap-1.5">
+<label class="text-xs font-semibold text-text-inverse uppercase">Date / วันที่</label>
+<input id="input-date" class="w-full bg-[#1E293B] border border-[#334155] rounded-xl px-4 py-2.5 text-sm text-text-inverse focus:ring-0" type="date">
+</div>
+<div class="flex flex-col gap-1.5">
+<label class="text-xs font-semibold text-text-inverse uppercase">Type / ชนิดสัตว์</label>
+<div class="grid grid-cols-2 gap-2 p-1 bg-[#1E293B] border border-[#334155] rounded-xl">
+<button class="type-pill-btn py-2 rounded-lg text-sm font-bold active bg-card-light text-text-primary" data-val="Mice" type="button">Mice</button>
+<button class="type-pill-btn py-2 rounded-lg text-sm font-bold text-text-muted" data-val="Rat" type="button">Rat</button>
+</div>
+</div>
+</div>
+
+<div class="flex flex-col gap-2">
+<label class="text-xs font-semibold text-text-inverse uppercase">Select Size (<span id="size-label-indicator">Mice</span>)</label>
+<div class="flex flex-wrap gap-2" id="size-pills-container"></div>
+</div>
+
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+<div class="flex flex-col gap-1.5">
+<label class="text-xs font-semibold text-text-inverse uppercase">Quantity / จำนวน (ตัว)</label>
+<input id="input-qty" class="w-full bg-[#1E293B] border border-[#334155] rounded-xl px-4 py-2.5 text-sm font-bold text-text-inverse focus:ring-0" placeholder="ระบุจำนวน..." type="number">
+</div>
+<div class="flex items-end">
+<button class="w-full px-6 py-3 rounded-xl bg-card-light text-text-primary text-base font-bold hover:bg-slate-100 transition-all shadow-md" type="submit">Submit Stock</button>
+</div>
+</div>
+</form>
+</section>
+
+<!-- Mice Inventory -->
+<section class="bg-card-light border border-border-light rounded-2xl p-5 sm:p-8 mb-8 shadow-sm">
+<div class="flex justify-between pb-4 border-b border-border-light">
+<h2 class="text-lg md:text-xl font-bold text-text-primary">Mice Stock Inventory</h2>
+</div>
+<div class="overflow-x-auto mt-4">
+<table class="w-full text-left border-collapse min-w-[400px]">
+<thead>
+<tr class="border-b border-border-light text-text-muted text-xs font-bold uppercase bg-[#F8FAFC]">
+<th class="py-3 px-4">Size</th>
+<th class="py-3 px-4 text-right">Total Qty (ตัว)</th>
+<th class="py-3 px-4 text-center">Status</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-100 text-sm" id="mice-table-body"></tbody>
+</table>
+</div>
+</section>
+
+<!-- Rat Inventory -->
+<section class="bg-card-light border border-border-light rounded-2xl p-5 sm:p-8 mb-12 shadow-sm">
+<div class="flex justify-between pb-4 border-b border-border-light">
+<h2 class="text-lg md:text-xl font-bold text-text-primary">Rat Stock Inventory</h2>
+</div>
+<div class="overflow-x-auto mt-4">
+<table class="w-full text-left border-collapse min-w-[400px]">
+<thead>
+<tr class="border-b border-border-light text-text-muted text-xs font-bold uppercase bg-[#F8FAFC]">
+<th class="py-3 px-4">Size</th>
+<th class="py-3 px-4 text-right">Total Qty (ตัว)</th>
+<th class="py-3 px-4 text-center">Status</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-100 text-sm" id="rat-table-body"></tbody>
+</table>
+</div>
+</section>
+</main>
+
+<script>
+    // Mobile Menu Logic
+    const mobileBtn = document.getElementById('mobile-menu-btn');
+    const closeMenuBtn = document.getElementById('close-menu-btn');
+    const sidebar = document.getElementById('sidebar');
+
+    mobileBtn.addEventListener('click', () => sidebar.classList.remove('-translate-x-full'));
+    closeMenuBtn.addEventListener('click', () => sidebar.classList.add('-translate-x-full'));
+
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyJ2tw3avSP6v1480WAMKL93HSulENpExuKnTY_GQP7_kMBbx4xBegojg8FgR0SXnmRgQ/exec';
+    const miceSizes = ["3XS", "2XS", "XS", "S", "M", "L", "XL", "2XL", "3XL"];
+    const ratSizes = ["S", "M1", "M2", "M3", "L1", "L2", "XL", "2XL", "3XL", "4XL", "5XL", "JB"];
+
+    let currentSelectedType = "Mice";
+    let currentSelectedSize = "3XS";
+
+    document.getElementById('input-date').value = new Date().toISOString().split('T')[0];
+
+    const typeButtons = document.querySelectorAll('.type-pill-btn');
+    const sizePillsContainer = document.getElementById('size-pills-container');
+    const sizeLabelIndicator = document.getElementById('size-label-indicator');
+
+    typeButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        typeButtons.forEach(b => {
+          b.classList.remove('active', 'bg-card-light', 'text-text-primary');
+          b.classList.add('text-text-muted');
+        });
+        btn.classList.add('active', 'bg-card-light', 'text-text-primary');
+        btn.classList.remove('text-text-muted');
+        currentSelectedType = btn.getAttribute('data-val');
+        renderSizes(currentSelectedType);
+      });
+    });
+
+    function renderSizes(type) {
+      const list = type === 'Mice' ? miceSizes : ratSizes;
+      sizeLabelIndicator.textContent = `${type} Standards`;
+      sizePillsContainer.innerHTML = '';
+      list.forEach((sizeName, index) => {
+        const pill = document.createElement('button');
+        pill.type = 'button';
+        pill.setAttribute('data-size', sizeName);
+        if (index === 0) {
+          currentSelectedSize = sizeName;
+          pill.className = 'size-pill-btn active px-3.5 py-1.5 rounded-xl bg-card-light text-text-primary text-xs font-bold transition-all';
+        } else {
+          pill.className = 'size-pill-btn px-3.5 py-1.5 rounded-xl border border-[#334155] bg-[#1E293B] text-text-inverse text-xs transition-all';
+        }
+        pill.textContent = sizeName;
+        pill.addEventListener('click', () => {
+          document.querySelectorAll('.size-pill-btn').forEach(p => {
+            p.className = 'size-pill-btn px-3.5 py-1.5 rounded-xl border border-[#334155] bg-[#1E293B] text-text-inverse text-xs transition-all';
+          });
+          pill.className = 'size-pill-btn active px-3.5 py-1.5 rounded-xl bg-card-light text-text-primary text-xs font-bold transition-all';
+          currentSelectedSize = sizeName;
+        });
+        sizePillsContainer.appendChild(pill);
+      });
+    }
+
+    async function loadStockTable() {
+      const miceBody = document.getElementById('mice-table-body');
+      const ratBody = document.getElementById('rat-table-body');
+      miceBody.innerHTML = '<tr><td colspan="3" class="py-4 text-center text-text-muted">กำลังโหลด...</td></tr>';
+      ratBody.innerHTML = '<tr><td colspan="3" class="py-4 text-center text-text-muted">กำลังโหลด...</td></tr>';
+      document.getElementById('sync-status').innerText = 'Syncing...';
+
+      try {
+        const res = await fetch(`${SCRIPT_URL}?action=getStock`);
+        const data = await res.json();
+        if (data.status === 'error') throw new Error(data.message);
+        
+        miceBody.innerHTML = '';
+        ratBody.innerHTML = '';
+        let totalMice = 0, totalRat = 0, lowStockCount = 0;
+
+        data.sort((a, b) => {
+          const aA = (a.animal || '').toLowerCase();
+          const aB = (b.animal || '').toLowerCase();
+          if (aA !== aB) return aA === 'mice' ? -1 : 1;
+          const arr = aA === 'mice' ? miceSizes : ratSizes;
+          return arr.indexOf(a.size) - arr.indexOf(b.size);
+        });
+
+        data.forEach(row => {
+          const animal = (row.animal || '').toLowerCase();
+          const stockVal = parseInt(row.stock) || 0;
+          const isLow = stockVal < 50;
+          
+          if (animal === 'mice') totalMice += stockVal;
+          if (animal === 'rat') totalRat += stockVal;
+          if (isLow) lowStockCount++;
+
+          const tr = `
+            <tr class="hover:bg-surface-container-low transition-colors">
+              <td class="py-3 px-4 font-bold text-text-primary">${row.size}</td>
+              <td class="py-3 px-4 text-right font-bold ${isLow ? 'text-state-danger' : 'text-text-primary'}">${stockVal.toLocaleString()}</td>
+              <td class="py-3 px-4 text-center">
+                <span class="inline-block px-2.5 py-0.5 rounded-full text-[10px] font-bold ${isLow ? 'bg-error-container text-state-danger' : 'bg-slate-100 text-secondary'}">
+                  ${isLow ? 'Low Stock' : 'In Stock'}
+                </span>
+              </td>
+            </tr>`;
+          if (animal === 'mice') miceBody.innerHTML += tr;
+          else if (animal === 'rat') ratBody.innerHTML += tr;
+        });
+
+        document.getElementById('metric-total-mice').innerText = totalMice.toLocaleString();
+        document.getElementById('metric-total-rats').innerText = totalRat.toLocaleString();
+        document.getElementById('metric-low-stock').innerText = lowStockCount;
+        document.getElementById('sync-status').innerText = 'Connected';
+      } catch (err) {
+        miceBody.innerHTML = `<tr><td colspan="3" class="py-4 text-center text-state-danger">${err.message}</td></tr>`;
+        ratBody.innerHTML = `<tr><td colspan="3" class="py-4 text-center text-state-danger">${err.message}</td></tr>`;
+        document.getElementById('sync-status').innerText = 'Error';
+      }
+    }
+
+    document.getElementById('add-stock-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const qty = parseInt(document.getElementById('input-qty').value);
+      const date = document.getElementById('input-date').value;
+      if (!qty || qty <= 0) return Swal.fire('ข้อมูลไม่ถูกต้อง', 'กรุณาระบุจำนวน', 'warning');
+
+      const submitBtn = e.target.querySelector('button[type="submit"]');
+      const originalText = submitBtn.innerText;
+      submitBtn.innerText = 'กำลังบันทึก...';
+      submitBtn.disabled = true;
+
+      try {
+        const res = await fetch(SCRIPT_URL, {
+          method: 'POST',
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify({ action: 'updateStock', date: date, animal: currentSelectedType, size: currentSelectedSize, qty: qty })
+        });
+        const result = await res.json();
+        if (result.status === 'success') {
+          Swal.fire({ toast: true, position: 'top-end', icon: 'success', title: 'เพิ่มสต็อกเรียบร้อย', showConfirmButton: false, timer: 2000 });
+          document.getElementById('input-qty').value = '';
+          loadStockTable();
+        } else throw new Error(result.message);
+      } catch (err) {
+        Swal.fire('เกิดข้อผิดพลาด', err.message, 'error');
+      } finally {
+        submitBtn.innerText = originalText;
+        submitBtn.disabled = false;
+      }
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+      renderSizes('Mice');
+      loadStockTable();
+    });
+</script>
+</body>
+</html>

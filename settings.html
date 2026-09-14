@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Settings — Big Mouse Farm Livestock Commercial Operations</title>
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "text-primary": "#0F172A", "text-inverse": "#FFFFFF", "text-muted": "#64748B",
+            "card-light": "#FFFFFF", "card-dark": "#0F172A", "bg-main": "#F8FAFC",
+            "border-light": "#E2E8F0", "kpi-blue": "#3B82F6", "state-danger": "#EF4444",
+            "primary": "#000000", "error-container": "#ffdad6"
+          },
+          "borderRadius": { "DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px" },
+          "fontFamily": {
+            "body-md": ["Prompt", "Inter", "sans-serif"], "headline-lg": ["Inter", "Prompt", "sans-serif"],
+            "headline-sm": ["Inter", "Prompt", "sans-serif"], "label-action": ["Inter", "Prompt", "sans-serif"]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    body { background-color: #F8FAFC; color: #0F172A; font-family: 'Inter', 'Prompt', sans-serif; -webkit-font-smoothing: antialiased; }
+    input::placeholder, textarea::placeholder { color: #94A3B8; font-size: 0.8125rem; }
+  </style>
+</head>
+<body class="bg-bg-main text-text-primary antialiased min-h-screen flex flex-col md:flex-row selection:bg-text-primary selection:text-text-inverse">
+
+<!-- MOBILE TOP BAR -->
+<header class="md:hidden flex items-center justify-between p-4 bg-card-light border-b border-border-light sticky top-0 z-20">
+  <div class="flex items-center gap-3">
+    <div class="w-8 h-8 rounded-full overflow-hidden border border-border-light bg-[#FFFFFF] flex items-center justify-center p-1">
+      <img alt="Big Mouse Farm" class="w-full h-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCdiQ2Bd4kil8XWMZw4iBd2wfd2Go7afAO7EAm-80_pC6gK7Lk46OXbSb55xP_zCK4aeAyAfEzHkpH-h25R7BJpIJVS87k_c9iISmTz-3gYa0v8oJvSptlcEdvUc7_udtjk36hRfc4UHDN1LvHFeUn3DX7SeUC19mn408VT8TT3TVRj9Jz4Verk7wJmQtAvf5I13KZRGz2nxp-0elIsJtlt_A0YHt7Fbw_elXOKA7IyHOoS9CxPnF4LIpfPoGPbVH_4bw">
+    </div>
+    <span class="text-sm font-bold text-text-primary">Big Mouse Farm</span>
+  </div>
+  <button id="mobile-menu-btn" class="p-2 text-text-primary">
+    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+  </button>
+</header>
+
+<!-- SIDEBAR -->
+<aside id="sidebar" class="w-[260px] h-screen p-6 flex flex-col justify-between shrink-0 fixed top-0 left-0 bg-card-light border-r border-border-light z-40 transition-transform transform -translate-x-full md:translate-x-0">
+<div class="flex flex-col gap-6">
+<div class="flex items-center justify-between pb-4 border-b border-border-light md:border-none md:pb-0">
+  <div class="flex items-center gap-3">
+    <div class="w-10 h-10 rounded-full overflow-hidden shrink-0 flex items-center justify-center bg-card-light border border-slate-200 shadow-sm">
+      <img alt="Big Mouse Farm" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCdiQ2Bd4kil8XWMZw4iBd2wfd2Go7afAO7EAm-80_pC6gK7Lk46OXbSb55xP_zCK4aeAyAfEzHkpH-h25R7BJpIJVS87k_c9iISmTz-3gYa0v8oJvSptlcEdvUc7_udtjk36hRfc4UHDN1LvHFeUn3DX7SeUC19mn408VT8TT3TVRj9Jz4Verk7wJmQtAvf5I13KZRGz2nxp-0elIsJtlt_A0YHt7Fbw_elXOKA7IyHOoS9CxPnF4LIpfPoGPbVH_4bw">
+    </div>
+    <div class="flex flex-col">
+      <span class="text-base font-bold text-text-primary tracking-tight">Big Mouse</span>
+      <span class="text-xs text-text-muted">Operations</span>
+    </div>
+  </div>
+  <button id="close-menu-btn" class="md:hidden text-text-muted hover:text-text-primary">
+    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+  </button>
+</div>
+<nav class="flex flex-col gap-1.5 mt-2">
+<a class="flex items-center w-full px-4 py-2.5 rounded-full text-text-muted text-sm font-medium hover:bg-surface-container-low" href="preparation.html">Preparation</a>
+<a class="flex items-center w-full px-4 py-2.5 rounded-full text-text-muted text-sm font-medium hover:bg-surface-container-low" href="pricing.html">Pricing</a>
+<a class="flex items-center w-full px-4 py-2.5 rounded-full text-text-muted text-sm font-medium hover:bg-surface-container-low" href="stock.html">Stock</a>
+<a class="flex items-center w-full px-4 py-2.5 rounded-full text-text-muted text-sm font-medium hover:bg-surface-container-low" href="sales.html">Sales</a>
+<a class="flex items-center w-full px-4 py-2.5 rounded-full text-text-muted text-sm font-medium hover:bg-surface-container-low" href="purchases.html">Purchases</a>
+<a class="flex items-center w-full px-4 py-2.5 rounded-full bg-primary text-text-inverse text-sm font-semibold transition-all" href="settings.html">Settings</a>
+</nav>
+</div>
+<div class="pt-4 border-t border-border-light flex flex-col gap-2">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-kpi-blue shrink-0"></span>
+<span class="text-xs font-semibold text-text-primary">System Live Node</span>
+</div>
+<p class="text-xs text-text-muted">Operational v3.0.0</p>
+</div>
+</aside>
+
+<main class="flex-1 md:ml-[260px] p-4 md:p-8 flex flex-col gap-6 md:gap-8 max-w-[1400px]">
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 md:pb-6 border-b border-border-light">
+<div>
+<h1 class="text-2xl md:text-3xl font-bold text-text-primary tracking-tight">System Settings &amp; Configuration</h1>
+<p class="text-sm text-text-muted mt-1 leading-relaxed">จัดการข้อมูลฟาร์ม การเชื่อมต่อ Google Sheets และพารามิเตอร์ราคา</p>
+</div>
+<div class="flex items-center gap-3 shrink-0">
+<button id="saveSettingsBtn" class="w-full md:w-auto px-6 py-2.5 rounded-full bg-card-dark text-text-inverse text-sm font-semibold hover:bg-slate-800 transition-colors shadow-sm" type="button">
+  Save All Changes
+</button>
+</div>
+</div>
+
+<div class="grid grid-cols-1 xl:grid-cols-12 gap-6">
+<section class="xl:col-span-7 bg-card-light border border-border-light p-5 md:p-6 flex flex-col justify-between rounded-2xl shadow-sm">
+<div>
+<div class="flex items-center justify-between mb-4">
+<h2 class="text-lg md:text-xl font-bold text-text-primary">Farm Profile &amp; Business Identity</h2>
+<span class="text-xs bg-slate-100 text-text-primary px-3 py-1 rounded-full border border-border-light font-bold uppercase">Verified</span>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4 mt-4">
+<div>
+<label class="block text-xs font-semibold text-text-primary uppercase mb-1">Farm Name (ชื่อฟาร์ม)</label>
+<input class="w-full px-4 py-2.5 rounded-xl border border-border-light bg-card-light text-sm focus:ring-0" type="text" value="Big Mouse Farm">
+</div>
+<div>
+<label class="block text-xs font-semibold text-text-primary uppercase mb-1">Commercial Tax ID</label>
+<input class="w-full px-4 py-2.5 rounded-xl border border-border-light bg-card-light text-sm focus:ring-0 font-mono" type="text" value="0-0000-00000-00-0">
+</div>
+</div>
+<div class="mb-4">
+<label class="block text-xs font-semibold text-text-primary uppercase mb-1">Contact &amp; Billing Address</label>
+<textarea class="w-full px-4 py-2 rounded-xl border border-border-light bg-card-light text-sm focus:ring-0 resize-none" rows="2">10/1 ซ.อ่อนนุช 53 แยก 1-3 ข.ประเวศ ข.ประเวศ จ.กรุงเทพฯ 10250</textarea>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+<div>
+<label class="block text-xs font-semibold text-text-primary uppercase mb-1">Phone</label>
+<input class="w-full px-3 py-2 rounded-xl border border-border-light bg-card-light text-sm focus:ring-0" type="text" value="089-445-9821">
+</div>
+<div>
+<label class="block text-xs font-semibold text-text-primary uppercase mb-1">LINE ID</label>
+<input class="w-full px-3 py-2 rounded-xl border border-border-light bg-card-light text-sm focus:ring-0" type="text" value="@bigmousefarm">
+</div>
+<div>
+<label class="block text-xs font-semibold text-text-primary uppercase mb-1">Facebook</label>
+<input class="w-full px-3 py-2 rounded-xl border border-border-light bg-card-light text-sm focus:ring-0" type="text" value="fb.com/bigmousefarm">
+</div>
+</div>
+</div>
+</section>
+
+<section class="xl:col-span-5 bg-card-dark text-text-inverse border border-card-dark-border p-5 md:p-6 flex flex-col justify-between rounded-2xl shadow-md">
+<div>
+<div class="flex items-center justify-between mb-4">
+<div>
+<h2 class="text-lg md:text-xl font-bold text-text-inverse">Google Sheets Sync</h2>
+<p class="text-xs text-text-muted mt-0.5">การเชื่อมต่อฐานข้อมูลหลัก</p>
+</div>
+<span class="text-xs bg-kpi-blue/20 text-kpi-blue border border-kpi-blue/30 px-3 py-1 rounded-full font-bold uppercase">Connected</span>
+</div>
+<div class="flex flex-col gap-3 mb-2 mt-4">
+  <div>
+    <label class="block text-xs font-semibold text-text-muted mb-1">ลิงก์ฐานข้อมูลลูกค้า (Customers)</label>
+    <input id="customerSheetInput" class="w-full px-4 py-2 rounded-xl border border-slate-700 bg-slate-900 text-text-inverse text-xs focus:ring-0 font-mono" type="text" placeholder="https://docs.google.com/.../edit">
+  </div>
+  <div>
+    <label class="block text-xs font-semibold text-text-muted mb-1">ลิงก์สต็อกสินค้า (Stock)</label>
+    <input id="stockSheetInput" class="w-full px-4 py-2 rounded-xl border border-slate-700 bg-slate-900 text-text-inverse text-xs focus:ring-0 font-mono" type="text" placeholder="https://docs.google.com/.../edit">
+  </div>
+  <div>
+    <label class="block text-xs font-semibold text-text-muted mb-1">ลิงก์บันทึกยอดขาย (Sales)</label>
+    <input id="salesSheetInput" class="w-full px-4 py-2 rounded-xl border border-slate-700 bg-slate-900 text-text-inverse text-xs focus:ring-0 font-mono" type="text" placeholder="https://docs.google.com/.../edit">
+  </div>
+  <div>
+    <label class="block text-xs font-semibold text-text-muted mb-1">ลิงก์อัปเดตกระเป๋าเงิน (Purchases)</label>
+    <input id="purchasesSheetInput" class="w-full px-4 py-2 rounded-xl border border-slate-700 bg-slate-900 text-text-inverse text-xs focus:ring-0 font-mono" type="text" placeholder="https://docs.google.com/.../edit">
+  </div>
+</div>
+</div>
+</section>
+</div>
+</main>
+</div>
+
+<script>
+  // Mobile Menu Logic
+  const mobileBtn = document.getElementById('mobile-menu-btn');
+  const closeMenuBtn = document.getElementById('close-menu-btn');
+  const sidebar = document.getElementById('sidebar');
+
+  mobileBtn.addEventListener('click', () => sidebar.classList.remove('-translate-x-full'));
+  closeMenuBtn.addEventListener('click', () => sidebar.classList.add('-translate-x-full'));
+
+  const STOCK_API_URL = 'https://script.google.com/macros/s/AKfycbyJ2tw3avSP6v1480WAMKL93HSulENpExuKnTY_GQP7_kMBbx4xBegojg8FgR0SXnmRgQ/exec';
+  const SALES_API_URL = 'https://script.google.com/macros/s/AKfycbxwcfYozMfzchT98X2rOZnT_9otOFrkGMxosTixCBUMJvIsAhN62CUaZoH8gM_L3Ol_mA/exec';
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const fields = [
+      { key: 'customerSheetUrl', id: 'customerSheetInput' },
+      { key: 'stockSheetUrl', id: 'stockSheetInput' },
+      { key: 'salesSheetUrl', id: 'salesSheetInput' },
+      { key: 'purchasesSheetUrl', id: 'purchasesSheetInput' }
+    ];
+    
+    fields.forEach(f => {
+      const saved = localStorage.getItem(f.key);
+      const inputEl = document.getElementById(f.id);
+      if (saved && inputEl) inputEl.value = saved;
+    });
+  });
+
+  document.getElementById('saveSettingsBtn').addEventListener('click', async () => {
+    const cUrl = document.getElementById('customerSheetInput')?.value.trim();
+    const stUrl = document.getElementById('stockSheetInput')?.value.trim();
+    const saUrl = document.getElementById('salesSheetInput')?.value.trim();
+    const pUrl = document.getElementById('purchasesSheetInput')?.value.trim();
+    
+    const btn = document.getElementById('saveSettingsBtn');
+    btn.innerText = 'Saving...';
+    btn.disabled = true;
+
+    if(cUrl) localStorage.setItem('customerSheetUrl', cUrl);
+    if(stUrl) localStorage.setItem('stockSheetUrl', stUrl);
+    if(saUrl) localStorage.setItem('salesSheetUrl', saUrl);
+    if(pUrl) localStorage.setItem('purchasesSheetUrl', pUrl);
+
+    try {
+      const apiRequests = [];
+      
+      if (stUrl) {
+        apiRequests.push(fetch(STOCK_API_URL, {
+          method: 'POST', headers: { "Content-Type": "text/plain" },
+          body: JSON.stringify({ action: 'setSheetUrl', url: stUrl })
+        }));
+      }
+      
+      if (saUrl) {
+        apiRequests.push(fetch(SALES_API_URL, {
+          method: 'POST', headers: { "Content-Type": "text/plain" },
+          body: JSON.stringify({ action: 'setSheetUrl', url: saUrl, walletUrl: pUrl || "" })
+        }));
+      }
+      
+      if (apiRequests.length > 0) {
+        await Promise.all(apiRequests);
+      }
+      
+      alert('บันทึกการตั้งค่าและอัปเดตลิงก์ระบบทั้งหมดเรียบร้อย');
+    } catch (err) {
+      alert('เกิดข้อผิดพลาดในการเชื่อมต่อ API: ' + err.message);
+    } finally {
+      btn.innerText = 'Save All Changes';
+      btn.disabled = false;
+    }
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Big Mouse Farm - Pricing & Calculator</title>
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "card-light": "#FFFFFF", "primary": "#000000", "background": "#f8f9ff",
+            "kpi-orange": "#FF6A00", "kpi-blue": "#3B82F6", "text-muted": "#64748B",
+            "border-light": "#E2E8F0", "text-primary": "#0F172A", "card-dark": "#0F172A",
+            "text-inverse": "#FFFFFF", "state-danger": "#EF4444", "surface-container-low": "#eff4ff",
+            "bg-main": "#F8FAFC"
+          },
+          "fontFamily": {
+            "body-md": ["Inter", "sans-serif"], "headline-sm": ["Inter", "sans-serif"],
+            "body-sm": ["Inter", "sans-serif"], "headline-md": ["Inter", "sans-serif"]
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-bg-main text-text-primary antialiased min-h-screen font-body-md text-sm flex flex-col md:flex-row">
+
+<!-- MOBILE TOP BAR -->
+<header class="md:hidden flex items-center justify-between p-4 bg-card-light border-b border-border-light sticky top-0 z-20">
+  <div class="flex items-center gap-3">
+    <div class="w-8 h-8 rounded-full overflow-hidden border border-border-light bg-[#FFFFFF] flex items-center justify-center p-1">
+      <img alt="Big Mouse Farm" class="w-full h-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCB0rE1TvbsusxjiKhvdKghA1ASK2dUEbHHxnAzHKZxLTlEwcU3DY338xvKyXQBDlkhVMwSaiT9m10P4Plp-b6TPCi0gYRXEH0xMY6ACpF30dh1Prc0V64p7_n-ZNDCSMolEUToGPLb_6Bkkwr-s5EvcHNB55FVLqgw6R2U_dZhmx09Fh0l6yPW_rQuPVo6Qll-3T0rSIWtDm_peXvRXmgCkURfv_qFKYdAbPIYITHMIn7n4whTACF9LEx64dCSyUDafw">
+    </div>
+    <span class="text-sm font-bold text-text-primary">Big Mouse Farm</span>
+  </div>
+  <button id="mobile-menu-btn" class="p-2 text-text-primary">
+    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+  </button>
+</header>
+
+<!-- SIDEBAR -->
+<aside id="sidebar" class="fixed top-0 left-0 h-screen w-[260px] flex flex-col justify-between bg-card-light border-r border-border-light z-40 p-6 transition-transform transform -translate-x-full md:translate-x-0">
+<div>
+  <div class="flex items-center justify-between pb-6 border-b border-border-light">
+    <div class="flex items-center space-x-3">
+      <div class="w-10 h-10 rounded-full border border-border-light bg-[#FFFFFF] flex items-center justify-center p-1 shadow-sm">
+        <img alt="Big Mouse Farm" class="w-full h-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCB0rE1TvbsusxjiKhvdKghA1ASK2dUEbHHxnAzHKZxLTlEwcU3DY338xvKyXQBDlkhVMwSaiT9m10P4Plp-b6TPCi0gYRXEH0xMY6ACpF30dh1Prc0V64p7_n-ZNDCSMolEUToGPLb_6Bkkwr-s5EvcHNB55FVLqgw6R2U_dZhmx09Fh0l6yPW_rQuPVo6Qll-3T0rSIWtDm_peXvRXmgCkURfv_qFKYdAbPIYITHMIn7n4whTACF9LEx64dCSyUDafw">
+      </div>
+      <div class="overflow-hidden">
+        <h1 class="text-base font-bold text-text-primary truncate">Big Mouse</h1>
+        <p class="text-xs text-text-muted truncate">Operations</p>
+      </div>
+    </div>
+    <button id="close-menu-btn" class="md:hidden text-text-muted hover:text-text-primary">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+    </button>
+  </div>
+<nav class="mt-6 flex flex-col space-y-1.5">
+<a class="flex items-center w-full px-4 py-2.5 rounded-full text-text-muted text-sm font-medium hover:bg-[#F1F5F9]" href="preparation.html">Preparation</a>
+<a class="flex items-center w-full px-4 py-2.5 rounded-full bg-primary text-text-inverse text-sm font-semibold" href="pricing.html">Pricing</a>
+<a class="flex items-center w-full px-4 py-2.5 rounded-full text-text-muted text-sm font-medium hover:bg-[#F1F5F9]" href="stock.html">Stock</a>
+<a class="flex items-center w-full px-4 py-2.5 rounded-full text-text-muted text-sm font-medium hover:bg-[#F1F5F9]" href="sales.html">Sales</a>
+<a class="flex items-center w-full px-4 py-2.5 rounded-full text-text-muted text-sm font-medium hover:bg-[#F1F5F9]" href="purchases.html">Purchases</a>
+<a class="flex items-center w-full px-4 py-2.5 rounded-full text-text-muted text-sm font-medium hover:bg-[#F1F5F9]" href="settings.html">Settings</a>
+</nav>
+</div>
+<div class="p-4 rounded-[15px] bg-[#0F172A] text-text-inverse">
+<div class="text-[10px] font-bold uppercase text-text-muted tracking-wider">Facility Ops</div>
+<div class="text-sm font-bold mt-1 text-text-inverse">BKK Hub Unit 02</div>
+</div>
+</aside>
+
+<!-- Main Content -->
+<main class="md:ml-[260px] flex-1 min-h-screen p-4 md:p-8 max-w-[1600px] w-full">
+<header class="mb-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
+<div>
+<h1 class="text-2xl md:text-3xl font-bold text-text-primary tracking-tight">Pricing & Calculator</h1>
+<p class="text-sm text-text-muted mt-1">คำนวณราคาและออกบิลคำสั่งซื้อหนูเหยื่อ (Mice & Rats)</p>
+</div>
+<div class="flex flex-wrap items-center gap-2">
+<button class="px-5 py-2 rounded-full border border-border-light text-text-primary font-semibold text-sm hover:bg-surface-container-low transition-colors" id="resetFormBtn" type="button">Clear</button>
+<button class="px-5 py-2 rounded-full bg-card-dark text-text-inverse font-semibold text-sm hover:bg-primary transition-colors" onclick="openBillModal()" type="button">Preview Bill</button>
+</div>
+</header>
+
+<div class="grid grid-cols-1 xl:grid-cols-12 gap-6">
+<!-- LEFT COLUMN -->
+<div class="xl:col-span-7 flex flex-col space-y-6">
+<!-- Config Card -->
+<section class="bg-card-light p-4 md:p-6 border border-border-light shadow-sm rounded-2xl">
+<div class="flex items-center justify-between mb-4 pb-2 border-b border-border-light">
+<h2 class="text-base font-bold text-text-primary uppercase tracking-wide">Configuration</h2>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+<div>
+<label class="block text-sm font-semibold text-text-primary mb-2">สายพันธุ์หนู (Species)</label>
+<div class="flex space-x-2">
+<button class="species-pill flex-1 py-2 px-4 rounded-full text-xs font-bold transition-all bg-card-dark text-text-inverse border border-card-dark" id="species-mice" onclick="selectSpecies('Mice')" type="button">Mice</button>
+<button class="species-pill flex-1 py-2 px-4 rounded-full text-xs font-bold transition-all bg-card-light text-text-muted border border-border-light hover:text-text-primary" id="species-rat" onclick="selectSpecies('Rat')" type="button">Rat</button>
+</div>
+</div>
+<div>
+<label class="block text-sm font-semibold text-text-primary mb-2">เรทราคา (Rate Tier)</label>
+<div class="flex space-x-2">
+<button class="tier-pill flex-1 py-2 px-3 rounded-full text-xs font-bold transition-all bg-card-dark text-text-inverse border border-card-dark" id="tier-retail" onclick="selectRateTier('retail')" type="button">ปลีก (Retail)</button>
+<button class="tier-pill flex-1 py-2 px-3 rounded-full text-xs font-bold transition-all bg-card-light text-text-muted border border-border-light hover:text-text-primary" id="tier-wholesale" onclick="selectRateTier('wholesale')" type="button">ส่ง (Wholesale)</button>
+</div>
+</div>
+<div class="sm:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4">
+  <div>
+  <label class="block text-sm font-semibold text-text-primary mb-1">วิธีขนส่ง (Logistics)</label>
+  <select class="w-full rounded-xl border border-border-light bg-card-light px-4 py-2.5 text-sm focus:ring-0" id="shippingMethod">
+  <option value="ควบคุมอุณหภูมิ (Nim Express)">ควบคุมอุณหภูมิ (Nim Express)</option>
+  <option value="Grab Express">Grab Express</option>
+  <option value="Line Man">Line Man</option>
+  <option value="Lalamove">Lalamove Instant</option>
+  <option value="รับเองที่ฟาร์ม">รับเองที่ฟาร์ม</option>
+  </select>
+  </div>
+  <div>
+  <label class="block text-sm font-semibold text-text-primary mb-1">ค่าส่ง (บาท)</label>
+  <input class="w-full rounded-xl border border-border-light bg-card-light px-4 py-2.5 text-sm font-bold focus:ring-0" id="shippingCost" min="0" type="number" value="0">
+  </div>
+</div>
+<div class="sm:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2 border-t border-border-light">
+<div>
+<label class="block text-sm font-semibold text-text-primary mb-1">มูลค่าส่วนลด</label>
+<input class="w-full rounded-xl border border-border-light bg-card-light px-4 py-2.5 text-sm font-bold focus:ring-0" id="discountVal" min="0" type="number" value="0">
+</div>
+<div>
+<label class="block text-sm font-semibold text-text-primary mb-1">รูปแบบส่วนลด</label>
+<div class="flex space-x-1.5">
+<button class="disc-pill flex-1 py-2.5 rounded-xl text-xs font-bold bg-card-dark text-text-inverse" id="disc-baht" onclick="selectDiscountType('baht')" type="button">บาท</button>
+<button class="disc-pill flex-1 py-2.5 rounded-xl text-xs font-bold bg-card-light text-text-muted border border-border-light" id="disc-pct" onclick="selectDiscountType('percent')" type="button">%</button>
+<button class="disc-pill flex-1 py-2.5 rounded-xl text-xs font-bold bg-card-light text-text-muted border border-border-light" id="disc-unit" onclick="selectDiscountType('unit')" type="button">ต่อตัว</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- Table Card -->
+<section class="bg-card-light border border-border-light shadow-sm rounded-2xl">
+<div class="flex items-center justify-between p-4 border-b border-border-light">
+  <h2 class="text-base font-bold text-text-primary uppercase">ระบุจำนวนสินค้า</h2>
+  <span class="px-2.5 py-1 bg-surface-container-low text-text-primary text-[10px] font-bold rounded-full border border-border-light" id="activeSpeciesBadge">MICE</span>
+</div>
+<div class="overflow-x-auto">
+  <table class="w-full border-collapse text-left min-w-[500px]">
+    <thead>
+      <tr class="border-b border-border-light text-[11px] font-bold text-text-muted uppercase bg-[#F8FAFC]">
+      <th class="py-3 px-3">Size</th><th class="py-3 px-2 text-right">Base</th><th class="py-3 px-2 text-center">Price</th>
+      <th class="py-3 px-2 text-center">Frozen</th><th class="py-3 px-2 text-center">Live</th>
+      <th class="py-3 px-3 text-right">Total</th><th class="py-3 px-2 text-center">Del</th>
+    </tr>
+  </thead>
+  <tbody class="divide-y divide-border-light text-sm" id="inventoryTableBody"></tbody>
+  </table>
+</div>
+<div class="p-4 border-t border-border-light flex items-center justify-between text-sm text-text-muted bg-[#F8FAFC] rounded-b-2xl">
+<span>รวมจำนวน: <strong class="text-text-primary font-bold text-base" id="totalQtyCount">0</strong> ตัว</span>
+<button class="font-bold text-state-danger hover:underline" onclick="zeroAllQuantities()" type="button">Reset All</button>
+</div>
+</section>
+</div>
+
+<!-- RIGHT COLUMN -->
+<div class="xl:col-span-5 flex flex-col space-y-6">
+<!-- Output Card -->
+<section class="bg-card-light p-4 md:p-6 border border-border-light shadow-sm flex flex-col rounded-2xl">
+<div class="flex items-center justify-between pb-2 border-b border-border-light mb-4">
+<h2 class="text-base font-bold text-text-primary uppercase tracking-wide">Summary & Output</h2>
+</div>
+
+<div class="mb-4">
+  <label class="block text-sm font-semibold text-text-primary mb-2">ลูกค้ารับบิล (Customer)</label>
+  <div class="flex gap-2">
+    <select class="flex-1 rounded-xl border border-border-light bg-card-light px-4 py-2.5 text-sm focus:ring-0" id="customerSelect">
+      <option value="" selected>⏳ โหลดข้อมูล...</option>
+    </select>
+    <button onclick="loadCustomersFromSheet(false)" type="button" class="px-3 py-2.5 rounded-xl border border-border-light bg-surface-container-low hover:bg-border-light text-text-primary text-sm font-semibold">
+      ⟲
+    </button>
+  </div>
+</div>
+
+<div class="bg-bg-main p-4 border border-border-light space-y-2 mb-4 rounded-xl">
+<div class="flex justify-between items-center text-sm text-text-muted">
+<span>ค่าสินค้า (Subtotal)</span><span class="font-bold text-text-primary" id="summarySubtotal">฿0.00</span>
+</div>
+<div class="flex justify-between items-center text-sm text-text-muted">
+<span>ส่วนลด (Discount)</span><span class="font-bold text-state-danger" id="summaryDiscount">- ฿0.00</span>
+</div>
+<div class="flex justify-between items-center text-sm text-text-muted">
+<span>ค่าจัดส่ง (Shipping)</span><span class="font-bold text-text-primary" id="summaryShipping">฿0.00</span>
+</div>
+<div class="pt-3 border-t border-border-light flex justify-between items-baseline mt-2">
+<span class="text-sm font-bold uppercase text-text-muted">ยอดสุทธิ (Net Total)</span>
+<span class="text-3xl font-extrabold text-text-primary tracking-tight" id="summaryGrandTotal">฿0.00</span>
+</div>
+</div>
+
+<div class="mb-4">
+<label class="text-sm font-semibold text-text-primary block mb-1">Line OA Raw Text</label>
+<textarea class="w-full border border-border-light bg-card-light p-3 text-xs md:text-sm focus:ring-0 resize-none font-mono rounded-xl" id="rawBillOutput" readonly rows="4"></textarea>
+</div>
+
+<div class="grid grid-cols-2 gap-3 pt-2">
+<button class="py-3 px-2 rounded-xl bg-card-dark text-text-inverse text-sm font-bold hover:bg-primary" onclick="copyBillText()" type="button">Copy Text</button>
+<button class="py-3 px-2 rounded-xl bg-[#06C755] text-white text-sm font-bold hover:bg-[#05a346]" onclick="sendFlexBill()" type="button">Send to LINE</button>
+</div>
+</section>
+
+<!-- Tracking Card -->
+<section class="bg-card-light p-4 md:p-6 border border-border-light shadow-sm rounded-2xl">
+<div class="flex items-center justify-between pb-2 border-b border-border-light mb-4">
+<h2 class="text-base font-bold text-text-primary uppercase tracking-wide">Tracking Update</h2>
+</div>
+<form class="space-y-4" onsubmit="event.preventDefault(); sendTrackingFlex();">
+<div>
+<label class="block text-sm font-semibold text-text-primary mb-1">ขนส่งที่ใช้</label>
+<select class="w-full rounded-xl border border-border-light bg-card-light px-4 py-2.5 text-sm focus:ring-0" id="trackingCourier">
+<option value="Line Man">Line Man</option>
+<option value="Inter Express">Inter Express</option>
+<option value="Nim Express">Nim Express</option>
+<option value="Lalamove">Lalamove</option>
+<option value="Grab">Grab</option>
+</select>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+<div>
+<label class="block text-sm font-semibold text-text-primary mb-1">เลขพัสดุ</label>
+<input class="w-full rounded-xl border border-border-light bg-card-light px-4 py-2.5 text-sm uppercase font-bold focus:ring-0" id="trackingNumber" placeholder="KRC-992019" type="text">
+</div>
+<div>
+<label class="block text-sm font-semibold text-text-primary mb-1">ลิงก์เช็คพัสดุ</label>
+<input class="w-full rounded-xl border border-border-light bg-card-light px-4 py-2.5 text-sm focus:ring-0" id="trackingUrl" placeholder="https://..." type="url">
+</div>
+</div>
+<button class="w-full mt-2 py-3 rounded-xl bg-card-dark text-text-inverse text-sm font-bold hover:bg-primary" type="submit">Send Tracking</button>
+</form>
+</section>
+<!-- Hidden inputs for text generator -->
+<input type="hidden" id="headerNote" value="Big Mouse Farm - สรุปรายการ">
+<input type="hidden" id="footerNote" value="ขอบคุณที่สนับสนุนฟาร์ม กรุณาถ่ายวิดีโอตอนแกะกล่องเพื่อเคลมสินค้า">
+</div>
+</div>
+</main>
+
+<!-- e-Bill Modal -->
+<div class="fixed inset-0 z-50 flex items-center justify-center bg-card-dark/60 backdrop-blur-sm p-4 hidden" id="billModal">
+<div class="bg-card-light w-full max-w-lg p-6 md:p-8 shadow-2xl relative flex flex-col max-h-[90vh] rounded-[20px]">
+<div class="flex items-center justify-between pb-4 border-b border-border-light">
+<h3 class="text-lg md:text-xl font-bold text-text-primary">ใบกำกับสินค้า (e-Bill)</h3>
+<button class="px-3 py-1.5 rounded-full border border-border-light text-xs font-bold hover:bg-surface-container-low" onclick="closeBillModal()" type="button">ปิด</button>
+</div>
+<div class="py-4 overflow-y-auto space-y-4 flex-1 text-sm text-text-primary">
+<div class="flex justify-between items-start">
+<div>
+<h4 class="font-bold text-lg">Big Mouse Farm</h4>
+<p class="text-xs text-text-muted">LINE: @bigmousefarm</p>
+</div>
+<div class="text-right text-xs text-text-muted mt-1">Date: <span id="modalDate"></span></div>
+</div>
+<div class="bg-bg-main p-3 border border-border-light rounded-xl">
+<p class="text-xs text-text-muted font-bold">ลูกค้า:</p>
+<p class="font-bold text-base" id="modalCustomer"></p>
+</div>
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="border-b border-border-light text-xs text-text-muted uppercase">
+<th class="py-2">Item</th><th class="py-2 text-center">Qty</th><th class="py-2 text-right">Total</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-border-light text-sm" id="modalTableItems"></tbody>
+</table>
+<div class="space-y-1.5 pt-4 border-t border-border-light">
+<div class="flex justify-between text-text-muted"><span>Subtotal:</span><span id="modalSubtotal" class="font-bold"></span></div>
+<div class="flex justify-between text-text-muted"><span>Discount:</span><span id="modalDiscount" class="font-bold text-state-danger"></span></div>
+<div class="flex justify-between text-text-muted"><span>Shipping:</span><span id="modalShipping" class="font-bold"></span></div>
+<div class="flex justify-between items-baseline pt-3 text-lg font-bold border-t border-border-light">
+<span>Net Total:</span><span id="modalGrandTotal" class="text-2xl text-text-primary"></span>
+</div>
+</div>
+</div>
+<div class="pt-4 border-t border-border-light flex gap-2">
+<button class="flex-1 py-3 rounded-xl border border-card-dark text-sm font-bold" onclick="window.print()" type="button">พิมพ์ (Print)</button>
+<button class="flex-1 py-3 rounded-xl bg-card-dark text-white text-sm font-bold" onclick="closeBillModal()" type="button">เสร็จสิ้น</button>
+</div>
+</div>
+</div>
+
+<script>
+    // --- Mobile Menu Logic ---
+    const mobileBtn = document.getElementById('mobile-menu-btn');
+    const closeMenuBtn = document.getElementById('close-menu-btn');
+    const sidebar = document.getElementById('sidebar');
+
+    mobileBtn.addEventListener('click', () => sidebar.classList.remove('-translate-x-full'));
+    closeMenuBtn.addEventListener('click', () => sidebar.classList.add('-translate-x-full'));
+
+    // --- Config Backend ---
+    const LIFF_ID = "2008984741-8hcXjikx"; 
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycby4qaEDYaAnWM2qB7Zhd8vJ2nZGbFU-m9D4vOkvyelDIpwIYJrCD18bGKwMH-4QA3UG/exec";
+    const PROMPTPAY_ID = "0990063438";
+    let customersData = [];
+
+    // --- State ---
+    const LIVESTOCK_SPECIES = {
+  Mice: [
+    { id: '3xs', name: '3XS', normalPrice: 8, wholesalePrice: 7, customPrice: 8, frozen: 0, live: 0 },
+    { id: '2xs', name: '2XS', normalPrice: 11, wholesalePrice: 10, customPrice: 11, frozen: 0, live: 0 },
+    { id: 'xs',  name: 'XS', normalPrice: 13, wholesalePrice: 11, customPrice: 13, frozen: 0, live: 0 },
+    { id: 's',   name: 'S', normalPrice: 18, wholesalePrice: 15, customPrice: 18, frozen: 0, live: 0 },
+    { id: 'm',   name: 'M', normalPrice: 23, wholesalePrice: 21, customPrice: 23, frozen: 0, live: 0 },
+    { id: 'l',   name: 'L', normalPrice: 28, wholesalePrice: 26, customPrice: 28, frozen: 0, live: 0 },
+    { id: 'xl',  name: 'XL', normalPrice: 34, wholesalePrice: 31, customPrice: 34, frozen: 0, live: 0 },
+    { id: '2xl', name: '2XL', normalPrice: 38, wholesalePrice: 35, customPrice: 38, frozen: 0, live: 0 },
+    { id: '3xl', name: '3XL', normalPrice: 42, wholesalePrice: 40, customPrice: 42, frozen: 0, live: 0 }
+  ],
+  Rat: [
+    { id: 's', name: 'S', normalPrice: 35, wholesalePrice: 33, customPrice: 35, frozen: 0, live: 0 },
+    { id: 'm1', name: 'M1', normalPrice: 40, wholesalePrice: 38, customPrice: 40, frozen: 0, live: 0 },
+    { id: 'm2', name: 'M2', normalPrice: 45, wholesalePrice: 43, customPrice: 45, frozen: 0, live: 0 },
+    { id: 'm3', name: 'M3', normalPrice: 50, wholesalePrice: 48, customPrice: 50, frozen: 0, live: 0 },
+    { id: 'l1', name: 'L1', normalPrice: 55, wholesalePrice: 53, customPrice: 55, frozen: 0, live: 0 },
+    { id: 'l2', name: 'L2', normalPrice: 60, wholesalePrice: 58, customPrice: 60, frozen: 0, live: 0 },
+    { id: 'xl', name: 'XL', normalPrice: 65, wholesalePrice: 63, customPrice: 65, frozen: 0, live: 0 },
+    { id: '2xl', name: '2XL', normalPrice: 70, wholesalePrice: 68, customPrice: 70, frozen: 0, live: 0 },
+    { id: '3xl', name: '3XL', normalPrice: 75, wholesalePrice: 73, customPrice: 75, frozen: 0, live: 0 },
+    { id: '4xl', name: '4XL', normalPrice: 85, wholesalePrice: 83, customPrice: 85, frozen: 0, live: 0 },
+    { id: '5xl', name: '5XL', normalPrice: 95, wholesalePrice: 93, customPrice: 95, frozen: 0, live: 0 },
+    { id: 'jb', name: 'JB', normalPrice: 100, wholesalePrice: 98, customPrice: 100, frozen: 0, live: 0 }
+  ]
+};
+
+    let activeSpecies = 'Mice';
+    let rateTier = 'retail';
+    let discountType = 'baht';
+    let inventoryState = JSON.parse(JSON.stringify(LIVESTOCK_SPECIES));
+    let currentTotals = { subtotal: 0, discount: 0, shipping: 0, grandTotal: 0 };
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      renderTableRows();
+      attachFormListeners();
+      recalculateAll();
+      document.getElementById('modalDate').innerText = new Date().toISOString().split('T')[0];
+      
+      const savedUrl = localStorage.getItem('customerSheetUrl');
+      if (savedUrl) { loadCustomersFromSheet(true); }
+      try { await liff.init({ liffId: LIFF_ID }); } catch (err) {}
+    });
+
+    // --- Core Logic ---
+    function selectSpecies(species) {
+      activeSpecies = species;
+      document.querySelectorAll('.species-pill').forEach(el => el.className = 'species-pill flex-1 py-2 px-4 rounded-full text-xs font-bold bg-card-light text-text-muted border border-border-light');
+      document.getElementById(`species-${species.toLowerCase()}`).className = 'species-pill flex-1 py-2 px-4 rounded-full text-xs font-bold bg-card-dark text-text-inverse border border-card-dark';
+      document.getElementById('activeSpeciesBadge').innerText = `${species.toUpperCase()}`;
+      renderTableRows();
+    }
+
+    function selectRateTier(tier) {
+  rateTier = tier;
+  document.querySelectorAll('.tier-pill').forEach(el => el.className = 'tier-pill flex-1 py-2 px-3 rounded-full text-xs font-bold bg-card-light text-text-muted border border-border-light');
+  document.getElementById(`tier-${tier}`).className = 'tier-pill flex-1 py-2 px-3 rounded-full text-xs font-bold bg-card-dark text-text-inverse border border-card-dark';
+  
+  inventoryState[activeSpecies].forEach(item => { 
+    item.customPrice = tier === 'wholesale' ? item.wholesalePrice : item.normalPrice; 
+  });
+  renderTableRows(); 
+  recalculateAll();
+}
+
+    function selectDiscountType(type) {
+      discountType = type;
+      document.querySelectorAll('.disc-pill').forEach(el => el.className = 'disc-pill flex-1 py-2.5 rounded-xl text-xs font-bold bg-card-light text-text-muted border border-border-light');
+      const map = { baht: 'disc-baht', percent: 'disc-pct', unit: 'disc-unit' };
+      document.getElementById(map[type]).className = 'disc-pill flex-1 py-2.5 rounded-xl text-xs font-bold bg-card-dark text-text-inverse';
+      recalculateAll();
+    }
+
+    function renderTableRows() {
+      const tbody = document.getElementById('inventoryTableBody');
+      tbody.innerHTML = '';
+      inventoryState[activeSpecies].forEach((item, index) => {
+        const rowQty = (item.frozen || 0) + (item.live || 0);
+        const tr = document.createElement('tr');
+        tr.className = 'hover:bg-surface-container-low transition-colors';
+        tr.innerHTML = `
+          <td class="py-2 px-3 font-bold">${item.name}</td>
+          <td class="py-2 px-2 text-right text-xs text-text-muted">฿${item.normalPrice}</td>
+          <td class="py-2 px-2 text-center"><input type="number" min="0" value="${item.customPrice}" oninput="handlePriceChange(${index}, this.value)" class="w-14 text-center rounded-lg bg-card-light border py-1.5 text-sm font-bold focus:ring-0"></td>
+          <td class="py-2 px-2 text-center"><input type="number" min="0" value="${item.frozen||''}" placeholder="0" oninput="handleQtyChange(${index}, 'frozen', this.value)" class="w-14 text-center rounded-lg border py-1.5 text-sm focus:ring-0"></td>
+          <td class="py-2 px-2 text-center"><input type="number" min="0" value="${item.live||''}" placeholder="0" oninput="handleQtyChange(${index}, 'live', this.value)" class="w-14 text-center rounded-lg border py-1.5 text-sm focus:ring-0"></td>
+          <td class="py-2 px-3 text-right font-bold text-kpi-blue">฿${(rowQty * item.customPrice).toLocaleString()}</td>
+          <td class="py-2 px-2 text-center"><button onclick="clearRow(${index})" class="text-xs font-bold text-state-danger">X</button></td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function handlePriceChange(i, v) { inventoryState[activeSpecies][i].customPrice = parseFloat(v)||0; recalculateAll(); renderTableRows(); }
+    function handleQtyChange(i, t, v) { inventoryState[activeSpecies][i][t] = parseInt(v)||0; recalculateAll(); renderTableRows(); }
+    function clearRow(i) { inventoryState[activeSpecies][i].frozen = 0; inventoryState[activeSpecies][i].live = 0; recalculateAll(); renderTableRows(); }
+    function zeroAllQuantities() { ['Mice','Rat'].forEach(sp => inventoryState[sp].forEach(i => { i.frozen=0; i.live=0; })); recalculateAll(); renderTableRows(); }
+
+    function recalculateAll() {
+      const ship = parseFloat(document.getElementById('shippingCost').value)||0;
+      const discVal = parseFloat(document.getElementById('discountVal').value)||0;
+      let subtotal = 0, units = 0, customDiscTotal = 0;
+
+      ['Mice', 'Rat'].forEach(sp => {
+        inventoryState[sp].forEach(item => {
+          const q = (item.frozen||0) + (item.live||0);
+          units += q;
+          subtotal += q * item.normalPrice;
+          customDiscTotal += q * (item.normalPrice - item.customPrice);
+        });
+      });
+
+      let subNet = subtotal - customDiscTotal;
+      let globalDisc = 0;
+      if (discountType === 'baht') globalDisc = discVal;
+      else if (discountType === 'percent') globalDisc = (subNet * discVal) / 100;
+      else if (discountType === 'unit') globalDisc = units * discVal;
+      
+      let totalDisc = Math.min(subtotal, customDiscTotal + globalDisc);
+      let grandTotal = Math.max(0, subtotal - totalDisc + ship);
+
+      currentTotals = { subtotal, discount: totalDisc, shipping: ship, grandTotal };
+
+      document.getElementById('totalQtyCount').innerText = units;
+      document.getElementById('summarySubtotal').innerText = `฿${subtotal.toLocaleString()}`;
+      document.getElementById('summaryDiscount').innerText = `- ฿${totalDisc.toLocaleString()}`;
+      document.getElementById('summaryShipping').innerText = `฿${ship.toLocaleString()}`;
+      document.getElementById('summaryGrandTotal').innerText = `฿${grandTotal.toLocaleString()}`;
+
+      generateRawBillText(subtotal, totalDisc, ship, grandTotal, units);
+    }
+
+    function generateRawBillText(sub, disc, ship, grand, units) {
+      const sel = document.getElementById('customerSelect');
+      const customer = sel.options[sel.selectedIndex]?.text || '';
+      const lines = [
+        `===== ${document.getElementById('headerNote').value} =====`,
+        `ลูกค้า: ${customer}`,
+        `การจัดส่ง: ${document.getElementById('shippingMethod').value}`,
+        `-------------------------`
+      ];
+      ['Mice', 'Rat'].forEach(sp => inventoryState[sp].forEach(i => {
+        let q = (i.frozen||0) + (i.live||0);
+        if(q>0) lines.push(`• [${sp}] ${i.name} (${q} ตัว) @฿${i.customPrice} = ฿${q*i.customPrice}`);
+      }));
+      lines.push(`-------------------------`, `รวมค่าสินค้า: ฿${sub}`);
+      if(disc>0) lines.push(`ส่วนลดรวม: -฿${disc}`);
+      lines.push(`ค่าจัดส่ง: ฿${ship}`, `ยอดสุทธิ: ฿${grand}`, `-------------------------`, `หมายเหตุ: ${document.getElementById('footerNote').value}`);
+      document.getElementById('rawBillOutput').value = lines.join('\n');
+    }
+
+    function attachFormListeners() {
+      ['shippingCost','discountVal','shippingMethod','customerSelect'].forEach(id => 
+        document.getElementById(id).addEventListener('change', recalculateAll)
+      );
+      document.getElementById('resetFormBtn').addEventListener('click', () => {
+        zeroAllQuantities();
+        document.getElementById('discountVal').value = 0; document.getElementById('shippingCost').value = 0; recalculateAll();
+      });
+    }
+
+    // --- Google Sheets Integration ---
+    function getSheetIdFromUrl(url) { const m = url.match(/\/spreadsheets\/d\/([a-zA-Z0-9-_]+)/); return m ? m[1] : null; }
+    function parseCSV(text) {
+      const rows = []; let row = [], field = '', inQ = false;
+      for (let i = 0; i < text.length; i++) {
+        const c = text[i], nc = text[i + 1];
+        if (c === '"') { if (inQ && nc === '"') { field += '"'; i++; } else inQ = !inQ; }
+        else if (c === ',' && !inQ) { row.push(field); field = ''; }
+        else if ((c === '\n' || c === '\r') && !inQ) {
+          if (c === '\r' && nc === '\n') i++; row.push(field);
+          if (row.some(f => f.trim() !== '')) rows.push(row); row = []; field = '';
+        } else field += c;
+      }
+      if (field || row.length > 0) { row.push(field); if (row.some(f => f.trim() !== '')) rows.push(row); }
+      return rows;
+    }
+    
+    async function loadCustomersFromSheet(isAutoLoad = false) {
+      const url = localStorage.getItem('customerSheetUrl'); 
+      const select = document.getElementById('customerSelect');
+      
+      if (!url) { 
+        select.innerHTML = '<option value="">⚠️ ใส่ลิงก์ลูกค้าใน Settings</option>';
+        if (!isAutoLoad) Swal.fire('เตือน', 'กรุณาระบุลิงก์ชีตลูกค้าในหน้า Settings', 'warning'); 
+        return; 
+      }
+      
+      const id = getSheetIdFromUrl(url);
+      if (!id) { 
+        if (!isAutoLoad) Swal.fire('Error', 'ลิงก์ชีตไม่ถูกต้อง', 'error'); 
+        return; 
+      }
+      try {
+        select.innerHTML = '<option value="">⏳ โหลดข้อมูล...</option>';
+        if(!isAutoLoad) Swal.fire({title:'กำลังโหลด...', didOpen:()=>Swal.showLoading()});
+        const res = await fetch(`https://docs.google.com/spreadsheets/d/${id}/export?format=csv&gid=0`);
+        const text = await res.text(); const rows = parseCSV(text);
+        customersData = [];
+        for (let i = 1; i < rows.length; i++) {
+          if (rows[i][0]) {
+            let grade = rows[i][4] ? rows[i][4].trim() : '';
+            let weight = 4, prefix = '';
+            if (['VIP','vip','แดง'].includes(grade)) { weight = 1; prefix = '🔴 '; }
+            else if (['ประจำ','น้ำเงิน'].includes(grade)) { weight = 2; prefix = '🔵 '; }
+            else if (['ขาจร','เหลือง'].includes(grade)) { weight = 3; prefix = '🟡 '; }
+            customersData.push({ id: rows[i][0].trim(), name: rows[i][1]||'ไม่ระบุ', weight, prefix });
+          }
+        }
+        customersData.sort((a, b) => a.weight !== b.weight ? a.weight - b.weight : a.name.localeCompare(b.name, 'th'));
+        select.innerHTML = '<option value="" disabled selected>-- เลือกลูกค้า --</option>';
+        customersData.forEach(c => {
+          let opt = document.createElement('option'); opt.value = c.id;
+          opt.setAttribute('data-clean-name', c.name); opt.textContent = c.prefix + c.name;
+          select.appendChild(opt);
+        });
+        if(!isAutoLoad) Swal.fire({icon:'success', title:'โหลดสำเร็จ!', timer:1000, showConfirmButton:false});
+      } catch (e) {
+        select.innerHTML = '<option value="">❌ Error</option>';
+        if(!isAutoLoad) Swal.fire('Error', e.message, 'error');
+      }
+    }
+
+    // --- LINE Flex Backend ---
+    async function sendFlexBill() {
+      const sel = document.getElementById("customerSelect");
+      const uid = sel.value;
+      if (!uid) { Swal.fire('เตือน', 'เลือกลูกค้าก่อน', 'warning'); return; }
+      const cName = sel.options[sel.selectedIndex].getAttribute('data-clean-name');
+      
+      let items = [], totalItems = 0;
+      ['Mice', 'Rat'].forEach(sp => {
+        inventoryState[sp].forEach(i => {
+          let q = (i.frozen||0) + (i.live||0);
+          if (q > 0) {
+            totalItems++;
+            let lGross = q * i.normalPrice;
+            let lDisc = q * (i.normalPrice - i.customPrice);
+            items.push({
+              "type":"box", "layout":"baseline", "contents":[
+                {"type":"text","text":`${sp} ${i.name}`,"size":"sm","flex":0},
+                {"type":"text","text":String(q),"size":"sm","margin":"md","flex":0},
+                {"type":"text","text":lGross.toLocaleString(),"size":"sm","align":"end"}
+              ]
+            });
+            if(lDisc > 0) items.push({"type":"box","layout":"baseline","contents":[
+              {"type":"text","text":`↳ ลดเหลือ ${i.customPrice}฿`,"size":"xs","color":"#ff6a00"},
+              {"type":"text","text":`-${lDisc}`,"size":"xs","color":"#ff6a00","align":"end"}
+            ]});
+          }
+        });
+      });
+      if(totalItems===0) { Swal.fire('เตือน', 'ยังไม่ใส่จำนวน', 'warning'); return; }
+
+      let mainBox = [...items];
+      if(currentTotals.shipping > 0) mainBox.push({"type":"box","layout":"baseline","contents":[{"type":"text","text":"ค่าส่ง","size":"sm"},{"type":"text","text":currentTotals.shipping.toLocaleString(),"size":"sm","align":"end"}]});
+      if(currentTotals.discount > 0) mainBox.push({"type":"box","layout":"baseline","contents":[{"type":"text","text":"ส่วนลด","size":"sm","color":"#ff3333"},{"type":"text","text":`-${currentTotals.discount.toLocaleString()}`,"size":"sm","color":"#ff3333","align":"end"}]});
+
+      const qrUrl = `https://promptpay.io/${PROMPTPAY_ID}/${currentTotals.grandTotal}`;
+      const payload = {
+        "type": "bubble",
+        "body": { "type": "box", "layout": "vertical", "contents": [
+          { "type": "text", "text": "บิลแจ้งยอด", "weight": "bold", "size": "xl" },
+          { "type": "text", "text": `ลูกค้า: ${cName}`, "size": "sm", "color": "#666666", "margin": "md" },
+          { "type": "separator", "margin": "lg" },
+          { "type": "box", "layout": "vertical", "margin": "lg", "spacing": "sm", "contents": mainBox },
+          { "type": "separator", "margin": "lg" },
+          { "type": "box", "layout": "horizontal", "margin": "md", "contents": [
+            { "type": "text", "text": "ยอดสุทธิ", "weight": "bold" },
+            { "type": "text", "text": `${currentTotals.grandTotal.toLocaleString()} ฿`, "align": "end", "weight": "bold", "size": "lg" }
+          ]}
+        ]},
+        "footer": { "type": "box", "layout": "vertical", "contents": [
+          { "type": "image", "url": qrUrl, "size": "xl", "aspectMode": "cover" },
+          { "type": "text", "text": "สแกนเพื่อชำระ (พร้อมเพย์)", "size": "xs", "align": "center", "color": "#aaaaaa", "margin": "md" }
+        ]}
+      };
+
+      Swal.fire({title:'Sending...', didOpen:()=>Swal.showLoading()});
+      try {
+        const res = await fetch(WEB_APP_URL, {
+          method: 'POST', headers: { 'Content-Type': 'text/plain' },
+          body: JSON.stringify({ action: 'sendFlex', userId: uid, flexMessage: payload, altText: "💰 บิลจาก BMF" })
+        });
+        const d = await res.json();
+        if(d.status==='success') Swal.fire('สำเร็จ', 'ส่งบิลแล้ว', 'success'); else throw new Error(d.message);
+      } catch(e) { Swal.fire('Error', e.message, 'error'); }
+    }
+
+    async function sendTrackingFlex() {
+      const sel = document.getElementById("customerSelect");
+      const uid = sel.value;
+      if (!uid) { Swal.fire('เตือน', 'เลือกลูกค้าก่อน', 'warning'); return; }
+      
+      const trackNo = document.getElementById('trackingNumber').value;
+      if(!trackNo) { Swal.fire('เตือน','ใส่เลขพัสดุ','warning'); return; }
+      
+      const payload = {
+        "type": "bubble", "size": "mega",
+        "header": { "type": "box", "layout": "vertical", "backgroundColor": "#000000", "contents": [{"type": "text", "text": "🚚 จัดส่งเรียบร้อย", "color": "#ffffff", "weight": "bold"}] },
+        "body": { "type": "box", "layout": "vertical", "spacing": "sm", "contents": [
+          {"type":"box","layout":"baseline","contents":[{"type":"text","text":"ขนส่ง:","flex":1},{"type":"text","text":document.getElementById('trackingCourier').value,"flex":3,"weight":"bold"}]},
+          {"type":"box","layout":"baseline","contents":[{"type":"text","text":"เลขพัสดุ:","flex":1},{"type":"text","text":trackNo,"flex":3,"weight":"bold","color":"#ff6a00"}]}
+        ]}
+      };
+      const url = document.getElementById('trackingUrl').value;
+      if(url) payload.footer = {"type":"box","layout":"vertical","contents":[{"type":"button","style":"primary","color":"#000000","action":{"type":"uri","label":"เช็คสถานะ","uri":url}}]};
+
+      Swal.fire({title:'Sending...', didOpen:()=>Swal.showLoading()});
+      try {
+        const res = await fetch(WEB_APP_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify({ action: 'sendFlex', userId: uid, flexMessage: payload, altText: "🚚 แจ้งพัสดุ" }) });
+        const d = await res.json();
+        if(d.status==='success') { Swal.fire('สำเร็จ', 'ส่งเลขพัสดุแล้ว', 'success'); document.getElementById('trackingNumber').value=''; } else throw new Error(d.message);
+      } catch(e) { Swal.fire('Error', e.message, 'error'); }
+    }
+
+    function copyBillText() {
+      const t = document.getElementById('rawBillOutput'); t.select();
+      navigator.clipboard.writeText(t.value).then(() => Swal.fire({toast:true, position:'top-end', icon:'success', title:'Copied!', showConfirmButton:false, timer:1500}));
+    }
+    
+    function openBillModal() {
+      const sel = document.getElementById('customerSelect');
+      document.getElementById('modalCustomer').innerText = sel.options[sel.selectedIndex]?.text || '-';
+      
+      const tbody = document.getElementById('modalTableItems');
+      tbody.innerHTML = '';
+      ['Mice', 'Rat'].forEach(sp => inventoryState[sp].forEach(i => {
+        let q = (i.frozen||0) + (i.live||0);
+        if(q>0) {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `<td class="py-2 font-bold">${sp} ${i.name}</td><td class="py-2 text-center">${q}</td><td class="py-2 text-right font-bold">฿${q*i.customPrice}</td>`;
+          tbody.appendChild(tr);
+        }
+      }));
+      
+      document.getElementById('modalSubtotal').innerText = `฿${currentTotals.subtotal.toLocaleString()}`;
+      document.getElementById('modalDiscount').innerText = `- ฿${currentTotals.discount.toLocaleString()}`;
+      document.getElementById('modalShipping').innerText = `฿${currentTotals.shipping.toLocaleString()}`;
+      document.getElementById('modalGrandTotal').innerText = `฿${currentTotals.grandTotal.toLocaleString()}`;
+      document.getElementById('billModal').classList.remove('hidden');
+    }
+    function closeBillModal() { document.getElementById('billModal').classList.add('hidden'); }
+  </script>
+</body>
+</html>
