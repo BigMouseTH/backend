@@ -398,18 +398,35 @@
         tr.innerHTML = `
           <td class="py-2 px-3 font-bold">${item.name}</td>
           <td class="py-2 px-2 text-right text-xs text-text-muted">฿${item.normalPrice}</td>
-          <td class="py-2 px-2 text-center"><input type="text" inputmode="numeric" value="${item.customPrice}" oninput="handlePriceChange(${index}, this.value)" class="w-14 text-center rounded-lg bg-card-light border py-1.5 text-sm font-bold focus:ring-0"></td>
-          <td class="py-2 px-2 text-center"><input type="text" inputmode="numeric" value="${item.frozen||''}" placeholder="0" oninput="handleQtyChange(${index}, 'frozen', this.value)" class="w-14 text-center rounded-lg border py-1.5 text-sm focus:ring-0"></td>
-          <td class="py-2 px-2 text-center"><input type="text" inputmode="numeric" value="${item.live||''}" placeholder="0" oninput="handleQtyChange(${index}, 'live', this.value)" class="w-14 text-center rounded-lg border py-1.5 text-sm focus:ring-0"></td>
-          <td class="py-2 px-3 text-right font-bold text-kpi-blue">฿${(rowQty * item.customPrice).toLocaleString()}</td>
+          <td class="py-2 px-2 text-center"><input type="tel" value="${item.customPrice}" onchange="handlePriceChange(${index}, this.value)" class="w-14 text-center rounded-lg bg-card-light border py-1.5 text-sm font-bold focus:ring-0"></td>
+          <td class="py-2 px-2 text-center"><input type="tel" value="${item.frozen||''}" placeholder="0" onchange="handleQtyChange(${index}, 'frozen', this.value)" class="w-14 text-center rounded-lg border py-1.5 text-sm focus:ring-0"></td>
+          <td class="py-2 px-2 text-center"><input type="tel" value="${item.live||''}" placeholder="0" onchange="handleQtyChange(${index}, 'live', this.value)" class="w-14 text-center rounded-lg border py-1.5 text-sm focus:ring-0"></td>
+          <td class="py-2 px-3 text-right font-bold text-kpi-blue" id="row-total-${index}">฿${(rowQty * item.customPrice).toLocaleString()}</td>
           <td class="py-2 px-2 text-center"><button onclick="clearRow(${index})" class="text-xs font-bold text-state-danger">X</button></td>
         `;
         tbody.appendChild(tr);
       });
     }
 
-    function handlePriceChange(i, v) { inventoryState[activeSpecies][i].customPrice = parseFloat(v)||0; recalculateAll(); renderTableRows(); }
-    function handleQtyChange(i, t, v) { inventoryState[activeSpecies][i][t] = parseInt(v)||0; recalculateAll(); renderTableRows(); }
+    function handlePriceChange(i, v) { 
+      inventoryState[activeSpecies][i].customPrice = parseFloat(v)||0; 
+      updateRowTotal(i);
+      recalculateAll(); 
+    }
+    
+    function handleQtyChange(i, t, v) { 
+      inventoryState[activeSpecies][i][t] = parseInt(v)||0; 
+      updateRowTotal(i);
+      recalculateAll(); 
+    }
+
+    function updateRowTotal(i) {
+      const item = inventoryState[activeSpecies][i];
+      const rowQty = (item.frozen || 0) + (item.live || 0);
+      const totalEl = document.getElementById(`row-total-${i}`);
+      if(totalEl) totalEl.innerText = `฿${(rowQty * item.customPrice).toLocaleString()}`;
+    }
+    
     function clearRow(i) { inventoryState[activeSpecies][i].frozen = 0; inventoryState[activeSpecies][i].live = 0; recalculateAll(); renderTableRows(); }
     function zeroAllQuantities() { ['Mice','Rat'].forEach(sp => inventoryState[sp].forEach(i => { i.frozen=0; i.live=0; })); recalculateAll(); renderTableRows(); }
 
