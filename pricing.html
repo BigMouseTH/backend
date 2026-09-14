@@ -389,24 +389,24 @@
     }
 
     function renderTableRows() {
-      const tbody = document.getElementById('inventoryTableBody');
-      tbody.innerHTML = '';
-      inventoryState[activeSpecies].forEach((item, index) => {
-        const rowQty = (item.frozen || 0) + (item.live || 0);
-        const tr = document.createElement('tr');
-        tr.className = 'hover:bg-surface-container-low transition-colors';
-        tr.innerHTML = `
-          <td class="py-2 px-3 font-bold">${item.name}</td>
-          <td class="py-2 px-2 text-right text-xs text-text-muted">฿${item.normalPrice}</td>
-          <td class="py-2 px-2 text-center"><input type="number" min="0" value="${item.customPrice}" oninput="handlePriceChange(${index}, this.value)" class="w-14 text-center rounded-lg bg-card-light border py-1.5 text-sm font-bold focus:ring-0"></td>
-          <td class="py-2 px-2 text-center"><input type="number" min="0" value="${item.frozen||''}" placeholder="0" oninput="handleQtyChange(${index}, 'frozen', this.value)" class="w-14 text-center rounded-lg border py-1.5 text-sm focus:ring-0"></td>
-          <td class="py-2 px-2 text-center"><input type="number" min="0" value="${item.live||''}" placeholder="0" oninput="handleQtyChange(${index}, 'live', this.value)" class="w-14 text-center rounded-lg border py-1.5 text-sm focus:ring-0"></td>
-          <td class="py-2 px-3 text-right font-bold text-kpi-blue">฿${(rowQty * item.customPrice).toLocaleString()}</td>
-          <td class="py-2 px-2 text-center"><button onclick="clearRow(${index})" class="text-xs font-bold text-state-danger">X</button></td>
-        `;
-        tbody.appendChild(tr);
-      });
-    }
+  const tbody = document.getElementById('inventoryTableBody');
+  tbody.innerHTML = '';
+  inventoryState[activeSpecies].forEach((item, index) => {
+    const rowQty = (item.frozen || 0) + (item.live || 0);
+    const tr = document.createElement('tr');
+    tr.className = 'hover:bg-surface-container-low transition-colors';
+    tr.innerHTML = `
+      <td class="py-2 px-3 font-bold">${item.name}</td>
+      <td class="py-2 px-2 text-right text-xs text-text-muted">฿${item.normalPrice}</td>
+      <td class="py-2 px-2 text-center"><input type="text" inputmode="numeric" value="${item.customPrice}" oninput="handlePriceChange(${index}, this.value)" class="w-14 text-center rounded-lg bg-card-light border py-1.5 text-sm font-bold focus:ring-0"></td>
+      <td class="py-2 px-2 text-center"><input type="text" inputmode="numeric" value="${item.frozen||''}" placeholder="0" oninput="handleQtyChange(${index}, 'frozen', this.value)" class="w-14 text-center rounded-lg border py-1.5 text-sm focus:ring-0"></td>
+      <td class="py-2 px-2 text-center"><input type="text" inputmode="numeric" value="${item.live||''}" placeholder="0" oninput="handleQtyChange(${index}, 'live', this.value)" class="w-14 text-center rounded-lg border py-1.5 text-sm focus:ring-0"></td>
+      <td class="py-2 px-3 text-right font-bold text-kpi-blue">฿${(rowQty * item.customPrice).toLocaleString()}</td>
+      <td class="py-2 px-2 text-center"><button onclick="clearRow(${index})" class="text-xs font-bold text-state-danger">X</button></td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
 
     function handlePriceChange(i, v) { inventoryState[activeSpecies][i].customPrice = parseFloat(v)||0; recalculateAll(); renderTableRows(); }
     function handleQtyChange(i, t, v) { inventoryState[activeSpecies][i][t] = parseInt(v)||0; recalculateAll(); renderTableRows(); }
