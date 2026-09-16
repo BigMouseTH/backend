@@ -199,6 +199,8 @@
     setInterval(checkDueTimes, 60000); 
   });
 
+const GAS_PREP_URL = "https://script.google.com/macros/s/AKfycbyAsUb3boJfIgFFhn2YpTLTnc862PABMRO7LxbdQEpK4yaY0MCPbBALgIq4BgMUvO6T/exec";
+
   function setupPriorityToggle() {
     const btns = document.querySelectorAll('.priority-btn');
     btns.forEach(btn => {
@@ -227,6 +229,19 @@
     tasks.push(newTask);
     saveTasks();
     renderTasks();
+
+    // ส่งข้อมูลตั้งคิวแจ้งเตือนเข้า LINE ผ่าน GAS
+    const dueDateTime = new Date(`${date}T${time}:00`).getTime();
+    fetch(GAS_PREP_URL, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain" },
+      body: JSON.stringify({
+        action: "addTask",
+        id: newTask.id,
+        text: `[${newTask.priority.toUpperCase()}] ${cat} ${size} x${qty} ตัว\nเวลาส่ง: ${date} ${time}\nโน้ต: ${note || "-"}`,
+        dueTimestamp: dueDateTime
+      })
+    }).catch(err => console.error("Line alert queue failed:", err));
     
     // Reset inputs except date
     document.getElementById('task-size').value = '';
@@ -236,6 +251,7 @@
 
     Swal.fire({toast:true, position:'top-end', icon:'success', title:'เพิ่มงานเรียบร้อย', showConfirmButton:false, timer:1500});
   });
+    
 
   function renderTasks() {
     const list = document.getElementById('task-list');
