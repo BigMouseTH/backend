@@ -484,16 +484,9 @@
         if (result.status === 'success') { 
           Swal.fire({ toast: true, position: 'top-end', icon: 'success', title: 'บันทึกสำเร็จ!', showConfirmButton: false, timer: 2000 });
           
-          // --- LINE Notification: ยอดขายใหม่ ---
+          // --- LINE Notification: ยอดขายใหม่ พร้อมยอดเงิน ---
           const grandTotalText = document.getElementById('grand-total').textContent;
-          fetch(GAS_NOTIFY_URL, {
-            method: "POST",
-            headers: { "Content-Type": "text/plain" },
-            body: JSON.stringify({
-              action: "notifyNow",
-              text: `💰 [ยอดขาย] Order #${no}\nยอดชำระ: ${grandTotalText}\nรูปแบบ: ${state.payType}\nขนส่ง: ${document.getElementById('ship-method').value}`
-            })
-          }).catch(e => console.error("Line alert failed:", e));
+          sendNotifyWithBalance(`💰 [ยอดขาย] Order #${no}\nยอดชำระ: ${grandTotalText}\nรูปแบบ: ${state.payType}\nขนส่ง: ${document.getElementById('ship-method').value}`);
           // ---------------------------------
 
           cart = []; document.getElementById('ship-cost').value='0'; document.getElementById('ship-paid').value='0'; renderCart(); loadSalesHistory(); 
@@ -592,15 +585,8 @@
           if (result.status === 'success') { 
             Swal.fire({toast:true, position:'top-end', icon:'success', title:'Updated', showConfirmButton:false, timer:1500}); 
             
-            // --- LINE Notification: อัปเดตค่าจัดส่ง ---
-            fetch(GAS_NOTIFY_URL, {
-              method: "POST",
-              headers: { "Content-Type": "text/plain" },
-              body: JSON.stringify({
-                action: "notifyNow",
-                text: `🚚 [อัปเดตค่าขนส่ง] เดือน ${month} (Row: ${row})\nค่าส่งเดิม: ฿${currentVal}\nค่าส่งใหม่: ฿${newAmt}`
-              })
-            }).catch(e => console.error("Line alert failed:", e));
+            // --- LINE Notification: อัปเดตค่าจัดส่ง พร้อมยอดเงิน ---
+            sendNotifyWithBalance(`🚚 [อัปเดตค่าขนส่ง] เดือน ${month} (Row: ${row})\nค่าส่งเดิม: ฿${currentVal}\nค่าส่งใหม่: ฿${newAmt}`);
             // ---------------------------------
             
             loadSalesHistory(); 
@@ -622,6 +608,30 @@
           else throw new Error(result.message);
         } catch(err) { Swal.fire('Error', err.message, 'error'); }
       }
+    }
+    
+    // --- ฟังก์ชันตัวกลางสำหรับดึงยอดบัญชีแล้วส่งเข้า LINE ---
+    async function sendNotifyWithBalance(baseText) {
+      try {
+        const today = new Date().toISOString().split('T')[0];
+        const dbRes = await fetch(SCRIPT_URL, {
+          method: 'POST', headers: { "Content-Type": "text/plain" },
+          body: JSON.stringify({ action: 'getDashboard', date: today })
+        });
+        const dbData = await dbRes.json();
+        
+        let balanceText = '';
+        if (dbData.status === 'success') {
+          const cash = parseFloat(dbData.summary.cash || 0).toLocaleString(undefined, {minimumFractionDigits: 2});
+          const bank = parseFloat(dbData.summary.digital || 0).toLocaleString(undefined, {minimumFractionDigits: 2});
+          balanceText = `\n---\n💵 เงินสด: ฿${cash}\n🏦 บัญชี: ฿${bank}`;
+        }
+
+        await fetch(GAS_NOTIFY_URL, {
+          method: "POST", headers: { "Content-Type": "text/plain" },
+          body: JSON.stringify({ action: "notifyNow", text: baseText + balanceText })
+        });
+      } catch (e) { console.error("Notify failed:", e); }
     }
   </script>
 </body>
