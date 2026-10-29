@@ -374,16 +374,9 @@
       if (result.status === 'success') {
         Swal.fire({ toast: true, position: 'top-end', icon: 'success', title: 'บันทึกรายจ่ายสำเร็จ!', showConfirmButton: false, timer: 1500 });
         
-        // แจ้งเตือนเข้า LINE
+        // แจ้งเตือนเข้า LINE พร้อมยอดเงิน
         const totalNet = (price * qty) + shipping - discount;
-        fetch(GAS_NOTIFY_URL, {
-          method: "POST",
-          headers: { "Content-Type": "text/plain" },
-          body: JSON.stringify({
-            action: "notifyNow",
-            text: `💸 [รายจ่าย] ${item}\nยอดสุทธิ: ฿${totalNet.toLocaleString()}\nชำระผ่าน: ${payType}\n${note ? 'โน้ต: '+note : ''}`
-          })
-        }).catch(e => console.error("Line alert failed:", e));
+        sendNotifyWithBalance(`💸 [รายจ่าย] ${item}\nยอดสุทธิ: ฿${totalNet.toLocaleString()}\nชำระผ่าน: ${payType}\n${note ? 'โน้ต: '+note : ''}`);
 
         document.getElementById('order-form').reset();
         document.getElementById('order-date').value = date;
@@ -440,22 +433,39 @@
       if (result.status === 'success') {
         Swal.fire({ toast: true, position: 'top-end', icon: 'success', title: 'โยกเงินสำเร็จ', showConfirmButton: false, timer: 1500 });
         
-        // แจ้งเตือนเข้า LINE
+        // แจ้งเตือนเข้า LINE พร้อมยอดเงิน
         const typeLabel = type === "DigitalToCash" ? "ธนาคาร ➡️ เงินสด" : "เงินสด ➡️ ธนาคาร";
-        fetch(GAS_NOTIFY_URL, {
-          method: "POST",
-          headers: { "Content-Type": "text/plain" },
-          body: JSON.stringify({
-            action: "notifyNow",
-            text: `🔄 [โยกเงิน] ${typeLabel}\nจำนวน: ฿${amount.toLocaleString()}\nโน้ต: ${note || '-'}`
-          })
-        }).catch(e => console.error("Line alert failed:", e));
+        sendNotifyWithBalance(`🔄 [โยกเงิน] ${typeLabel}\nจำนวน: ฿${amount.toLocaleString()}\nโน้ต: ${note || '-'}`);
 
         document.getElementById('transfer-amount').value = ''; document.getElementById('transfer-note').value = '';
         toggleModal(false); loadDashboard(); 
       } else throw new Error(result.message);
     } catch(e) { Swal.fire('Error', e.message, 'error'); }
     finally { btn.disabled = false; btn.innerText = oldTxt; }
+  }
+
+  // --- ฟังก์ชันตัวกลางสำหรับดึงยอดบัญชีแล้วส่งเข้า LINE ---
+  async function sendNotifyWithBalance(baseText) {
+    try {
+      const today = new Date().toISOString().split('T')[0];
+      const dbRes = await fetch(SCRIPT_URL, {
+        method: 'POST', headers: { "Content-Type": "text/plain" },
+        body: JSON.stringify({ action: 'getDashboard', date: today })
+      });
+      const dbData = await dbRes.json();
+      
+      let balanceText = '';
+      if (dbData.status === 'success') {
+        const cash = parseFloat(dbData.summary.cash || 0).toLocaleString(undefined, {minimumFractionDigits: 2});
+        const bank = parseFloat(dbData.summary.digital || 0).toLocaleString(undefined, {minimumFractionDigits: 2});
+        balanceText = `\n---\n💵 เงินสด: ฿${cash}\n🏦 บัญชี: ฿${bank}`;
+      }
+
+      await fetch(GAS_NOTIFY_URL, {
+        method: "POST", headers: { "Content-Type": "text/plain" },
+        body: JSON.stringify({ action: "notifyNow", text: baseText + balanceText })
+      });
+    } catch (e) { console.error("Notify failed:", e); }
   }
 </script>
 </body>
