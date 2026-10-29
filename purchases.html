@@ -84,17 +84,17 @@
 </div>
 </aside>
 
-<main class="flex-1 md:ml-[260px] p-4 md:p-8 flex flex-col gap-6 md:gap-8 max-w-[1440px]">
+<main class="flex-1 md:ml-[260px] p-4 md:p-8 flex flex-col gap-6 md:gap-8 max-w-[1440px] transition-opacity duration-300 opacity-100">
 <section class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
 <div>
 <h1 class="text-2xl md:text-3xl font-bold text-text-primary">Purchases & Financial Dashboard</h1>
 <p class="text-sm text-text-muted mt-1">บันทึกค่าใช้จ่าย บริหารจัดการต้นทุนฟาร์ม และสรุปบัญชีการเงิน</p>
 </div>
 <div class="flex flex-wrap items-center gap-2.5">
-<button class="px-5 py-2.5 rounded-full bg-card-light border border-border-light text-sm font-semibold hover:bg-surface-container-low" onclick="loadDashboard()">
+<button class="px-5 py-2.5 rounded-full bg-card-light border border-border-light text-sm font-semibold hover:bg-surface-container-low transition-colors" onclick="loadDashboard()">
   Sync Ledger
 </button>
-<button class="px-5 py-2.5 rounded-full bg-card-dark text-text-inverse text-sm font-semibold hover:bg-black shadow-sm" onclick="toggleModal(true)">
+<button class="px-5 py-2.5 rounded-full bg-card-dark text-text-inverse text-sm font-semibold hover:bg-black shadow-sm transition-colors" onclick="toggleModal(true)">
   Transfer Money
 </button>
 </div>
@@ -124,7 +124,7 @@
 <div>
 <div class="flex items-center justify-between">
 <span class="text-xs font-bold text-text-muted uppercase tracking-wider">Wallet Balance</span>
-<button class="text-xs font-bold underline hover:text-kpi-blue" onclick="toggleModal(true)">Transfer</button>
+<button class="text-xs font-bold underline hover:text-kpi-blue transition-colors" onclick="toggleModal(true)">Transfer</button>
 </div>
 <div class="mt-2 text-2xl md:text-3xl font-extrabold text-text-primary" id="dash-balance">฿0.00</div>
 </div>
@@ -152,11 +152,11 @@
 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 <div class="flex flex-col gap-1.5">
 <label class="text-xs font-semibold text-text-muted uppercase">Date (วันที่)</label>
-<input id="order-date" class="w-full bg-[#1E293B] border border-[#334155] text-text-inverse rounded-xl px-4 py-2.5 text-sm focus:ring-0" type="date">
+<input id="order-date" class="w-full bg-[#1E293B] border border-[#334155] text-text-inverse rounded-xl px-4 py-2.5 text-sm focus:ring-0 transition-colors" type="date">
 </div>
 <div class="flex flex-col gap-1.5">
 <label class="text-xs font-semibold text-text-muted uppercase">Payment Wallet (กระเป๋าเงิน)</label>
-<select id="order-pay-type" class="w-full bg-[#1E293B] border border-[#334155] text-text-inverse rounded-xl px-4 py-2.5 text-sm focus:ring-0">
+<select id="order-pay-type" class="w-full bg-[#1E293B] border border-[#334155] text-text-inverse rounded-xl px-4 py-2.5 text-sm focus:ring-0 transition-colors">
   <option value="โอน">Bank Transfer (โอนบัญชีธนาคาร)</option>
   <option value="เงินสด">Cash (เงินสด)</option>
 </select>
@@ -166,36 +166,36 @@
 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 <div class="flex flex-col gap-1.5">
 <label class="text-xs font-semibold text-text-muted uppercase">Item Name (รายการค่าใช้จ่าย)</label>
-<input id="order-item" class="w-full bg-[#1E293B] border border-[#334155] text-text-inverse rounded-xl px-4 py-2.5 text-sm focus:ring-0" type="text" placeholder="ระบุรายการ...">
+<input id="order-item" class="w-full bg-[#1E293B] border border-[#334155] text-text-inverse rounded-xl px-4 py-2.5 text-sm focus:ring-0 transition-colors" type="text" placeholder="ระบุรายการ...">
 </div>
 <div class="flex flex-col gap-1.5">
 <label class="text-xs font-semibold text-text-muted uppercase">Supplier (ผู้จำหน่าย)</label>
-<input id="order-supplier" class="w-full bg-[#1E293B] border border-[#334155] text-text-inverse rounded-xl px-4 py-2.5 text-sm focus:ring-0" type="text" placeholder="ร้านค้า...">
+<input id="order-supplier" class="w-full bg-[#1E293B] border border-[#334155] text-text-inverse rounded-xl px-4 py-2.5 text-sm focus:ring-0 transition-colors" type="text" placeholder="ร้านค้า...">
 </div>
 </div>
 
 <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
 <div class="flex flex-col gap-1.5">
 <label class="text-xs font-semibold text-text-muted uppercase">Unit Price (฿)</label>
-<input id="order-price" class="w-full bg-[#1E293B] border border-[#334155] text-text-inverse rounded-xl px-3 py-2 text-sm focus:ring-0" type="number" placeholder="0">
+<input id="order-price" class="w-full bg-[#1E293B] border border-[#334155] text-text-inverse rounded-xl px-3 py-2 text-sm focus:ring-0 transition-colors" type="number" placeholder="0">
 </div>
 <div class="flex flex-col gap-1.5">
 <label class="text-xs font-semibold text-text-muted uppercase">Quantity</label>
-<input id="order-qty" class="w-full bg-[#1E293B] border border-[#334155] text-text-inverse rounded-xl px-3 py-2 text-sm focus:ring-0" type="number" value="1">
+<input id="order-qty" class="w-full bg-[#1E293B] border border-[#334155] text-text-inverse rounded-xl px-3 py-2 text-sm focus:ring-0 transition-colors" type="number" value="1">
 </div>
 <div class="flex flex-col gap-1.5">
 <label class="text-xs font-semibold text-text-muted uppercase">Shipping (฿)</label>
-<input id="order-shipping" class="w-full bg-[#1E293B] border border-[#334155] text-text-inverse rounded-xl px-3 py-2 text-sm focus:ring-0" type="number" placeholder="0">
+<input id="order-shipping" class="w-full bg-[#1E293B] border border-[#334155] text-text-inverse rounded-xl px-3 py-2 text-sm focus:ring-0 transition-colors" type="number" placeholder="0">
 </div>
 <div class="flex flex-col gap-1.5">
 <label class="text-xs font-semibold text-text-muted uppercase">Discount (฿)</label>
-<input id="order-discount" class="w-full bg-[#1E293B] border border-[#334155] text-text-inverse rounded-xl px-3 py-2 text-sm focus:ring-0" type="number" placeholder="0">
+<input id="order-discount" class="w-full bg-[#1E293B] border border-[#334155] text-text-inverse rounded-xl px-3 py-2 text-sm focus:ring-0 transition-colors" type="number" placeholder="0">
 </div>
 </div>
 
 <div class="flex flex-col gap-1.5">
 <label class="text-xs font-semibold text-text-muted uppercase">Note (หมายเหตุ)</label>
-<input id="order-note" class="w-full bg-[#1E293B] border border-[#334155] text-text-inverse rounded-xl px-4 py-2.5 text-sm focus:ring-0" type="text" placeholder="เพิ่มเติม...">
+<input id="order-note" class="w-full bg-[#1E293B] border border-[#334155] text-text-inverse rounded-xl px-4 py-2.5 text-sm focus:ring-0 transition-colors" type="text" placeholder="เพิ่มเติม...">
 </div>
 
 <div class="flex flex-col sm:flex-row items-center gap-4 pt-4 border-t border-card-dark-border justify-between">
@@ -239,30 +239,30 @@
 <div class="bg-card-light border border-border-light w-full max-w-lg p-6 md:p-8 shadow-2xl flex flex-col gap-5 rounded-[20px]">
 <div class="flex items-center justify-between pb-3 border-b border-border-light">
 <h3 class="text-lg md:text-xl font-bold text-text-primary">Transfer Money (โยกเงิน)</h3>
-<button class="px-3 py-1.5 rounded-full border border-border-light text-xs font-semibold text-text-primary hover:bg-surface-container-low" onclick="toggleModal(false)">Close</button>
+<button class="px-3 py-1.5 rounded-full border border-border-light text-xs font-semibold text-text-primary hover:bg-surface-container-low transition-colors" onclick="toggleModal(false)">Close</button>
 </div>
 <form class="flex flex-col gap-4" onsubmit="event.preventDefault();">
 <div class="flex flex-col gap-1.5">
 <label class="text-xs font-semibold text-text-primary uppercase">วันที่ทำรายการ</label>
-<input id="transfer-date" class="w-full bg-card-light border border-border-light rounded-xl px-4 py-2.5 text-sm focus:ring-0" type="date">
+<input id="transfer-date" class="w-full bg-card-light border border-border-light rounded-xl px-4 py-2.5 text-sm focus:ring-0 transition-colors" type="date">
 </div>
 <div class="flex flex-col gap-1.5">
 <label class="text-xs font-semibold text-text-primary uppercase">รูปแบบการโยกเงิน</label>
-<select id="transfer-type" class="w-full bg-card-light border border-border-light rounded-xl px-4 py-2.5 text-sm focus:ring-0">
+<select id="transfer-type" class="w-full bg-card-light border border-border-light rounded-xl px-4 py-2.5 text-sm focus:ring-0 transition-colors">
 <option value="DigitalToCash">ถอนเงินออกมาใช้ (Bank -> Cash)</option>
 <option value="CashToDigital">ฝากเข้าธนาคาร (Cash -> Bank)</option>
 </select>
 </div>
 <div class="flex flex-col gap-1.5">
 <label class="text-xs font-semibold text-text-primary uppercase">Transfer Amount (ยอดเงิน)</label>
-<input id="transfer-amount" class="w-full bg-card-light border border-border-light rounded-xl px-4 py-2.5 text-lg font-bold focus:ring-0" placeholder="0" type="number">
+<input id="transfer-amount" class="w-full bg-card-light border border-border-light rounded-xl px-4 py-2.5 text-lg font-bold focus:ring-0 transition-colors" placeholder="0" type="number">
 </div>
 <div class="flex flex-col gap-1.5">
 <label class="text-xs font-semibold text-text-primary uppercase">Transfer Note (บันทึกช่วยจำ)</label>
-<input id="transfer-note" class="w-full bg-card-light border border-border-light rounded-xl px-4 py-2.5 text-sm focus:ring-0" placeholder="เช่น กดเงินสดใช้จ่าย" type="text">
+<input id="transfer-note" class="w-full bg-card-light border border-border-light rounded-xl px-4 py-2.5 text-sm focus:ring-0 transition-colors" placeholder="เช่น กดเงินสดใช้จ่าย" type="text">
 </div>
 <div class="pt-4 border-t border-border-light flex items-center justify-end gap-3">
-<button id="btn-transfer" class="w-full py-3 rounded-xl bg-card-dark text-text-inverse text-sm font-bold hover:bg-slate-800" onclick="submitTransfer()">Confirm Transfer</button>
+<button id="btn-transfer" class="w-full py-3 rounded-xl bg-card-dark text-text-inverse text-sm font-bold hover:bg-slate-800 transition-colors" onclick="submitTransfer()">Confirm Transfer</button>
 </div>
 </form>
 </div>
@@ -278,6 +278,7 @@
   closeMenuBtn.addEventListener('click', () => sidebar.classList.add('-translate-x-full'));
 
   const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzevDDOgRBy5i4WjKzX72JBeSJc8e44N9kwC3aeVU5PebS3lHIyfi-nmDcHYR4esv5K7Q/exec';
+  const GAS_NOTIFY_URL = 'https://script.google.com/macros/s/AKfycbwDeloF6hvJ7UdKK8RbVDq7fTCBabXxJBOXyqaXaqWMx5mF74PhZM5rP6dTpKQYSX3A/exec';
 
   document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('order-date').value = new Date().toISOString().split('T')[0];
@@ -337,7 +338,7 @@
               </td>
               <td class="py-3 px-3 text-right font-extrabold text-state-danger text-xs md:text-sm">฿${parseFloat(o.total).toLocaleString()}</td>
               <td class="py-3 px-3 text-center">
-                <button class="text-state-danger font-bold text-xs hover:underline" onclick="deleteOrder(${o.row}, '${date.split('-')[0] + '-' + date.split('-')[1]}')">Del</button>
+                <button class="text-state-danger font-bold text-xs hover:underline transition-all" onclick="deleteOrder(${o.row}, '${date.split('-')[0] + '-' + date.split('-')[1]}')">Del</button>
               </td>
             `;
             tbody.appendChild(tr);
@@ -372,6 +373,18 @@
       const result = await res.json();
       if (result.status === 'success') {
         Swal.fire({ toast: true, position: 'top-end', icon: 'success', title: 'บันทึกรายจ่ายสำเร็จ!', showConfirmButton: false, timer: 1500 });
+        
+        // แจ้งเตือนเข้า LINE
+        const totalNet = (price * qty) + shipping - discount;
+        fetch(GAS_NOTIFY_URL, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain" },
+          body: JSON.stringify({
+            action: "notifyNow",
+            text: `💸 [รายจ่าย] ${item}\nยอดสุทธิ: ฿${totalNet.toLocaleString()}\nชำระผ่าน: ${payType}\n${note ? 'โน้ต: '+note : ''}`
+          })
+        }).catch(e => console.error("Line alert failed:", e));
+
         document.getElementById('order-form').reset();
         document.getElementById('order-date').value = date;
         document.getElementById('order-qty').value = '1';
@@ -426,6 +439,18 @@
       const result = await res.json();
       if (result.status === 'success') {
         Swal.fire({ toast: true, position: 'top-end', icon: 'success', title: 'โยกเงินสำเร็จ', showConfirmButton: false, timer: 1500 });
+        
+        // แจ้งเตือนเข้า LINE
+        const typeLabel = type === "DigitalToCash" ? "ธนาคาร ➡️ เงินสด" : "เงินสด ➡️ ธนาคาร";
+        fetch(GAS_NOTIFY_URL, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain" },
+          body: JSON.stringify({
+            action: "notifyNow",
+            text: `🔄 [โยกเงิน] ${typeLabel}\nจำนวน: ฿${amount.toLocaleString()}\nโน้ต: ${note || '-'}`
+          })
+        }).catch(e => console.error("Line alert failed:", e));
+
         document.getElementById('transfer-amount').value = ''; document.getElementById('transfer-note').value = '';
         toggleModal(false); loadDashboard(); 
       } else throw new Error(result.message);
