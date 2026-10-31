@@ -301,19 +301,19 @@
     const GAS_NOTIFY_URL = 'https://script.google.com/macros/s/AKfycbwDeloF6hvJ7UdKK8RbVDq7fTCBabXxJBOXyqaXaqWMx5mF74PhZM5rP6dTpKQYSX3A/exec';
 
     async function sendLineNotify(payload) {
-  try {
-    const res = await fetch(GAS_NOTIFY_URL, {
-      method: "POST", headers: { "Content-Type": "text/plain" },
-      body: JSON.stringify(payload)
-    });
-    const result = await res.json();
-    if (result.status !== "success") {
-      console.error("LINE notify error:", result);
-      Swal.fire({ toast: true, position: 'top-end', icon: 'warning',
-        title: 'แจ้งเตือน LINE ไม่สำเร็จ: ' + (result.message || ''), showConfirmButton: false, timer: 4000 });
+      try {
+        const res = await fetch(GAS_NOTIFY_URL, {
+          method: "POST", headers: { "Content-Type": "text/plain" },
+          body: JSON.stringify(payload)
+        });
+        const result = await res.json();
+        if (result.status !== "success") {
+          console.error("LINE notify error:", result);
+          Swal.fire({ toast: true, position: 'top-end', icon: 'warning',
+            title: 'แจ้งเตือน LINE ไม่สำเร็จ: ' + (result.message || ''), showConfirmButton: false, timer: 4000 });
+        }
+      } catch (e) { console.error("LINE notify failed:", e); }
     }
-  } catch (e) { console.error("LINE notify failed:", e); }
-}
     
     const PRICES = {
       Mice: {
@@ -493,7 +493,7 @@
       const shipCharged = parseFloat(document.getElementById('ship-cost').value || 0);
       const shipActual = parseFloat(document.getElementById('ship-paid').value || 0);
       const grandTotalVal = subtotal + shipCharged;
-      const netWalletChange = grandTotalVal - shipActual; // ยอดรับสุทธิหลังหักต้นทุนค่าส่ง
+      const netWalletChange = grandTotalVal - shipActual; 
 
       const grandTotalText = document.getElementById('grand-total').textContent;
       const shipMethodVal = document.getElementById('ship-method').value;
@@ -514,15 +514,12 @@
           const diffCash = payTypeVal === 'เงินสด' ? netWalletChange : 0;
           const diffBank = payTypeVal === 'โอน' ? netWalletChange : 0;
 
-          fetch(GAS_NOTIFY_URL, {
-            method: "POST", headers: { "Content-Type": "text/plain" },
-            body: JSON.stringify({
-              action: "notifyNow",
-              text: `💰 [ยอดขาย] Order #${no}\nยอดชำระ: ${grandTotalText}\nรูปแบบ: ${payTypeVal}\nขนส่ง: ${shipMethodVal}`,
-              diffCash: diffCash,
-              diffBank: diffBank
-            })
-          }).catch(e => console.error("Line alert failed:", e));
+          sendLineNotify({
+            action: "notifyNow",
+            text: `💰 [ยอดขาย] Order #${no}\nยอดชำระ: ${grandTotalText}\nรูปแบบ: ${payTypeVal}\nขนส่ง: ${shipMethodVal}`,
+            diffCash: diffCash,
+            diffBank: diffBank
+          });
 
           cart = []; document.getElementById('ship-cost').value='0'; document.getElementById('ship-paid').value='0'; renderCart(); loadSalesHistory(); 
         } else throw new Error(result.message);
@@ -622,14 +619,11 @@
             Swal.fire({toast:true, position:'top-end', icon:'success', title:'Updated', showConfirmButton:false, timer:1500}); 
             
             const diffShip = parseFloat(currentVal || 0) - newActualVal;
-            fetch(GAS_NOTIFY_URL, {
-              method: "POST", headers: { "Content-Type": "text/plain" },
-              body: JSON.stringify({
-                action: "notifyNow",
-                text: `🚚 [อัปเดตค่าขนส่ง] เดือน ${month} (Row: ${row})\nค่าส่งเดิม: ฿${currentVal}\nค่าส่งใหม่: ฿${newActualVal}`,
-                diffBank: diffShip
-              })
-            }).catch(e => console.error("Line alert failed:", e));
+            sendLineNotify({
+              action: "notifyNow",
+              text: `🚚 [อัปเดตค่าขนส่ง] เดือน ${month} (Row: ${row})\nค่าส่งเดิม: ฿${currentVal}\nค่าส่งใหม่: ฿${newActualVal}`,
+              diffBank: diffShip
+            });
 
             loadSalesHistory(); 
           } 
@@ -648,10 +642,9 @@
           const result = await res.json();
           if (result.status === 'success') { 
             Swal.fire({toast:true, position:'top-end', icon:'success', title:'Deleted', showConfirmButton:false, timer:1500}); 
-            fetch(GAS_NOTIFY_URL, {
-              method: "POST", headers: { "Content-Type": "text/plain" },
-              body: JSON.stringify({ action: "notifyNow", text: `🗑️ [ลบรายการขาย] เดือน ${month} (Row: ${row})` })
-            }).catch(e => console.error("Line alert failed:", e));
+            
+            sendLineNotify({ action: "notifyNow", text: `🗑️ [ลบรายการขาย] เดือน ${month} (Row: ${row})` });
+
             loadSalesHistory(); 
           } 
           else throw new Error(result.message);
