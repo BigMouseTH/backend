@@ -280,6 +280,21 @@
   const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzevDDOgRBy5i4WjKzX72JBeSJc8e44N9kwC3aeVU5PebS3lHIyfi-nmDcHYR4esv5K7Q/exec';
   const GAS_NOTIFY_URL = 'https://script.google.com/macros/s/AKfycbwDeloF6hvJ7UdKK8RbVDq7fTCBabXxJBOXyqaXaqWMx5mF74PhZM5rP6dTpKQYSX3A/exec';
 
+  async function sendLineNotify(payload) {
+    try {
+      const res = await fetch(GAS_NOTIFY_URL, {
+        method: "POST", headers: { "Content-Type": "text/plain" },
+        body: JSON.stringify(payload)
+      });
+      const result = await res.json();
+      if (result.status !== "success") {
+        console.error("LINE notify error:", result);
+        Swal.fire({ toast: true, position: 'top-end', icon: 'warning',
+          title: 'แจ้งเตือน LINE ไม่สำเร็จ: ' + (result.message || ''), showConfirmButton: false, timer: 4000 });
+      }
+    } catch (e) { console.error("LINE notify failed:", e); }
+  }
+
   document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('order-date').value = new Date().toISOString().split('T')[0];
     
@@ -326,11 +341,7 @@
         document.getElementById('dash-cash').innerText = '฿' + cashVal.toLocaleString(undefined, {minimumFractionDigits: 2});
         document.getElementById('dash-digital').innerText = '฿' + bankVal.toLocaleString(undefined, {minimumFractionDigits: 2});
 
-        // แอบซิงค์ยอดเงินจริงไปเก็บไว้ที่ GAS แจ้งเตือนเบื้องหลัง
-        fetch(GAS_NOTIFY_URL, {
-          method: "POST", headers: { "Content-Type": "text/plain" },
-          body: JSON.stringify({ action: "syncBalance", cash: cashVal, bank: bankVal })
-        }).catch(e => console.warn("Sync balance warning:", e));
+        sendLineNotify({ action: "syncBalance", cash: cashVal, bank: bankVal });
 
         tbody.innerHTML = '';
         if (result.orders.length === 0) {
@@ -387,15 +398,12 @@
         const diffCash = payType === 'เงินสด' ? -totalNet : 0;
         const diffBank = payType === 'โอน' ? -totalNet : 0;
 
-        fetch(GAS_NOTIFY_URL, {
-          method: "POST", headers: { "Content-Type": "text/plain" },
-          body: JSON.stringify({
-            action: "notifyNow",
-            text: `💸 [รายจ่าย] ${item}\nยอดสุทธิ: ฿${totalNet.toLocaleString()}\nชำระผ่าน: ${payType}${note ? '\nโน้ต: '+note : ''}`,
-            diffCash: diffCash,
-            diffBank: diffBank
-          })
-        }).catch(e => console.error("Line alert failed:", e));
+        sendLineNotify({
+          action: "notifyNow",
+          text: `💸 [รายจ่าย] ${item}\nยอดสุทธิ: ฿${totalNet.toLocaleString()}\nชำระผ่าน: ${payType}${note ? '\nโน้ต: '+note : ''}`,
+          diffCash: diffCash,
+          diffBank: diffBank
+        });
 
         document.getElementById('order-form').reset();
         document.getElementById('order-date').value = date;
@@ -416,10 +424,7 @@
         if (result.status === 'success') { 
           Swal.fire({toast:true, position:'top-end', icon:'success', title:'Deleted', showConfirmButton:false, timer:1500}); 
           await loadDashboard();
-          fetch(GAS_NOTIFY_URL, {
-            method: "POST", headers: { "Content-Type": "text/plain" },
-            body: JSON.stringify({ action: "notifyNow", text: `🗑️ [ลบรายจ่าย] เดือน ${monthParam} (Row: ${row})` })
-          }).catch(e => console.error("Line alert failed:", e));
+          sendLineNotify({ action: "notifyNow", text: `🗑️ [ลบรายจ่าย] เดือน ${monthParam} (Row: ${row})` });
         } 
         else throw new Error(result.message);
       } catch(err) { Swal.fire('Error', err.message, 'error'); }
@@ -463,15 +468,12 @@
         const diffCash = type === "DigitalToCash" ? amount : -amount;
         const diffBank = type === "DigitalToCash" ? -amount : amount;
 
-        fetch(GAS_NOTIFY_URL, {
-          method: "POST", headers: { "Content-Type": "text/plain" },
-          body: JSON.stringify({
-            action: "notifyNow",
-            text: `🔄 [โยกเงิน] ${typeLabel}\nจำนวน: ฿${amount.toLocaleString()}\nโน้ต: ${note || '-'}`,
-            diffCash: diffCash,
-            diffBank: diffBank
-          })
-        }).catch(e => console.error("Line alert failed:", e));
+        sendLineNotify({
+          action: "notifyNow",
+          text: `🔄 [โยกเงิน] ${typeLabel}\nจำนวน: ฿${amount.toLocaleString()}\nโน้ต: ${note || '-'}`,
+          diffCash: diffCash,
+          diffBank: diffBank
+        });
 
         document.getElementById('transfer-amount').value = ''; document.getElementById('transfer-note').value = '';
         toggleModal(false); loadDashboard(); 
