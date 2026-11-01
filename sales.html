@@ -492,8 +492,8 @@
       const subtotal = parseFloat(document.getElementById('cart-subtotal').dataset.val || 0);
       const shipCharged = parseFloat(document.getElementById('ship-cost').value || 0);
       const shipActual = parseFloat(document.getElementById('ship-paid').value || 0);
-      const grandTotalVal = subtotal + shipCharged;
-      const netWalletChange = grandTotalVal - shipActual; 
+      const grandTotalVal = subtotal + shipCharged; 
+      const netWalletChange = grandTotalVal - shipActual; // นี่คือกำไรสุทธิที่จะเข้ากระเป๋าจริง
 
       const grandTotalText = document.getElementById('grand-total').textContent;
       const shipMethodVal = document.getElementById('ship-method').value;
@@ -514,6 +514,7 @@
           const diffCash = payTypeVal === 'เงินสด' ? netWalletChange : 0;
           const diffBank = payTypeVal === 'โอน' ? netWalletChange : 0;
 
+          // แจ้งเตือนแบบแยกข้อความ (ข้อความที่ 1)
           sendLineNotify({
             action: "notifyNow",
             text: `💰 [ยอดขาย] Order #${no}\nยอดชำระ: ${grandTotalText}\nรูปแบบ: ${payTypeVal}\nขนส่ง: ${shipMethodVal}`,
