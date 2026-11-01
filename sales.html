@@ -301,19 +301,34 @@
     const GAS_NOTIFY_URL = 'https://script.google.com/macros/s/AKfycbwDeloF6hvJ7UdKK8RbVDq7fTCBabXxJBOXyqaXaqWMx5mF74PhZM5rP6dTpKQYSX3A/exec';
 
     async function sendLineNotify(payload) {
-      try {
-        const res = await fetch(GAS_NOTIFY_URL, {
-          method: "POST", headers: { "Content-Type": "text/plain" },
-          body: JSON.stringify(payload)
-        });
-        const result = await res.json();
-        if (result.status !== "success") {
-          console.error("LINE notify error:", result);
-          Swal.fire({ toast: true, position: 'top-end', icon: 'warning',
-            title: 'แจ้งเตือน LINE ไม่สำเร็จ: ' + (result.message || ''), showConfirmButton: false, timer: 4000 });
-        }
-      } catch (e) { console.error("LINE notify failed:", e); }
+  try {
+    // 1. ดึงยอดจริงล่าสุดจาก Sheet ทันทีหลังทำรายการเสร็จ
+    const today = new Date().toISOString().split('T')[0];
+    const dbRes = await fetch(SCRIPT_URL, {
+      method: 'POST', headers: { "Content-Type": "text/plain" },
+      body: JSON.stringify({ action: 'getDashboard', date: today })
+    });
+    const dbData = await dbRes.json();
+    
+    // 2. แนบยอดจริง (Override) ไปกับแจ้งเตือน
+    if (dbData.status === 'success') {
+      payload.overrideCash = parseFloat(dbData.summary.cash || 0);
+      payload.overrideBank = parseFloat(dbData.summary.digital || 0);
     }
+
+    // 3. ส่งข้อมูลไปที่ LINE
+    const res = await fetch(GAS_NOTIFY_URL, {
+      method: "POST", headers: { "Content-Type": "text/plain" },
+      body: JSON.stringify(payload)
+    });
+    const result = await res.json();
+    if (result.status !== "success") {
+      console.error("LINE notify error:", result);
+      Swal.fire({ toast: true, position: 'top-end', icon: 'warning',
+        title: 'แจ้งเตือน LINE ไม่สำเร็จ: ' + (result.message || ''), showConfirmButton: false, timer: 4000 });
+    }
+  } catch (e) { console.error("LINE notify failed:", e); }
+}
     
     const PRICES = {
       Mice: {
