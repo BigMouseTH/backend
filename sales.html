@@ -305,25 +305,25 @@
         // หน่วงเวลา 2 วินาทีเพื่อให้ Google Sheet บันทึกและคำนวณยอดเงินเสร็จสมบูรณ์
         await new Promise(resolve => setTimeout(resolve, 2000));
         
-        // 1. ดึงยอดจริงล่าสุดจาก Sheet ทันทีหลังทำรายการเสร็จ
-        const today = new Date().toISOString().split('T')[0];
+        const d = new Date();
+        const today = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+        
         const dbRes = await fetch(SCRIPT_URL, {
           method: 'POST', headers: { "Content-Type": "text/plain" },
           body: JSON.stringify({ action: 'getDashboard', date: today })
         });
-        const dbData = await dbRes.json();
         
-        // 2. แนบยอดจริง (Override) ไปกับแจ้งเตือน
+        const dbData = await dbRes.json();
         if (dbData.status === 'success') {
           payload.overrideCash = parseFloat(dbData.summary.cash || 0);
           payload.overrideBank = parseFloat(dbData.summary.digital || 0);
         }
-
-        // 3. ส่งข้อมูลไปที่ LINE
+        
         const res = await fetch(GAS_NOTIFY_URL, {
           method: "POST", headers: { "Content-Type": "text/plain" },
           body: JSON.stringify(payload)
         });
+        
         const result = await res.json();
         if (result.status !== "success") {
           console.error("LINE notify error:", result);
@@ -527,7 +527,6 @@
         if (result.status === 'success') { 
           Swal.fire({ toast: true, position: 'top-end', icon: 'success', title: 'บันทึกสำเร็จ!', showConfirmButton: false, timer: 2000 });
           
-          // แจ้งเตือนแบบแยกข้อความ (ข้อความที่ 1) ไม่ต้องส่งค่า diff แล้ว
           sendLineNotify({
             action: "notifyNow",
             text: `💰 [ยอดขาย] Order #${no}\nยอดชำระ: ${grandTotalText}\nรูปแบบ: ${payTypeVal}\nขนส่ง: ${shipMethodVal}`
@@ -630,7 +629,6 @@
           if (result.status === 'success') { 
             Swal.fire({toast:true, position:'top-end', icon:'success', title:'Updated', showConfirmButton:false, timer:1500}); 
             
-            // ส่งแจ้งเตือน โดยไม่ต้องส่ง diff ไปกวนใจ
             sendLineNotify({
               action: "notifyNow",
               text: `🚚 [อัปเดตค่าขนส่ง] เดือน ${month} (Row: ${row})\nค่าส่งเดิม: ฿${currentVal}\nค่าส่งใหม่: ฿${newActualVal}`
@@ -645,6 +643,7 @@
 
     async function deleteSale(row, month) {
       if (!month || month === 'current') { const d = new Date(); month = d.getFullYear() + '-' + ("0" + (d.getMonth() + 1)).slice(-2); }
+      const rec = (window.globalSalesRecords || []).find(r => r.row == row);
       const confirm = await Swal.fire({ title: 'ลบรายการ?', text: "ข้อมูลจะถูกลบและเงินจะถูกหักกลับ", icon: 'warning', showCancelButton: true, confirmButtonColor: '#d33' });
       if (confirm.isConfirmed) {
         Swal.fire({ title: 'Deleting...', didOpen: () => Swal.showLoading() });
@@ -653,9 +652,10 @@
           const result = await res.json();
           if (result.status === 'success') { 
             Swal.fire({toast:true, position:'top-end', icon:'success', title:'Deleted', showConfirmButton:false, timer:1500}); 
-            
-            sendLineNotify({ action: "notifyNow", text: `🗑️ [ลบรายการขาย] เดือน ${month} (Row: ${row})` });
-
+            const detail = rec
+              ? `\nOrder #${rec.orderNo || '-'} | ${rec.animal} ${rec.size} x${rec.qty}\nยอด: ฿${(parseFloat(rec.price) || 0).toLocaleString()}`
+              : '';
+            sendLineNotify({ action: "notifyNow", text: `🗑️ [ลบรายการขาย] เดือน ${month} (Row: ${row})${detail}\n(ยอดเงินด้านล่างคือยอดหลังหักรายการนี้แล้ว)` });
             loadSalesHistory(); 
           } 
           else throw new Error(result.message);
