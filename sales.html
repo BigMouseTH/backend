@@ -301,34 +301,37 @@
     const GAS_NOTIFY_URL = 'https://script.google.com/macros/s/AKfycbwDeloF6hvJ7UdKK8RbVDq7fTCBabXxJBOXyqaXaqWMx5mF74PhZM5rP6dTpKQYSX3A/exec';
 
     async function sendLineNotify(payload) {
-  try {
-    // 1. ดึงยอดจริงล่าสุดจาก Sheet ทันทีหลังทำรายการเสร็จ
-    const today = new Date().toISOString().split('T')[0];
-    const dbRes = await fetch(SCRIPT_URL, {
-      method: 'POST', headers: { "Content-Type": "text/plain" },
-      body: JSON.stringify({ action: 'getDashboard', date: today })
-    });
-    const dbData = await dbRes.json();
-    
-    // 2. แนบยอดจริง (Override) ไปกับแจ้งเตือน
-    if (dbData.status === 'success') {
-      payload.overrideCash = parseFloat(dbData.summary.cash || 0);
-      payload.overrideBank = parseFloat(dbData.summary.digital || 0);
-    }
+      try {
+        // หน่วงเวลา 2 วินาทีเพื่อให้ Google Sheet บันทึกและคำนวณยอดเงินเสร็จสมบูรณ์
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        
+        // 1. ดึงยอดจริงล่าสุดจาก Sheet ทันทีหลังทำรายการเสร็จ
+        const today = new Date().toISOString().split('T')[0];
+        const dbRes = await fetch(SCRIPT_URL, {
+          method: 'POST', headers: { "Content-Type": "text/plain" },
+          body: JSON.stringify({ action: 'getDashboard', date: today })
+        });
+        const dbData = await dbRes.json();
+        
+        // 2. แนบยอดจริง (Override) ไปกับแจ้งเตือน
+        if (dbData.status === 'success') {
+          payload.overrideCash = parseFloat(dbData.summary.cash || 0);
+          payload.overrideBank = parseFloat(dbData.summary.digital || 0);
+        }
 
-    // 3. ส่งข้อมูลไปที่ LINE
-    const res = await fetch(GAS_NOTIFY_URL, {
-      method: "POST", headers: { "Content-Type": "text/plain" },
-      body: JSON.stringify(payload)
-    });
-    const result = await res.json();
-    if (result.status !== "success") {
-      console.error("LINE notify error:", result);
-      Swal.fire({ toast: true, position: 'top-end', icon: 'warning',
-        title: 'แจ้งเตือน LINE ไม่สำเร็จ: ' + (result.message || ''), showConfirmButton: false, timer: 4000 });
+        // 3. ส่งข้อมูลไปที่ LINE
+        const res = await fetch(GAS_NOTIFY_URL, {
+          method: "POST", headers: { "Content-Type": "text/plain" },
+          body: JSON.stringify(payload)
+        });
+        const result = await res.json();
+        if (result.status !== "success") {
+          console.error("LINE notify error:", result);
+          Swal.fire({ toast: true, position: 'top-end', icon: 'warning',
+            title: 'แจ้งเตือน LINE ไม่สำเร็จ: ' + (result.message || ''), showConfirmButton: false, timer: 4000 });
+        }
+      } catch (e) { console.error("LINE notify failed:", e); }
     }
-  } catch (e) { console.error("LINE notify failed:", e); }
-}
     
     const PRICES = {
       Mice: {
@@ -507,8 +510,6 @@
       const subtotal = parseFloat(document.getElementById('cart-subtotal').dataset.val || 0);
       const shipCharged = parseFloat(document.getElementById('ship-cost').value || 0);
       const shipActual = parseFloat(document.getElementById('ship-paid').value || 0);
-      const grandTotalVal = subtotal + shipCharged; 
-      const netWalletChange = grandTotalVal - shipActual; // นี่คือกำไรสุทธิที่จะเข้ากระเป๋าจริง
 
       const grandTotalText = document.getElementById('grand-total').textContent;
       const shipMethodVal = document.getElementById('ship-method').value;
@@ -526,15 +527,10 @@
         if (result.status === 'success') { 
           Swal.fire({ toast: true, position: 'top-end', icon: 'success', title: 'บันทึกสำเร็จ!', showConfirmButton: false, timer: 2000 });
           
-          const diffCash = payTypeVal === 'เงินสด' ? netWalletChange : 0;
-          const diffBank = payTypeVal === 'โอน' ? netWalletChange : 0;
-
-          // แจ้งเตือนแบบแยกข้อความ (ข้อความที่ 1)
+          // แจ้งเตือนแบบแยกข้อความ (ข้อความที่ 1) ไม่ต้องส่งค่า diff แล้ว
           sendLineNotify({
             action: "notifyNow",
-            text: `💰 [ยอดขาย] Order #${no}\nยอดชำระ: ${grandTotalText}\nรูปแบบ: ${payTypeVal}\nขนส่ง: ${shipMethodVal}`,
-            diffCash: diffCash,
-            diffBank: diffBank
+            text: `💰 [ยอดขาย] Order #${no}\nยอดชำระ: ${grandTotalText}\nรูปแบบ: ${payTypeVal}\nขนส่ง: ${shipMethodVal}`
           });
 
           cart = []; document.getElementById('ship-cost').value='0'; document.getElementById('ship-paid').value='0'; renderCart(); loadSalesHistory(); 
@@ -634,11 +630,10 @@
           if (result.status === 'success') { 
             Swal.fire({toast:true, position:'top-end', icon:'success', title:'Updated', showConfirmButton:false, timer:1500}); 
             
-            const diffShip = parseFloat(currentVal || 0) - newActualVal;
+            // ส่งแจ้งเตือน โดยไม่ต้องส่ง diff ไปกวนใจ
             sendLineNotify({
               action: "notifyNow",
-              text: `🚚 [อัปเดตค่าขนส่ง] เดือน ${month} (Row: ${row})\nค่าส่งเดิม: ฿${currentVal}\nค่าส่งใหม่: ฿${newActualVal}`,
-              diffBank: diffShip
+              text: `🚚 [อัปเดตค่าขนส่ง] เดือน ${month} (Row: ${row})\nค่าส่งเดิม: ฿${currentVal}\nค่าส่งใหม่: ฿${newActualVal}`
             });
 
             loadSalesHistory(); 
