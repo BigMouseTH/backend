@@ -219,35 +219,6 @@
 </div>
 </section>
 
-<!-- Tracking Card -->
-<section class="bg-card-light p-4 md:p-6 border border-border-light shadow-sm rounded-2xl">
-<div class="flex items-center justify-between pb-2 border-b border-border-light mb-4">
-<h2 class="text-base font-bold text-text-primary uppercase tracking-wide">Tracking Update</h2>
-</div>
-<form class="space-y-4" onsubmit="event.preventDefault(); sendTrackingFlex();">
-<div>
-<label class="block text-sm font-semibold text-text-primary mb-1">ขนส่งที่ใช้</label>
-<select class="w-full rounded-xl border border-border-light bg-card-light px-4 py-2.5 text-sm focus:ring-0" id="trackingCourier">
-<option value="Line Man">Line Man</option>
-<option value="Inter Express">Inter Express</option>
-<option value="Nim Express">Nim Express</option>
-<option value="Lalamove">Lalamove</option>
-<option value="Grab">Grab</option>
-</select>
-</div>
-<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-<div>
-<label class="block text-sm font-semibold text-text-primary mb-1">เลขพัสดุ</label>
-<input class="w-full rounded-xl border border-border-light bg-card-light px-4 py-2.5 text-sm uppercase font-bold focus:ring-0" id="trackingNumber" placeholder="KRC-992019" type="text">
-</div>
-<div>
-<label class="block text-sm font-semibold text-text-primary mb-1">ลิงก์เช็คพัสดุ</label>
-<input class="w-full rounded-xl border border-border-light bg-card-light px-4 py-2.5 text-sm focus:ring-0" id="trackingUrl" placeholder="https://..." type="url">
-</div>
-</div>
-<button class="w-full mt-2 py-3 rounded-xl bg-card-dark text-text-inverse text-sm font-bold hover:bg-primary" type="submit">Send Tracking</button>
-</form>
-</section>
 <!-- Hidden inputs for text generator -->
 <input type="hidden" id="headerNote" value="Big Mouse Farm - สรุปรายการ">
 <input type="hidden" id="footerNote" value="ขอบคุณที่สนับสนุนฟาร์ม กรุณาถ่ายวิดีโอตอนแกะกล่องเพื่อเคลมสินค้า">
@@ -618,33 +589,6 @@
         });
         const d = await res.json();
         if(d.status==='success') Swal.fire('สำเร็จ', 'ส่งบิลแล้ว', 'success'); else throw new Error(d.message);
-      } catch(e) { Swal.fire('Error', e.message, 'error'); }
-    }
-
-    async function sendTrackingFlex() {
-      const sel = document.getElementById("customerSelect");
-      const uid = sel.value;
-      if (!uid) { Swal.fire('เตือน', 'เลือกลูกค้าก่อน', 'warning'); return; }
-      
-      const trackNo = document.getElementById('trackingNumber').value;
-      if(!trackNo) { Swal.fire('เตือน','ใส่เลขพัสดุ','warning'); return; }
-      
-      const payload = {
-        "type": "bubble", "size": "mega",
-        "header": { "type": "box", "layout": "vertical", "backgroundColor": "#000000", "contents": [{"type": "text", "text": "🚚 จัดส่งเรียบร้อย", "color": "#ffffff", "weight": "bold"}] },
-        "body": { "type": "box", "layout": "vertical", "spacing": "sm", "contents": [
-          {"type":"box","layout":"baseline","contents":[{"type":"text","text":"ขนส่ง:","flex":1},{"type":"text","text":document.getElementById('trackingCourier').value,"flex":3,"weight":"bold"}]},
-          {"type":"box","layout":"baseline","contents":[{"type":"text","text":"เลขพัสดุ:","flex":1},{"type":"text","text":trackNo,"flex":3,"weight":"bold","color":"#ff6a00"}]}
-        ]}
-      };
-      const url = document.getElementById('trackingUrl').value;
-      if(url) payload.footer = {"type":"box","layout":"vertical","contents":[{"type":"button","style":"primary","color":"#000000","action":{"type":"uri","label":"เช็คสถานะ","uri":url}}]};
-
-      Swal.fire({title:'Sending...', didOpen:()=>Swal.showLoading()});
-      try {
-        const res = await fetch(WEB_APP_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify({ action: 'sendFlex', userId: uid, flexMessage: payload, altText: "🚚 แจ้งพัสดุ" }) });
-        const d = await res.json();
-        if(d.status==='success') { Swal.fire('สำเร็จ', 'ส่งเลขพัสดุแล้ว', 'success'); document.getElementById('trackingNumber').value=''; } else throw new Error(d.message);
       } catch(e) { Swal.fire('Error', e.message, 'error'); }
     }
 
