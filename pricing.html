@@ -218,6 +218,7 @@
 <div class="grid grid-cols-2 gap-3 pt-2">
 <button class="py-3 px-2 rounded-xl bg-card-dark text-text-inverse text-sm font-bold hover:bg-primary" onclick="copyBillText()" type="button">Copy Text</button>
 <button class="py-3 px-2 rounded-xl bg-[#06C755] text-white text-sm font-bold hover:bg-[#05a346]" onclick="sendFlexBill()" type="button">Send to LINE</button>
+<button class="col-span-2 py-3 px-2 rounded-xl border border-card-dark text-text-primary text-sm font-bold hover:bg-surface-container-low" onclick="sendToSales()" type="button">📥 บันทึกเป็นยอดขาย</button>
 </div>
 </section>
 
@@ -592,6 +593,48 @@
         const d = await res.json();
         if(d.status==='success') Swal.fire('สำเร็จ', 'ส่งบิลแล้ว', 'success'); else throw new Error(d.message);
       } catch(e) { Swal.fire('Error', e.message, 'error'); }
+    }
+
+    // --- ส่งรายการไปหน้า Sales (ไปตรวจและกดบันทึกที่หน้า Sales) ---
+    function sendToSales() {
+      const round2 = n => Math.round(n * 100) / 100;
+      const items = [];
+      let customDisc = 0;
+      ['Mice', 'Rat'].forEach(sp => inventoryState[sp].forEach(i => {
+        const isW = i.customPrice === i.wholesalePrice && i.wholesalePrice !== i.normalPrice;
+        const size = i.name + (isW ? ' w' : '');   // ราคาส่งใช้รูปแบบเดียวกับหน้า Sales เช่น "S w"
+        customDisc += ((i.frozen||0) + (i.live||0)) * (i.normalPrice - i.customPrice);
+        if (i.frozen > 0) items.push({ animal: sp, size, price: i.customPrice, qty: i.frozen, isLive: false });
+        if (i.live > 0)   items.push({ animal: sp, size, price: i.customPrice, qty: i.live,   isLive: true  });
+      }));
+      if (!items.length) return Swal.fire('เตือน', 'ยังไม่ได้ใส่จำนวนสินค้า', 'warning');
+
+      // ส่วนลดรวม (บาท/%/ต่อตัว) กระจายตามสัดส่วนยอดของแต่ละรายการ เศษไปอยู่รายการสุดท้าย
+      const gross = items.reduce((s, i) => s + i.price * i.qty, 0);
+      let disc = Math.max(0, round2(currentTotals.discount - customDisc));
+      let left = disc;
+      items.forEach((it, idx) => {
+        const line = it.price * it.qty;
+        let d = idx === items.length - 1 ? left : round2(gross ? disc * line / gross : 0);
+        d = Math.min(Math.max(0, round2(d)), line);
+        left = round2(left - d);
+        it.discount = d;
+        it.promDisplay = d ? `(ลด ${d}บ.)` : '';
+      });
+
+      const shipMap = { 'ควบคุมอุณหภูมิ (Nim Express)': 'Nim Express', 'Grab Express': 'Grab', 'Line Man': 'Line Man',
+                        'Lalamove': 'Lalamove', 'รับเองที่ฟาร์ม': 'Yourself' };
+      const sel = document.getElementById('customerSelect');
+      const handoff = {
+        at: Date.now(), items,
+        shipCost: currentTotals.shipping,
+        shipMethod: shipMap[document.getElementById('shippingMethod').value] || '',
+        customer: sel.value ? (sel.options[sel.selectedIndex]?.text || '') : '',
+        grandTotal: currentTotals.grandTotal
+      };
+      try { localStorage.setItem('bmf_pricing_to_sales', JSON.stringify(handoff)); }
+      catch (e) { return Swal.fire('Error', 'เบราว์เซอร์นี้บันทึกข้อมูลชั่วคราวไม่ได้', 'error'); }
+      location.href = 'sales.html';
     }
 
     function copyBillText() {

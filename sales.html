@@ -221,6 +221,7 @@
 <option value="Grab">Grab Express</option>
 <option value="Nim Express">Nim Express</option>
 <option value="Yourself">รับเอง (Yourself)</option>
+<option value="Line Man">Line Man</option>
 </select>
 </div>
 
@@ -332,7 +333,33 @@
       loadSalesHistory();
       
       ['ship-cost', 'ship-paid'].forEach(id => document.getElementById(id).addEventListener('input', calculateNetTotal));
+      importFromPricing();
     });
+
+    // --- รับรายการที่ส่งมาจากหน้า Pricing ---
+    function importFromPricing() {
+      let h = null;
+      try { h = JSON.parse(localStorage.getItem('bmf_pricing_to_sales')); localStorage.removeItem('bmf_pricing_to_sales'); } catch (e) { return; }
+      if (!h || !Array.isArray(h.items) || !h.items.length || Date.now() - (h.at || 0) > 60 * 60 * 1000) return;
+
+      cart = h.items.map(i => ({
+        animal: i.animal, size: i.size, price: Number(i.price) || 0, qty: Number(i.qty) || 0,
+        isLive: !!i.isLive, discount: Number(i.discount) || 0, promDisplay: i.promDisplay || ''
+      }));
+      document.getElementById('ship-cost').value = Number(h.shipCost) || 0;
+      document.getElementById('ship-paid').value = Number(h.shipCost) || 0;
+      const sm = document.getElementById('ship-method');
+      if (h.shipMethod && [...sm.options].some(o => o.value === h.shipMethod)) sm.value = h.shipMethod;
+      renderCart();
+
+      const box = document.createElement('div');
+      box.innerHTML = '<div style="text-align:left;line-height:1.7"></div>';
+      const lines = box.firstChild;
+      if (h.customer) lines.appendChild(Object.assign(document.createElement('div'), { textContent: 'ลูกค้า: ' + h.customer }));
+      lines.appendChild(Object.assign(document.createElement('div'), { textContent: 'ยอดสุทธิ: ฿' + (Number(h.grandTotal) || 0).toLocaleString() }));
+      lines.appendChild(Object.assign(document.createElement('div'), { innerHTML: '<br>กรุณาตรวจ <b>ค่าส่งจริง (Actual)</b> และ <b>ช่องทางชำระ</b> แล้วกดบันทึก' }));
+      Swal.fire({ icon: 'info', title: 'นำรายการจาก Pricing มาแล้ว', html: box });
+    }
 
     function setupToggleGroup(groupId, stateKey, callback) {
       const container = document.getElementById(groupId);
