@@ -1,0 +1,76 @@
+/* ============================================================
+   Big Mouse — โหมดมืด (ใช้ร่วมกันทุกหน้า)
+   ทำงานเมื่อ <html> มี class "dark" (ตั้งโดย theme.js)
+   ใช้เฉพาะบนจอ — ตอนสั่งพิมพ์จะเป็นโหมดสว่างเสมอ
+   ============================================================ */
+@media screen {
+  html.dark { color-scheme: dark; }
+  html.dark body { background-color: #0B1120 !important; color: #E5E7EB; }
+
+  /* พื้นหลังหน้า */
+  html.dark .bg-bg-main, html.dark .bg-background, html.dark .bg-surface,
+  html.dark .bg-\[\#F8FAFC\] { background-color: #0B1120; }
+
+  /* การ์ด / กล่อง */
+  html.dark .bg-card-light, html.dark .bg-\[\#FFFFFF\], html.dark .bg-white,
+  html.dark .bg-text-inverse { background-color: #111827; }
+
+  /* พื้นรอง (แถบ, chip, hover) */
+  html.dark .bg-surface-container-low, html.dark .bg-\[\#F1F5F9\], html.dark .bg-slate-100,
+  html.dark .bg-\[\#EFF4FF\], html.dark .bg-slate-200, html.dark .bg-border-light { background-color: #1F2937; }
+  html.dark .hover\:bg-surface-container-low:hover, html.dark .hover\:bg-\[\#F1F5F9\]:hover,
+  html.dark .hover\:bg-surface:hover, html.dark .hover\:bg-slate-100:hover,
+  html.dark .hover\:bg-slate-200:hover, html.dark .hover\:bg-border-light:hover { background-color: #273449; }
+
+  /* ปุ่ม/ป้ายสีเข้ม → ยกให้สว่างกว่าการ์ดเล็กน้อย */
+  html.dark .bg-card-dark, html.dark .bg-primary, html.dark .bg-text-primary,
+  html.dark .bg-\[\#0F172A\], html.dark .bg-slate-900 { background-color: #334155; }
+  html.dark .bg-\[\#1E293B\] { background-color: #1E293B; }
+  html.dark .hover\:bg-\[\#1E293B\]:hover, html.dark .hover\:bg-primary:hover, html.dark .hover\:bg-black:hover,
+  html.dark .hover\:bg-slate-800:hover, html.dark .hover\:bg-card-dark:hover { background-color: #475569; }
+
+  /* ตัวอักษร */
+  html.dark .text-text-primary, html.dark .text-primary, html.dark .hover\:text-text-primary:hover { color: #E5E7EB; }
+  html.dark .text-text-muted, html.dark .text-slate-500, html.dark .text-\[\#94A3B8\] { color: #94A3B8; }
+  html.dark .text-state-danger, html.dark .text-\[\#EF4444\] { color: #F87171; }
+  html.dark .text-kpi-blue, html.dark .text-\[\#2170E4\], html.dark .text-secondary, html.dark .hover\:text-kpi-blue:hover { color: #60A5FA; }
+
+  /* เส้นขอบ */
+  html.dark .border-border-light, html.dark .border-slate-200, html.dark .border-slate-100,
+  html.dark .divide-border-light > :not([hidden]) ~ :not([hidden]),
+  html.dark .divide-slate-100 > :not([hidden]) ~ :not([hidden]),
+  html.dark .divide-\[\#F1F5F9\] > :not([hidden]) ~ :not([hidden]) { border-color: #263244; }
+  html.dark .border-card-dark, html.dark .border-text-primary { border-color: #64748B; }
+
+  /* สีสถานะ */
+  html.dark .bg-error-container, html.dark .bg-\[\#FEE2E2\] { background-color: #3B1219; }
+
+  /* ช่องกรอกข้อมูล */
+  html.dark :is(input, select, textarea) { background-color: #111827; color: #E5E7EB; border-color: #334155; }
+  html.dark :is(input, textarea)::placeholder { color: #64748B; }
+
+  /* โลโก้ในวงกลมขาว ให้คงพื้นขาวไว้ */
+  html.dark .bg-\[\#FFFFFF\]:has(> img), html.dark .rounded-full:has(> img) { background-color: #FFFFFF; }
+
+  /* SweetAlert2 */
+  html.dark .swal2-popup { background: #111827; color: #E5E7EB; }
+  html.dark .swal2-title, html.dark .swal2-html-container { color: #E5E7EB; }
+  html.dark .swal2-input, html.dark .swal2-select, html.dark .swal2-textarea { background: #0B1120; color: #E5E7EB; border-color: #334155; }
+
+  /* สวิตช์ธีม */
+  .bmf-topbar-actions { display: flex; align-items: center; gap: .5rem; }
+  .bmf-switch { position: relative; flex-shrink: 0; width: 56px; height: 30px; padding: 0; border: 1px solid #E2E8F0;
+    border-radius: 9999px; background: #E2E8F0; cursor: pointer; transition: background-color .2s, border-color .2s; }
+  .bmf-switch:focus-visible { outline: 2px solid #3B82F6; outline-offset: 2px; }
+  .bmf-switch-thumb { position: absolute; top: 2px; left: 2px; width: 24px; height: 24px; border-radius: 9999px;
+    background: #FFFFFF; box-shadow: 0 1px 3px rgba(15,23,42,.3); transition: transform .2s ease; }
+  .bmf-switch-icon { position: absolute; top: 50%; transform: translateY(-50%); font-size: 13px; line-height: 1; pointer-events: none; }
+  .bmf-sun { left: 7px; }
+  .bmf-moon { right: 7px; }
+  .bmf-switch[aria-checked="true"] { background: #334155; border-color: #475569; }
+  .bmf-switch[aria-checked="true"] .bmf-switch-thumb { transform: translateX(26px); background: #0F172A; }
+  /* แสดงสวิตช์ตามขนาดจอ: มือถือ = แถบบน, จอใหญ่ = หัวเมนูซ้าย */
+  .bmf-switch-desktop { display: none; }
+  @media (min-width: 768px) { .bmf-switch-desktop { display: block; } }
+  @media (prefers-reduced-motion: reduce) { .bmf-switch, .bmf-switch-thumb { transition: none; } }
+}
